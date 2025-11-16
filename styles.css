@@ -1,0 +1,390 @@
+/**
+ * Modern Dark Portfolio Styles
+ * Optimized for all form factors with responsive design
+ */
+
+/* =========================================================================
+ * 1. CSS VARIABLES & THEME
+ * ========================================================================= */
+:root {
+    --bg-primary: #0a0e27;
+    --bg-secondary: #151932;
+    --bg-tertiary: #1e2139;
+    --accent-primary: #3b82f6;
+    --accent-secondary: #60a5fa;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --border-color: #2d3250;
+}
+
+/* =========================================================================
+ * 2. RESET & BASE STYLES
+ * ========================================================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Animated Background */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(96, 165, 250, 0.1) 0%, transparent 50%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* =========================================================================
+ * 3. NAVIGATION
+ * ========================================================================= */
+.navbar-custom {
+    position: fixed;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: calc(100% - 2rem);
+    max-width: 1200px;
+}
+
+.navbar-custom .container-fluid {
+    background: rgba(21, 25, 50, 0.8);
+    backdrop-filter: blur(20px);
+    border-radius: 1rem;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--text-primary) !important;
+}
+
+.nav-link {
+    color: var(--text-secondary) !important;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem !important;
+    border-radius: 0.5rem;
+}
+
+.nav-link:hover {
+    color: var(--accent-secondary) !important;
+    background: rgba(59, 130, 246, 0.1);
+}
+
+/* =========================================================================
+ * 4. HERO SECTION
+ * ========================================================================= */
+#home {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 5rem;
+}
+
+.hero-content {
+    animation: fadeInUp 1s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-description {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.hero-image-wrap {
+    position: relative;
+    border-radius: 2rem;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.hero-image-wrap::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    border-radius: 2rem;
+    z-index: -1;
+}
+
+.hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.hero-image-wrap:hover .hero-image {
+    transform: scale(1.05);
+}
+
+/* =========================================================================
+ * 5. BUTTONS
+ * ========================================================================= */
+.btn-primary-custom {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    border: none;
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.btn-primary-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+/* =========================================================================
+ * 6. SECTION STYLING
+ * ========================================================================= */
+section {
+    padding: 5rem 0;
+}
+
+.section-title {
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.section-subtitle {
+    color: var(--text-secondary);
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 3rem;
+}
+
+/* =========================================================================
+ * 7. SKILLS CARDS
+ * ========================================================================= */
+.skill-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.skill-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-primary);
+    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
+}
+
+.skill-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+}
+
+/* =========================================================================
+ * 8. TOOLS BADGES
+ * ========================================================================= */
+.tool-badge {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    margin: 0.5rem;
+}
+
+.tool-badge:hover {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    transform: translateY(-2px);
+}
+
+/* =========================================================================
+ * 9. PROJECT CARDS
+ * ========================================================================= */
+.project-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.project-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--accent-primary);
+    box-shadow: 0 15px 40px rgba(59, 130, 246, 0.25);
+}
+
+.project-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.project-card:hover .project-image {
+    transform: scale(1.1);
+}
+
+.project-body {
+    padding: 1.5rem;
+}
+
+/* =========================================================================
+ * 10. EXPERIENCE CARDS
+ * ========================================================================= */
+.experience-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    display: flex;
+    gap: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.experience-card:hover {
+    border-color: var(--accent-primary);
+    transform: translateX(5px);
+}
+
+.experience-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+/* =========================================================================
+ * 11. FOOTER
+ * ========================================================================= */
+footer {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+    padding: 3rem 0;
+    margin-top: 5rem;
+}
+
+footer a {
+    color: var(--accent-secondary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: var(--accent-primary);
+}
+
+/* =========================================================================
+ * 12. RESPONSIVE DESIGN
+ * ========================================================================= */
+
+/* Tablets and below */
+@media (max-width: 991px) {
+    .navbar-custom {
+        width: calc(100% - 1rem);
+    }
+
+    .navbar-custom .container-fluid {
+        padding: 0.5rem 1rem;
+    }
+
+    #home {
+        padding-top: 6rem;
+    }
+
+    .hero-image-wrap {
+        margin-bottom: 2rem;
+    }
+
+    section {
+        padding: 3rem 0;
+    }
+}
+
+/* Mobile devices */
+@media (max-width: 576px) {
+    .tool-badge {
+        font-size: 0.875rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .skill-card {
+        padding: 1.5rem;
+    }
+
+    .navbar-custom .container-fluid {
+        padding: 0.5rem 0.75rem;
+    }
+}
+
+/* Large screens optimization */
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1320px;
+    }
+}
