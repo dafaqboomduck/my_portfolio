@@ -170,10 +170,8 @@ const projectData = {
             'Multi-language communication and cross-cultural collaboration'
         ],
         achievements: [
-            'Led workshops with 200+ participants across 5 European countries',
+            'Led workshops with 200+ participants across 5 European and Non-European countries',
             'Developed collaborative quiz application used by 100+ students internationally',
-            'Received Excellence Award for cultural integration efforts',
-            'Built international network of collaborators and mentors from diverse backgrounds',
             'Demonstrated leadership in coordinating multinational teams',
             'Enhanced cross-cultural communication and adaptability skills',
             'Integrated technical education with cultural awareness initiatives'
