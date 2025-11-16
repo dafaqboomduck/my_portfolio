@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Razvan's Portfolio</title>
+    <title>Razvan Nica - Portfolio</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -11,333 +11,376 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-custom">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">RN</a>
-            
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <i class="bi bi-list fs-3" style="color: var(--text-primary);"></i>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto gap-2">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#home"><i class="bi bi-house-door-fill me-2"></i>Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#skills"><i class="bi bi-star-fill me-2"></i>Skills</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#projects"><i class="bi bi-folder-fill me-2"></i>Projects</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#contact"><i class="bi bi-envelope-fill me-2"></i>Contact</a>
-                    </li>
-                </ul>
-            </div>
+    <!-- Floating Navigation -->
+    <div class="nav-wrapper">
+        <div class="nav-toggle" onclick="toggleNav()">
+            <i class="bi bi-list fs-3"></i>
         </div>
-    </nav>
+        <div class="nav-menu" id="navMenu">
+            <a href="#home" class="nav-item" onclick="toggleNav()">
+                <i class="bi bi-house-door"></i>
+                <span>Home</span>
+            </a>
+            <a href="#skills" class="nav-item" onclick="toggleNav()">
+                <i class="bi bi-star"></i>
+                <span>Skills</span>
+            </a>
+            <a href="#projects" class="nav-item" onclick="toggleNav()">
+                <i class="bi bi-folder"></i>
+                <span>Projects</span>
+            </a>
+            <a href="#contact" class="nav-item" onclick="toggleNav()">
+                <i class="bi bi-envelope"></i>
+                <span>Contact</span>
+            </a>
+        </div>
+    </div>
 
     <main>
-        
+        <!-- Hero Section - Split Screen Design -->
         <section id="home">
-            <div class="container">
-                <div class="row g-5 align-items-center">
-                    <div class="col-lg-6 order-2 order-lg-1">
-                        <div class="hero-content">
-                            <h1 class="hero-title">
-                                Welcome to my Portfolio!
+            <div class="container-fluid px-0">
+                <div class="row g-0 min-vh-100">
+                    <div class="col-lg-6 d-flex align-items-center justify-content-center hero-left">
+                        <div class="hero-content p-5">
+                            <div class="hero-label mb-3">
+                                <span class="pulse-dot"></span>
+                                Available for opportunities
+                            </div>
+                            <h1 class="hero-title mb-4">
+                                Hi, I'm<br>
+                                <span class="gradient-text">Razvan Nica</span>
                             </h1>
-                            <p class="hero-description">
-                                Hi, I'm Razvan Nica, a Data & AI student at Breda University of Applied Sciences. I'm passionate about machine learning, Python programming, and leveraging technology to solve real-world problems.
-                                <br><br>     
-                                Explore my work and let's connect!
+                            <p class="hero-subtitle mb-4">
+                                Data & AI Student | Machine Learning Enthusiast | Problem Solver
                             </p>
-                            <a href="#contact" class="btn btn-primary-custom">
-                                Get In Touch <i class="bi bi-arrow-right ms-2"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 order-1 order-lg-2">
-                        <div class="hero-image-wrap">
-                           <img src="images/profile.jpg" alt="Profile" class="hero-image" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="skills">
-            <div class="container">
-                <h2 class="section-title">Top Skills</h2>
-                <p class="section-subtitle">
-                    A combination of technical expertise and soft skills that drive success
-                </p>
-                
-                <div class="row g-4 mb-5">
-                    <div class="col-md-6 col-lg-6">
-                        <div class="skill-card">
-                            <div class="skill-icon">
-                                <i class="bi bi-chat-dots-fill"></i>
+                            <p class="hero-description mb-5">
+                                Transforming data into intelligent solutions. Currently studying at Breda University, 
+                                passionate about leveraging AI to solve real-world challenges.
+                            </p>
+                            <div class="d-flex gap-3 flex-wrap">
+                                <a href="#contact" class="btn-glow">
+                                    <span>Let's Connect</span>
+                                    <i class="bi bi-arrow-right ms-2"></i>
+                                </a>
+                                <a href="documents/cv.pdf" target="_blank" class="btn-outline">
+                                    <span>Download CV</span>
+                                    <i class="bi bi-download ms-2"></i>
+                                </a>
                             </div>
-                            <h5 class="fw-bold mb-3">Team Leadership & Communication</h5>
-                            <p class="text-secondary mb-0">
-                                Strong ability to lead teams, provide constructive feedback, and communicate effectively across diverse cultural backgrounds. Experienced in coordinating international workshops and collaborative projects.
-                            </p>
                         </div>
                     </div>
-                    <div class="col-md-6 col-lg-6">
-                        <div class="skill-card">
-                            <div class="skill-icon">
-                                <i class="bi bi-clipboard-check-fill"></i>
-                            </div>
-                            <h5 class="fw-bold mb-3">Data & AI Development</h5>
-                            <p class="text-secondary mb-0">
-                                Proficient in Python, SQL, and various Data & AI frameworks. Currently studying Machine Learning and AI with hands-on experience in developing applications and working with complex datasets.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-6">
-                        <div class="skill-card">
-                            <div class="skill-icon">
+                    <div class="col-lg-6 hero-right">
+                        <div class="hero-image-container">
+                            <div class="floating-card card-1">
                                 <i class="bi bi-code-slash"></i>
+                                <span>Python</span>
                             </div>
-                            <h5 class="fw-bold mb-3">Web Development</h5>
-                            <p class="text-secondary mb-0">
-                                Skilled in HTML, CSS, JavaScript, and C++ for creating functional and user-friendly web applications. Developed Android apps and interactive digital solutions for real-world projects.
-                            </p>
+                            <div class="floating-card card-2">
+                                <i class="bi bi-robot"></i>
+                                <span>ML & AI</span>
+                            </div>
+                            <div class="floating-card card-3">
+                                <i class="bi bi-database"></i>
+                                <span>SQL</span>
+                            </div>
+                            <img src="images/profile.jpg" alt="Razvan Nica" class="hero-profile-img">
+                            <div class="glow-orb orb-1"></div>
+                            <div class="glow-orb orb-2"></div>
                         </div>
                     </div>
-                    <div class="col-md-6 col-lg-6">
-                        <div class="skill-card">
-                            <div class="skill-icon">
-                                <i class="bi bi-arrow-clockwise"></i>
-                            </div>
-                            <h5 class="fw-bold mb-3">Organization & Time Management</h5>
-                            <p class="text-secondary mb-0">
-                                Excellent at planning, task division, and managing multiple projects simultaneously. Strong documentation skills and proficiency with Microsoft Office suite (ECDL certified).
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <h3 class="section-title mt-5 mb-4">Tools I Use</h3>
-                <div class="text-center">
-                    <span class="tool-badge">
-                        <i class="bi bi-code-slash"></i>Python
-                    </span>
-                    <span class="tool-badge">
-                        <i class="bi bi-robot"></i>Machine Learning
-                    </span>
-                    <span class="tool-badge">
-                        <i class="bi bi-bar-chart-fill"></i>Data Analysis
-                    </span>
-                    <span class="tool-badge">
-                        <i class="bi bi-database"></i>SQL
-                    </span>
-                    <span class="tool-badge">
-                        <i class="bi bi-filetype-html"></i>HTML/CSS/JS
-                    </span>
-                    <span class="tool-badge">
-                        <i class="bi bi-microsoft"></i>Microsoft 365
-                    </span>
-                    <span class="tool-badge">
-                        <i class="bi bi-windows"></i>Windows
-                    </span>
                 </div>
             </div>
         </section>
-            
+
+        <!-- Skills Section - Grid Layout with Hover Effects -->
+        <section id="skills">
+            <div class="container py-5">
+                <div class="text-center mb-5">
+                    <div class="section-tag">What I Bring</div>
+                    <h2 class="section-title">Core Competencies</h2>
+                    <p class="section-subtitle">
+                        Technical expertise meets creative problem-solving
+                    </p>
+                </div>
+
+                <!-- Skills Grid -->
+                <div class="skills-grid mb-5">
+                    <div class="skill-item">
+                        <div class="skill-icon-modern">
+                            <i class="bi bi-chat-dots-fill"></i>
+                        </div>
+                        <h4>Leadership</h4>
+                        <p>Team coordination, cross-cultural communication, and workshop facilitation across international projects</p>
+                    </div>
+
+                    <div class="skill-item">
+                        <div class="skill-icon-modern">
+                            <i class="bi bi-cpu"></i>
+                        </div>
+                        <h4>Data & AI</h4>
+                        <p>Python, SQL, Machine Learning frameworks with hands-on experience in AI application development</p>
+                    </div>
+
+                    <div class="skill-item">
+                        <div class="skill-icon-modern">
+                            <i class="bi bi-code-square"></i>
+                        </div>
+                        <h4>Development</h4>
+                        <p>Full-stack capabilities in HTML, CSS, JavaScript, C++, and Android app development</p>
+                    </div>
+
+                    <div class="skill-item">
+                        <div class="skill-icon-modern">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        <h4>Organization</h4>
+                        <p>Project management, documentation, and multi-tasking with ECDL certification</p>
+                    </div>
+                </div>
+
+                <!-- Tech Stack -->
+                <div class="tech-stack">
+                    <h3 class="text-center mb-4">Technology Stack</h3>
+                    <div class="tech-grid">
+                        <div class="tech-badge">
+                            <i class="bi bi-code-slash"></i>
+                            <span>Python</span>
+                        </div>
+                        <div class="tech-badge">
+                            <i class="bi bi-robot"></i>
+                            <span>ML & AI</span>
+                        </div>
+                        <div class="tech-badge">
+                            <i class="bi bi-bar-chart-fill"></i>
+                            <span>Data Analysis</span>
+                        </div>
+                        <div class="tech-badge">
+                            <i class="bi bi-database"></i>
+                            <span>SQL</span>
+                        </div>
+                        <div class="tech-badge">
+                            <i class="bi bi-filetype-html"></i>
+                            <span>Web Dev</span>
+                        </div>
+                        <div class="tech-badge">
+                            <i class="bi bi-microsoft"></i>
+                            <span>Office 365</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section - Bento Grid Layout -->
         <section id="projects">
-            <div class="container">
-                <h2 class="section-title">Previous Projects</h2>
-                <p class="section-subtitle">
-                    Highlights from my academic journey and international collaborations showcasing cultural exchange, technical development, and innovative problem-solving
-                </p>
-
-                <div class="row g-4">
-                    
-                    <div class="col-sm-6 col-lg-4">
-                        <div class="project-card">
-                            <div style="overflow: hidden;">
-                                <img src="./images/thumbnails/dll-thumbnail.jpg" alt="Erasmus Portugal" class="project-image">
-                            </div>
-                            <div class="project-body">
-                                <h5 class="fw-bold mb-2">Erasmus+ Portugal Exchange</h5>
-                                <p class="text-secondary small mb-3">
-                                    Week-long mobility program in Ferreira do Alentejo, focusing on active societal involvement and cultural awareness.
-                                </p>
-                                <a href="#" class="btn btn-sm btn-primary-custom">
-                                    Learn More <i class="bi bi-arrow-right ms-1"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-4">
-                        <div class="project-card">
-                            <div style="overflow: hidden;">
-                                <img src="./images/thumbnails/geisha-thumbnail.jpg" alt="Android App" class="project-image">
-                            </div>
-                            <div class="project-body">
-                                <h5 class="fw-bold mb-2">Android App Development</h5>
-                                <p class="text-secondary small mb-3">
-                                    Developed an Android application for exchange students as part of the Erasmus+ KA2 project.
-                                </p>
-                                <a href="#" class="btn btn-sm btn-primary-custom">
-                                    Learn More <i class="bi bi-arrow-right ms-1"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-4">
-                        <div class="project-card">
-                            <div style="overflow: hidden;">
-                                <img src="./images/thumbnails/bip-thumbnail.jpg" alt="Transport Quiz" class="project-image">
-                            </div>
-                            <div class="project-body">
-                                <h5 class="fw-bold mb-2">Erasmus+ Transport Quiz</h5>
-                                <p class="text-secondary small mb-3">
-                                    Created an engaging quiz about transport apps that received over 200 votes from participants across Europe.
-                                </p>
-                                <a href="#" class="btn btn-sm btn-primary-custom">
-                                    Learn More <i class="bi bi-arrow-right ms-1"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-4">
-                        <div class="project-card">
-                            <div style="overflow: hidden;">
-                                <img src="./images/thumbnails/snowy-thumbnail.png" alt="Cultural Workshop" class="project-image">
-                            </div>
-                            <div class="project-body">
-                                <h5 class="fw-bold mb-2">CLIP Cultural Workshop</h5>
-                                <p class="text-secondary small mb-3">
-                                    Coordinated a workshop for exchange students from multiple countries to promote cultural understanding.
-                                </p>
-                                <a href="#" class="btn btn-sm btn-primary-custom">
-                                    Learn More <i class="bi bi-arrow-right ms-1"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-4">
-                        <div class="project-card">
-                            <div style="overflow: hidden;">
-                                <img src="./images/thumbnails/ha-thumbnail.jpg" alt="Environmental Project" class="project-image">
-                            </div>
-                            <div class="project-body">
-                                <h5 class="fw-bold mb-2">Environmental Awareness Project</h5>
-                                <p class="text-secondary small mb-3">
-                                    Participated in exchanging presentations and innovative ideas about environmental challenges across Europe.
-                                </p>
-                                <a href="#" class="btn btn-sm btn-primary-custom">
-                                    Learn More <i class="bi bi-arrow-right ms-1"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6 col-lg-4">
-                        <div class="project-card">
-                            <div style="overflow: hidden;">
-                                <img src="./images/thumbnails/evntprod-thumbnail.jpg" alt="Accounting Internship" class="project-image">
-                            </div>
-                            <div class="project-body">
-                                <h5 class="fw-bold mb-2">Accounting Internship</h5>
-                                <p class="text-secondary small mb-3">
-                                    Two summer internships learning WinMENTOR accounting software and documentation systems.
-                                </p>
-                                <a href="#" class="btn btn-sm btn-primary-custom">
-                                    Learn More <i class="bi bi-arrow-right ms-1"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
+            <div class="container py-5">
+                <div class="text-center mb-5">
+                    <div class="section-tag">Featured Work</div>
+                    <h2 class="section-title">Projects & Experience</h2>
+                    <p class="section-subtitle">
+                        International collaboration meets technical innovation
+                    </p>
                 </div>
-            </div>
-        </section>
 
-        <section id="resume">
-            <div class="container">
-                <div class="row g-5 align-items-center">
-                    <div class="col-lg-6">
-                        <h2 class="section-title text-start">My Experience</h2>
-                        <p class="text-secondary mb-4">
-                            Currently pursuing Data & AI studies at Breda University of Applied Sciences, I combine technical expertise in programming with strong organizational and communication skills. My experience spans international collaboration through Erasmus+ projects and professional internships in accounting and finance.
-                        </p>
-                        <a href="documents/cv.pdf" target="_blank" class="btn btn-primary-custom">
-                            Download My Resume
-                            <i class="bi bi-download ms-2"></i>
-                        </a>
+                <div class="bento-grid">
+                    <!-- Large Featured Project -->
+                    <div class="bento-item large">
+                        <div class="bento-content">
+                            <div class="bento-image">
+                                <img src="./images/thumbnails/chest-xray-thumbnail.jpg" alt="AI Chest X-Ray Classification">
+                            </div>
+                            <div class="bento-info">
+                                <span class="project-tag">AI & Healthcare</span>
+                                <h4>AI-Powered Chest X-Ray Classification System</h4>
+                                <p>Deep learning application with Explainable AI dashboard for medical diagnostics. Selected as Top 3 Project by The Innovation Square at BUas for business value and innovation potential.</p>
+                                <a href="#" class="project-link">
+                                    View Details <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="d-grid gap-3">
-                            <div class="experience-card">
-                                <div class="experience-icon">
-                                    <i class="bi bi-mortarboard-fill"></i>
-                                </div>
-                                <div>
-                                    <h6 class="fw-bold mb-2">Data & AI Student</h6>
-                                    <p class="text-secondary mb-0 small">Currently studying at Breda University of Applied Sciences, specializing in Machine Learning, Python, and SQL.</p>
-                                </div>
+
+                    <!-- Medium Projects -->
+                    <div class="bento-item medium">
+                        <div class="bento-content">
+                            <div class="bento-image">
+                                <img src="./images/thumbnails/stock-prediction-thumbnail.jpg" alt="Stock Price Prediction">
                             </div>
-                            <div class="experience-card">
-                                <div class="experience-icon">
-                                    <i class="bi bi-briefcase-fill"></i>
-                                </div>
-                                <div>
-                                    <h6 class="fw-bold mb-2">Professional Internships</h6>
-                                    <p class="text-secondary mb-0 small">Hands-on experience at Teaha Management Consulting and Romanian Rural Credit Guarantee Fund.</p>
-                                </div>
+                            <div class="bento-info">
+                                <span class="project-tag">Financial Analytics</span>
+                                <h4>NASDAQ-100 Stock Price Prediction Platform</h4>
+                                <p>High-frequency time series forecasting with clustering analysis. Flask + PostgreSQL backend for real-time minute-level predictions across 10 years of trading data.</p>
+                                <a href="#" class="project-link">
+                                    View <i class="bi bi-arrow-right"></i>
+                                </a>
                             </div>
-                            <div class="experience-card">
-                                <div class="experience-icon">
-                                    <i class="bi bi-globe-americas"></i>
-                                </div>
-                                <div>
-                                    <h6 class="fw-bold mb-2">International Collaboration</h6>
-                                    <p class="text-secondary mb-0 small">Active participant in multiple Erasmus+ projects across Europe, coordinating workshops and developing applications.</p>
-                                </div>
+                        </div>
+                    </div>
+
+                    <div class="bento-item medium">
+                        <div class="bento-content">
+                            <div class="bento-image">
+                                <img src="./images/thumbnails/diabetes-thumbnail.jpg" alt="Hospital Readmission Prediction">
+                            </div>
+                            <div class="bento-info">
+                                <span class="project-tag">Healthcare ML</span>
+                                <h4>Hospital Readmission Prediction for Diabetes Patients</h4>
+                                <p>Machine learning models with SMOTE and PCA to predict 30-day readmissions, enabling proactive patient care and resource optimization.</p>
+                                <a href="#" class="project-link">
+                                    View <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Small Projects -->
+                    <div class="bento-item small">
+                        <div class="bento-content">
+                            <div class="bento-image">
+                                <img src="./images/thumbnails/sdg-thumbnail.jpg" alt="SDG Dashboard">
+                            </div>
+                            <div class="bento-info">
+                                <span class="project-tag">Data Analytics</span>
+                                <h5>SDG Data Analytics Dashboard</h5>
+                                <p>Interactive Power BI dashboard analyzing water, sanitation, and infant mortality correlations across developing nations.</p>
+                                <a href="#" class="project-link-sm">
+                                    <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bento-item small">
+                        <div class="bento-content">
+                            <div class="bento-image">
+                                <img src="./images/thumbnails/epl-thumbnail.jpg" alt="EPL Match Prediction">
+                            </div>
+                            <div class="bento-info">
+                                <span class="project-tag">Sports Analytics</span>
+                                <h5>EPL Match Result Prediction</h5>
+                                <p>Predictive pipeline for English Premier League outcomes using team attributes, player data, and ML models.</p>
+                                <a href="#" class="project-link-sm">
+                                    <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bento-item small">
+                        <div class="bento-content">
+                            <div class="bento-image">
+                                <img src="./images/thumbnails/dll-thumbnail.jpg" alt="International Projects">
+                            </div>
+                            <div class="bento-info">
+                                <span class="project-tag">International</span>
+                                <h5>Erasmus+ Projects</h5>
+                                <p>5+ international mobility programs including Portugal exchange, cultural workshops, Android app development, and environmental awareness initiatives.</p>
+                                <a href="#" class="project-link-sm">
+                                    <i class="bi bi-arrow-right"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </section>
 
+        <!-- Contact Section - Minimalist Card -->
+        <section id="contact">
+            <div class="container py-5">
+                <div class="contact-card">
+                    <div class="row align-items-center g-5">
+                        <div class="col-lg-6">
+                            <h2 class="mb-4">Let's Build Something Amazing</h2>
+                            <p class="text-muted mb-4">
+                                Always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
+                            </p>
+                            <div class="contact-methods">
+                                <a href="mailto:razvan.al.nica@gmail.com" class="contact-method">
+                                    <div class="method-icon">
+                                        <i class="fas fa-envelope"></i>
+                                    </div>
+                                    <div>
+                                        <div class="method-label">Email</div>
+                                        <div class="method-value">razvan.al.nica@gmail.com</div>
+                                    </div>
+                                </a>
+                                <a href="tel:+40737654865" class="contact-method">
+                                    <div class="method-icon">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                    <div>
+                                        <div class="method-label">Phone</div>
+                                        <div class="method-value">+40 737 654 865</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <div class="stat-number">5+</div>
+                                    <div class="stat-label">Erasmus+ Projects</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-number">200+</div>
+                                    <div class="stat-label">Quiz Participants</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-number">2</div>
+                                    <div class="stat-label">Professional Internships</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-number">∞</div>
+                                    <div class="stat-label">Ideas to Explore</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <footer id="contact">
-        <div class="container text-center">
-            <h2 class="section-title mb-3">Get In Touch</h2>
-            <p class="text-secondary mb-4 mx-auto" style="max-width: 600px;">
-                I'm always open to new opportunities and collaborations. Feel free to reach out!
-            </p>
-
-            <div class="d-flex flex-column flex-sm-row justify-content-center gap-4 mb-4">
-                <div class="d-flex align-items-center justify-content-center gap-2">
-                    <i class="fas fa-envelope fs-5"></i>
-                    <a href="mailto:razvan.al.nica@gmail.com">razvan.al.nica@gmail.com</a>
-                </div>
-                <div class="d-flex align-items-center justify-content-center gap-2">
-                    <i class="fas fa-phone fs-5"></i>
-                    <a href="tel:+40737654865">+40 737 654 865</a>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 Razvan Nica. Crafted with passion.</p>
+                <div class="footer-links">
+                    <a href="#home">Back to Top <i class="bi bi-arrow-up"></i></a>
                 </div>
             </div>
-
-            <p class="text-secondary small pt-3" style="border-top: 1px solid var(--border-color);">
-                &copy; 2025 Razvan Nica Portfolio. All rights reserved.
-            </p>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleNav() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('active');
+        }
+
+        // Close nav when clicking outside
+        document.addEventListener('click', function(event) {
+            const navWrapper = document.querySelector('.nav-wrapper');
+            const menu = document.getElementById('navMenu');
+            if (!navWrapper.contains(event.target) && menu.classList.contains('active')) {
+                menu.classList.remove('active');
+            }
+        });
+
+        // Smooth scroll offset for fixed nav
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
