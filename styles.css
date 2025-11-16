@@ -690,44 +690,66 @@ section {
     transform: translateY(-5px);
     box-shadow: 0 20px 60px rgba(0, 245, 255, 0.2);
 }
-
-/* Ensure all bento images have consistent containers */
-.bento-image {
+/* Ensure all bento items have consistent structure */
+.bento-icon-container {
     width: 100%;
-    overflow: hidden;
-    background: #1a1a2e;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(0, 245, 255, 0.1), rgba(189, 0, 255, 0.1));
     position: relative;
+    overflow: hidden;
 }
 
-/* Set specific heights for different bento sizes */
-.bento-item.large .bento-image {
-    height: 400px;
+.bento-icon-container::before {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, 
+        transparent 30%, 
+        rgba(0, 245, 255, 0.1) 50%, 
+        transparent 70%);
+    animation: shimmer 3s infinite;
 }
 
-.bento-item.medium .bento-image {
-    height: 250px;
+@keyframes shimmer {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
 }
 
-.bento-item.small .bento-image {
+.bento-item.large .bento-icon-container {
+    height: 300px;
+}
+
+.bento-item.medium .bento-icon-container {
     height: 200px;
 }
 
-/* Force fit images to fill containers */
-.bento-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    transition: transform 0.3s ease;
+.bento-icon-container.small {
+    height: 150px;
 }
 
-/* Optional: Add zoom effect on hover */
-.bento-item:hover .bento-image img {
-    transform: scale(1.05);
+.project-icon {
+    font-size: 5rem;
+    color: var(--accent-cyan);
+    z-index: 2;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 0 20px var(--glow));
 }
 
-.bento-content:hover .bento-image img {
-    transform: scale(1.1);
+.bento-item.large .project-icon {
+    font-size: 6rem;
+}
+
+.bento-icon-container.small .project-icon {
+    font-size: 3.5rem;
+}
+
+.bento-item:hover .project-icon {
+    transform: scale(1.1) rotate(5deg);
+    color: var(--accent-purple);
 }
 
 .bento-info {
