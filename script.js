@@ -193,7 +193,7 @@ function openModal(projectId) {
         <div class="modal-header">
             <span class="project-tag">${project.tag}</span>
             <h3>${project.title}</h3>
-            <p class="text-muted">${project.description}</p>
+            <p class="text">${project.description}</p>
         </div>
         
         <div class="modal-tech-stack">
@@ -202,7 +202,7 @@ function openModal(projectId) {
         
         <div class="modal-section">
             <h4>Overview</h4>
-            <p class="text-muted">${project.fullDescription}</p>
+            <p class="text">${project.fullDescription}</p>
         </div>
         
         <div class="modal-section">
