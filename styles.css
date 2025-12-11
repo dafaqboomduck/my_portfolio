@@ -840,13 +840,13 @@ section {
     overflow-y: auto;
     padding: 2rem;
 }
-
 .modal-overlay.active {
     display: flex;
-    align-items: center;
+    align-items: flex-start; /* Changed from center to flex-start */
     justify-content: center;
+    padding-top: 2rem; /* Add top padding for breathing room */
+    padding-bottom: 2rem; /* Add bottom padding */
 }
-
 .modal-content {
     background: var(--bg-card);
     border: 1px solid rgba(0, 153, 255, 0.2);
@@ -856,8 +856,18 @@ section {
     width: 100%;
     position: relative;
     animation: modalSlideIn 0.3s ease;
+    margin: auto 0;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
 }
-
+.modal-header-top {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;  /* CHANGE THIS TO: */
+    align-items: flex-start;
+    padding-right: 1rem; 
+}
 @keyframes modalSlideIn {
     from {
         opacity: 0;
@@ -868,13 +878,9 @@ section {
         transform: translateY(0);
     }
 }
-
 .modal-close {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     background: rgba(0, 102, 204, 0.15);
     border: 1px solid rgba(0, 153, 255, 0.2);
     border-radius: 50%;
@@ -885,27 +891,40 @@ section {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 0;
+    line-height: 1;  /* ADD THIS LINE */
+    padding: 0;      /* ADD THIS LINE */
 }
-
 .modal-close:hover {
     background: var(--accent-blue-2);
     border-color: var(--accent-blue-2);
     transform: rotate(90deg);
 }
-
 .modal-header h3 {
     font-size: 2rem;
     font-weight: 800;
     margin-bottom: 1rem;
+    line-height: 1.3;
 }
-
+.modal-header p {
+    margin-top: 1rem;
+}
+.project-tag {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: rgba(0, 102, 204, 0.15);
+    border: 1px solid var(--accent-blue-1);
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    color: var(--accent-blue-2);
+    font-weight: 600;
+}
 .modal-tech-stack {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
     margin: 1.5rem 0;
 }
-
 .modal-tech-badge {
     padding: 0.5rem 1rem;
     background: rgba(0, 102, 204, 0.15);
@@ -915,30 +934,25 @@ section {
     color: var(--accent-blue-2);
     font-weight: 600;
 }
-
 .modal-section {
     margin: 2rem 0;
 }
-
 .modal-section h4 {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
     color: var(--accent-blue-2);
 }
-
 .modal-section ul {
     list-style: none;
     padding: 0;
 }
-
 .modal-section li {
     padding: 0.75rem 0;
     padding-left: 2rem;
     position: relative;
     color: var(--text-muted);
 }
-
 .modal-section li::before {
     content: '→';
     position: absolute;
@@ -946,13 +960,11 @@ section {
     color: var(--accent-blue-2);
     font-weight: bold;
 }
-
 .modal-links {
     display: flex;
     gap: 1rem;
     margin-top: 2rem;
 }
-
 .modal-btn {
     padding: 1rem 2rem;
     background: linear-gradient(135deg, var(--accent-blue-1), var(--accent-blue-2));
@@ -966,10 +978,41 @@ section {
     gap: 0.5rem;
     transition: all 0.3s ease;
 }
-
 .modal-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 30px var(--glow);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .modal-overlay {
+        padding: 0.5rem;
+    }
+    .modal-overlay.active {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+    .modal-content {
+        padding: 2rem;
+        border-radius: 1.5rem;
+        max-height: calc(100vh - 1rem);
+    }
+    .modal-header h3 {
+        font-size: 1.5rem;
+    }
+    .modal-close {
+        width: 40px;
+        height: 40px;
+    }
+    .modal-section h4 {
+        font-size: 1.25rem;
+    }
+    .modal-links {
+        flex-direction: column;
+    }
+    .modal-btn {
+        justify-content: center;
+    }
 }
 
 /* ========== CONTACT SECTION ========== */

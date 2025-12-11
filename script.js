@@ -33,8 +33,12 @@ function openModal(projectId) {
     if (!project) return;
     
     modalBody.innerHTML = `
-        <div class="modal-header">
+        <div class="modal-header-top">
             <span class="project-tag">${project.tag}</span>
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+        </div>
+        
+        <div class="modal-header">
             <h3>${project.title}</h3>
             <p class="text">${project.description}</p>
         </div>

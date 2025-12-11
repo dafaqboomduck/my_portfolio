@@ -86,18 +86,16 @@ const projectData = {
         technologies: ['Power BI', 'DAX', 'Excel', 'Python', 'Data Cleaning', 'Statistical Analysis', 'Data Visualization'],
         features: [
             'Dynamic visualizations exploring country-specific trends and comparative metrics',
-            'Global health and infrastructure data analysis across 100+ developing nations',
+            'Global health and infrastructure data analysis across 50+ developing nations',
             'Statistical correlation analysis between water access, sanitation, and infant mortality',
             'Interactive filtering and drill-down capabilities',
             'Custom DAX measures for complex health indicator calculations',
             'Data-driven visualizations translating complex data into actionable insights'
         ],
         achievements: [
-            'Analyzed data from 100+ developing countries',
+            'Analyzed and processed data from various developing countries using Excel and DAX.',
             'Identified strong negative correlation (r=0.82) between improved water/sanitation and infant mortality',
-            'Provided evidence-based insights for policy prioritization',
-            'Created decision-support tool for policymakers and public health advocates',
-            'Demonstrated how infrastructure investments correlate with child health outcomes',
+            'Built an interactive dashboard using PowerBI to visualize the data and my findings.',
             'Presented findings to university faculty and students'
         ],
         github: '#',
