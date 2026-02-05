@@ -1,0 +1,1481 @@
+/* ========== VISTA PORTFOLIO STYLES ========== */
+@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    background: #000;
+}
+
+.hidden { display: none !important; }
+
+/* ========== BOOT SCREEN ========== */
+.boot-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, #000 0%, #0a1628 50%, #000 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.boot-content {
+    text-align: center;
+}
+
+.boot-logo {
+    width: 280px;
+    height: auto;
+    margin-bottom: 30px;
+    animation: bootGlow 2s ease-in-out infinite;
+}
+
+@keyframes bootGlow {
+    0%, 100% { filter: brightness(1) drop-shadow(0 0 20px rgba(0, 150, 255, 0.5)); }
+    50% { filter: brightness(1.2) drop-shadow(0 0 40px rgba(0, 150, 255, 0.8)); }
+}
+
+.boot-text {
+    color: #fff;
+    font-size: 14px;
+    letter-spacing: 3px;
+    margin-bottom: 40px;
+    opacity: 0.9;
+}
+
+.boot-loader {
+    width: 200px;
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    margin: 0 auto 30px;
+    overflow: hidden;
+}
+
+.boot-progress {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #0078d4, #00bcf2, #0078d4);
+    background-size: 200% 100%;
+    border-radius: 3px;
+    animation: bootProgress 3s ease-out forwards, shimmer 1s linear infinite;
+}
+
+@keyframes bootProgress {
+    0% { width: 0%; }
+    100% { width: 100%; }
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.boot-copyright {
+    color: rgba(255,255,255,0.4);
+    font-size: 11px;
+}
+
+/* ========== WELCOME SCREEN ========== */
+.welcome-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1a3a5c 0%, #0d1f33 100%);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.welcome-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('images/window-vista-bkg.jpg') center/cover;
+    opacity: 0.3;
+}
+
+.welcome-content {
+    position: relative;
+    text-align: center;
+    z-index: 1;
+}
+
+.welcome-text {
+    color: #fff;
+    font-size: 48px;
+    font-weight: 300;
+    margin-bottom: 60px;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+}
+
+.user-card {
+    display: inline-block;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.user-card:hover {
+    transform: scale(1.05);
+    background: rgba(255,255,255,0.1);
+}
+
+.user-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #4a90d9, #1e5799);
+    margin: 0 auto 15px;
+    overflow: hidden;
+    border: 3px solid rgba(255,255,255,0.5);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-avatar i {
+    font-size: 60px;
+    color: rgba(255,255,255,0.8);
+}
+
+.user-name {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    text-shadow: 0 1px 5px rgba(0,0,0,0.5);
+}
+
+/* ========== DESKTOP ========== */
+.desktop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('images/window-vista-bkg.jpg') center/cover no-repeat;
+    background-color: #0a1628;
+}
+
+/* ========== DESKTOP ICONS ========== */
+.desktop-icons {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 10;
+}
+
+.desktop-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80px;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.desktop-icon:hover {
+    background: rgba(255,255,255,0.15);
+}
+
+.desktop-icon:active, .desktop-icon.selected {
+    background: rgba(100,150,255,0.3);
+    border: 1px solid rgba(100,150,255,0.5);
+}
+
+.desktop-icon img {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 5px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.desktop-icon span {
+    color: #fff;
+    font-size: 11px;
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    word-wrap: break-word;
+    max-width: 70px;
+}
+
+/* ========== WINDOWS ========== */
+.vista-window {
+    position: absolute;
+    min-width: 400px;
+    min-height: 300px;
+    background: rgba(30, 60, 100, 0.85);
+    border-radius: 8px 8px 0 0;
+    box-shadow: 
+        0 0 0 1px rgba(255,255,255,0.4),
+        0 0 0 2px rgba(0,0,0,0.3),
+        0 8px 32px rgba(0,0,0,0.5),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 100;
+    overflow: hidden;
+}
+
+.vista-window.active {
+    z-index: 200;
+    box-shadow: 
+        0 0 0 1px rgba(255,255,255,0.5),
+        0 0 0 2px rgba(0,0,0,0.3),
+        0 12px 48px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+.vista-window.minimized {
+    display: none;
+}
+
+.vista-window.maximized {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: calc(100% - 40px) !important;
+    border-radius: 0;
+}
+
+/* Window Title Bar */
+.window-titlebar {
+    height: 30px;
+    background: linear-gradient(180deg, 
+        rgba(200, 220, 255, 0.4) 0%,
+        rgba(100, 150, 220, 0.3) 50%,
+        rgba(50, 100, 180, 0.4) 100%);
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    cursor: move;
+}
+
+.window-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+}
+
+.window-title {
+    flex: 1;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 400;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.window-controls {
+    display: flex;
+    gap: 2px;
+}
+
+.window-btn {
+    width: 28px;
+    height: 20px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all 0.15s;
+}
+
+.window-btn-min {
+    background: linear-gradient(180deg, #7eb4ea 0%, #3a8ad9 100%);
+    color: #fff;
+}
+
+.window-btn-max {
+    background: linear-gradient(180deg, #7eb4ea 0%, #3a8ad9 100%);
+    color: #fff;
+}
+
+.window-btn-close {
+    background: linear-gradient(180deg, #f08080 0%, #dc3545 100%);
+    color: #fff;
+}
+
+.window-btn:hover {
+    filter: brightness(1.2);
+}
+
+.window-btn-close:hover {
+    background: linear-gradient(180deg, #ff6b6b 0%, #ff0000 100%);
+}
+
+/* Window Toolbar */
+.window-toolbar {
+    height: 60px;
+    background: linear-gradient(180deg, 
+        rgba(230, 240, 255, 0.95) 0%,
+        rgba(200, 220, 250, 0.95) 100%);
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    gap: 10px;
+}
+
+.toolbar-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px 10px;
+    border: none;
+    background: transparent;
+    border-radius: 3px;
+    cursor: pointer;
+    color: #333;
+}
+
+.toolbar-btn:hover {
+    background: rgba(100, 150, 255, 0.2);
+}
+
+.toolbar-btn i {
+    font-size: 20px;
+    color: #1e5799;
+}
+
+.toolbar-btn span {
+    font-size: 10px;
+    margin-top: 2px;
+}
+
+.address-bar {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    padding: 5px 10px;
+    margin-left: 10px;
+}
+
+.address-bar i {
+    color: #666;
+    margin-right: 8px;
+}
+
+.address-bar span {
+    color: #333;
+    font-size: 12px;
+}
+
+/* Window Content */
+.window-content {
+    background: linear-gradient(180deg, #fff 0%, #f5f5f5 100%);
+    height: calc(100% - 90px);
+    overflow-y: auto;
+    padding: 20px;
+    color: #333;
+}
+
+.window-content h2 {
+    color: #1e5799;
+    font-size: 24px;
+    margin-bottom: 15px;
+    font-weight: 400;
+}
+
+.window-content h3 {
+    color: #2a6ab8;
+    font-size: 18px;
+    margin: 20px 0 10px;
+    font-weight: 600;
+}
+
+.window-content p {
+    line-height: 1.6;
+    margin-bottom: 15px;
+    color: #444;
+}
+
+.window-content ul {
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+.window-content li {
+    margin-bottom: 8px;
+    color: #444;
+}
+
+/* Vista Info Box */
+.vista-info-box {
+    background: linear-gradient(135deg, #e8f4ff 0%, #d0e8ff 100%);
+    border: 1px solid #a0c4e8;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 15px 0;
+}
+
+.vista-info-box h4 {
+    color: #1e5799;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+/* Skills Grid */
+.skills-vista-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.skill-vista-item {
+    background: linear-gradient(180deg, #fff 0%, #e8f0ff 100%);
+    border: 1px solid #b0c8e8;
+    border-radius: 5px;
+    padding: 15px;
+    text-align: center;
+}
+
+.skill-vista-item i {
+    font-size: 32px;
+    color: #1e5799;
+    margin-bottom: 10px;
+}
+
+.skill-vista-item h5 {
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.skill-vista-item p {
+    font-size: 11px;
+    color: #666;
+    margin: 0;
+}
+
+/* Project Cards */
+.project-vista-card {
+    background: #fff;
+    border: 1px solid #c0c0c0;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.project-vista-header {
+    background: linear-gradient(180deg, #1e5799 0%, #0d3a6e 100%);
+    color: #fff;
+    padding: 10px 15px;
+    font-weight: 600;
+}
+
+.project-vista-body {
+    padding: 15px;
+}
+
+.project-vista-tag {
+    display: inline-block;
+    background: #e8f0ff;
+    color: #1e5799;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    margin-bottom: 10px;
+}
+
+.project-vista-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.tech-vista-badge {
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 10px;
+    color: #555;
+}
+
+/* Contact Form Vista Style */
+.vista-form-group {
+    margin-bottom: 15px;
+}
+
+.vista-form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+    font-size: 12px;
+}
+
+.vista-input, .vista-textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    font-size: 13px;
+    background: #fff;
+}
+
+.vista-input:focus, .vista-textarea:focus {
+    outline: none;
+    border-color: #1e5799;
+    box-shadow: 0 0 5px rgba(30, 87, 153, 0.3);
+}
+
+.vista-btn {
+    background: linear-gradient(180deg, #7eb4ea 0%, #3a8ad9 100%);
+    color: #fff;
+    border: 1px solid #2a6ab8;
+    padding: 8px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.vista-btn:hover {
+    background: linear-gradient(180deg, #8ec4fa 0%, #4a9ae9 100%);
+}
+
+/* ========== TASKBAR ========== */
+.taskbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(180deg, 
+        rgba(60, 100, 160, 0.95) 0%,
+        rgba(30, 60, 110, 0.95) 50%,
+        rgba(20, 40, 80, 0.98) 100%);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    z-index: 9000;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+}
+
+/* Start Button */
+.start-button {
+    width: 60px;
+    height: 40px;
+    border: none;
+    background: linear-gradient(180deg, 
+        #3a9d3a 0%, 
+        #2d7d2d 50%, 
+        #1a5a1a 100%);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    border-right: 1px solid rgba(0,0,0,0.3);
+}
+
+.start-button:hover {
+    background: linear-gradient(180deg, 
+        #4aad4a 0%, 
+        #3d8d3d 50%, 
+        #2a6a2a 100%);
+}
+
+.start-button img {
+    width: 28px;
+    height: 28px;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
+}
+
+/* Quick Launch */
+.quick-launch {
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.ql-separator {
+    width: 1px;
+    height: 24px;
+    background: rgba(255,255,255,0.2);
+    margin: 0 5px;
+}
+
+/* Taskbar Windows */
+.taskbar-windows {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    gap: 3px;
+    overflow-x: auto;
+}
+
+.taskbar-item {
+    height: 28px;
+    min-width: 160px;
+    max-width: 200px;
+    background: linear-gradient(180deg, 
+        rgba(80, 130, 200, 0.8) 0%,
+        rgba(50, 90, 150, 0.8) 100%);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.taskbar-item:hover {
+    background: linear-gradient(180deg, 
+        rgba(100, 150, 220, 0.9) 0%,
+        rgba(70, 110, 170, 0.9) 100%);
+}
+
+.taskbar-item.active {
+    background: linear-gradient(180deg, 
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(200, 220, 255, 0.3) 100%);
+    border-color: rgba(255,255,255,0.5);
+}
+
+.taskbar-item img {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+}
+
+.taskbar-item span {
+    color: #fff;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+/* System Tray */
+.system-tray {
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    gap: 15px;
+    border-left: 1px solid rgba(255,255,255,0.2);
+}
+
+.tray-icons {
+    display: flex;
+    gap: 10px;
+}
+
+.tray-icons i {
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    opacity: 0.9;
+}
+
+.tray-icons i:hover {
+    opacity: 1;
+}
+
+.tray-clock {
+    color: #fff;
+    font-size: 11px;
+    text-align: right;
+    line-height: 1.3;
+}
+
+/* ========== START MENU ========== */
+.start-menu {
+    position: fixed;
+    bottom: 40px;
+    left: 0;
+    width: 400px;
+    background: linear-gradient(180deg, 
+        rgba(40, 80, 140, 0.98) 0%,
+        rgba(20, 50, 100, 0.98) 100%);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0 -5px 30px rgba(0,0,0,0.5);
+    z-index: 9500;
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+}
+
+.start-menu-left {
+    width: 55%;
+    background: rgba(255,255,255,0.95);
+    padding: 10px 0;
+}
+
+.start-menu-right {
+    width: 45%;
+    padding: 10px 0;
+}
+
+.start-user {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    margin-bottom: 5px;
+}
+
+.start-user-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 5px;
+    background: linear-gradient(135deg, #4a90d9, #1e5799);
+    margin-right: 12px;
+    overflow: hidden;
+    border: 2px solid #1e5799;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.start-user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.start-user-avatar i {
+    font-size: 28px;
+    color: #fff;
+}
+
+.start-user span {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e5799;
+}
+
+.start-separator {
+    height: 1px;
+    background: #c0c0c0;
+    margin: 5px 15px;
+}
+
+.start-separator-right {
+    height: 1px;
+    background: rgba(255,255,255,0.2);
+    margin: 5px 10px;
+}
+
+.start-programs {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.start-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.start-item:hover {
+    background: #e8f0ff;
+}
+
+.start-item img {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}
+
+.start-item i {
+    font-size: 18px;
+    margin-right: 10px;
+    color: #1e5799;
+    width: 24px;
+    text-align: center;
+}
+
+.start-item span {
+    font-size: 12px;
+    color: #333;
+}
+
+.start-item-right {
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.start-item-right:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.start-item-right span {
+    font-size: 12px;
+    color: #fff;
+}
+
+.start-bottom {
+    width: 100%;
+    background: linear-gradient(180deg, 
+        rgba(0, 0, 0, 0.2) 0%,
+        rgba(0, 0, 0, 0.4) 100%);
+    padding: 8px 15px;
+    display: flex;
+    align-items: center;
+}
+
+.start-shutdown {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #dc3545 0%, #a01020 100%);
+    border: 2px solid #fff;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+
+.start-shutdown:hover {
+    background: linear-gradient(180deg, #ff4555 0%, #c02030 100%);
+}
+
+.start-bottom span {
+    color: #fff;
+    font-size: 12px;
+}
+
+/* ========== SHUTDOWN SCREEN ========== */
+.shutdown-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    z-index: 20000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.shutdown-text {
+    color: #fff;
+    font-size: 24px;
+    animation: fadeInOut 2s ease-in-out;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* ========== SCROLLBAR VISTA STYLE ========== */
+.window-content::-webkit-scrollbar {
+    width: 16px;
+}
+
+.window-content::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-left: 1px solid #ccc;
+}
+
+.window-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #c0c0c0 0%, #a0a0a0 100%);
+    border: 1px solid #888;
+    border-radius: 0;
+}
+
+.window-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #b0b0b0 0%, #909090 100%);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    .vista-window {
+        min-width: 100% !important;
+        width: 100% !important;
+        left: 0 !important;
+        top: 0 !important;
+        height: calc(100% - 40px) !important;
+        border-radius: 0;
+    }
+    
+    .start-menu {
+        width: 100%;
+    }
+    
+    .desktop-icons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        left: 10px;
+        right: 10px;
+    }
+    
+    .skills-vista-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* Disabled Toolbar Button */
+.toolbar-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.toolbar-btn.disabled:hover {
+    background: transparent;
+}
+
+/* Clickable Project Cards */
+.project-vista-card.clickable {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.project-vista-card.clickable:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(30, 87, 153, 0.3);
+    border-color: #1e5799;
+}
+
+.project-vista-card .view-more {
+    margin-top: 12px;
+    font-size: 11px;
+    color: #1e5799;
+    font-style: italic;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.project-vista-card.clickable:hover .view-more {
+    opacity: 1;
+}
+
+/* Documents Grid View */
+.documents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 20px;
+    padding: 20px 10px;
+}
+
+.document-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.document-item:hover {
+    background: rgba(30, 87, 153, 0.1);
+}
+
+.document-item:active {
+    background: rgba(30, 87, 153, 0.2);
+}
+
+.document-item i {
+    font-size: 48px;
+    color: #1e5799;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.document-item span {
+    font-size: 11px;
+    color: #333;
+    word-wrap: break-word;
+    line-height: 1.3;
+}
+
+/* Default Programs / Installed Programs */
+.programs-list {
+    margin-top: 15px;
+}
+
+.program-category {
+    background: linear-gradient(180deg, #e8f0ff 0%, #d0e0f5 100%);
+    border: 1px solid #a0c0e0;
+    border-radius: 4px;
+    padding: 8px 15px;
+    margin: 15px 0 8px 0;
+}
+
+.program-category h4 {
+    margin: 0;
+    color: #1e5799;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.program-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid #e0e0e0;
+    transition: background 0.15s;
+}
+
+.program-item:hover {
+    background: #f5f8ff;
+}
+
+.program-item i {
+    font-size: 24px;
+    color: #1e5799;
+    width: 40px;
+    text-align: center;
+    margin-right: 12px;
+}
+
+.program-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.program-name {
+    font-size: 13px;
+    color: #333;
+    font-weight: 500;
+}
+
+.program-publisher {
+    font-size: 11px;
+    color: #888;
+    margin-top: 2px;
+}
+
+/* Contact Links Enhancement */
+.contact-link {
+    transition: all 0.2s;
+}
+
+.contact-link:hover {
+    transform: translateX(5px);
+    border-color: #1e5799;
+    background: linear-gradient(135deg, #d8ecff 0%, #c0dcff 100%);
+}
+
+.contact-link a {
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.contact-link a:hover {
+    text-decoration: underline;
+}
+
+/* Vista Button in links */
+.vista-btn {
+    text-decoration: none !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.vista-btn i {
+    font-size: 14px;
+}
+
+/* Games Grid */
+.games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 20px;
+    padding: 20px 10px;
+}
+
+.game-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    background: linear-gradient(180deg, #fff 0%, #e8f0ff 100%);
+    border: 1px solid #b0c8e8;
+}
+
+.game-item:hover {
+    background: linear-gradient(180deg, #e8f4ff 0%, #d0e0ff 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(30, 87, 153, 0.2);
+}
+
+.game-item:active {
+    transform: translateY(0);
+}
+
+.game-item i {
+    font-size: 48px;
+    color: #1e5799;
+    margin-bottom: 10px;
+}
+
+.game-item span {
+    font-size: 13px;
+    color: #333;
+    font-weight: 500;
+}
+
+.game-item small {
+    font-size: 10px;
+    color: #888;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+.game-item.coming-soon {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.game-item.coming-soon:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* Computer / Drives View */
+.drives-section {
+    margin: 20px 0;
+}
+
+.drives-section h3 {
+    font-size: 14px;
+    color: #1e5799;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #c0c0c0;
+}
+
+.drive-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    margin: 8px 0;
+    background: linear-gradient(180deg, #fff 0%, #f5f5f5 100%);
+    border: 1px solid #c0c0c0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.drive-item:hover {
+    background: linear-gradient(180deg, #e8f4ff 0%, #d8e8ff 100%);
+    border-color: #1e5799;
+}
+
+.drive-item i {
+    font-size: 36px;
+    color: #1e5799;
+    margin-right: 15px;
+}
+
+.drive-info {
+    flex: 1;
+}
+
+.drive-name {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.drive-bar {
+    height: 16px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.drive-used {
+    height: 100%;
+    background: linear-gradient(180deg, #7eb4ea 0%, #3a8ad9 100%);
+}
+
+.drive-space {
+    font-size: 11px;
+    color: #666;
+}
+
+.system-info-table {
+    width: 100%;
+    font-size: 12px;
+}
+
+.system-info-table td {
+    padding: 4px 0;
+}
+
+.system-info-table td:first-child {
+    color: #666;
+    width: 100px;
+}
+
+.system-info-table td:last-child {
+    color: #333;
+    font-weight: 500;
+}
+
+/* Control Panel Grid */
+.cp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.cp-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    background: linear-gradient(180deg, #fff 0%, #f8f8f8 100%);
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cp-item:hover {
+    background: linear-gradient(180deg, #e8f4ff 0%, #d8e8ff 100%);
+    border-color: #1e5799;
+    transform: translateX(3px);
+}
+
+.cp-item i {
+    font-size: 32px;
+    color: #1e5799;
+    margin-right: 12px;
+    width: 40px;
+    text-align: center;
+}
+
+.cp-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.cp-title {
+    font-size: 13px;
+    color: #1e5799;
+    font-weight: 500;
+}
+
+.cp-desc {
+    font-size: 11px;
+    color: #666;
+    margin-top: 2px;
+}
+
+/* Help and Support */
+.help-section {
+    margin: 15px 0;
+}
+
+.help-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    margin: 5px 0;
+    background: #f8f8f8;
+    border-radius: 4px;
+}
+
+.help-item i {
+    font-size: 20px;
+    color: #1e5799;
+    margin-right: 15px;
+    width: 30px;
+    text-align: center;
+}
+
+.help-item kbd {
+    background: linear-gradient(180deg, #f8f8f8 0%, #e0e0e0 100%);
+    border: 1px solid #c0c0c0;
+    border-radius: 3px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-family: 'Consolas', monospace;
+    margin-right: 5px;
+    box-shadow: 0 2px 0 #a0a0a0;
+}
+
+.help-item div {
+    flex: 1;
+    font-size: 13px;
+    color: #333;
+}
+
+.help-footer {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+    text-align: center;
+}
+
+.help-footer p {
+    margin: 5px 0;
+}
+
+/* Vista Notification */
+.vista-notification {
+    position: fixed;
+    bottom: 60px;
+    right: 20px;
+    background: linear-gradient(180deg, rgba(40, 80, 140, 0.95) 0%, rgba(20, 50, 100, 0.95) 100%);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 5px;
+    border: 1px solid rgba(255,255,255,0.3);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
+    z-index: 10000;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    font-size: 13px;
+}
+
+.vista-notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Dark Theme */
+body.dark-theme .desktop {
+    filter: brightness(0.8);
+}
+
+body.dark-theme .vista-window {
+    background: rgba(20, 30, 50, 0.95);
+}
+
+body.dark-theme .window-content {
+    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+    color: #e0e0e0;
+}
+
+body.dark-theme .window-content h2,
+body.dark-theme .window-content h3 {
+    color: #7eb4ea;
+}
+
+body.dark-theme .window-content p,
+body.dark-theme .window-content li {
+    color: #c0c0c0;
+}
+
+body.dark-theme .vista-info-box {
+    background: linear-gradient(135deg, #1a2a4a 0%, #0d1a30 100%);
+    border-color: #3a5a8a;
+}
+
+body.dark-theme .vista-info-box h4 {
+    color: #7eb4ea;
+}
+
+body.dark-theme .window-toolbar {
+    background: linear-gradient(180deg, rgba(40, 50, 70, 0.95) 0%, rgba(30, 40, 60, 0.95) 100%);
+}
+
+body.dark-theme .address-bar {
+    background: #1a1a2e;
+    border-color: #3a5a8a;
+}
+
+body.dark-theme .address-bar span {
+    color: #c0c0c0;
+}
+
+body.dark-theme .toolbar-btn {
+    color: #c0c0c0;
+}
+
+body.dark-theme .project-vista-card,
+body.dark-theme .skill-vista-item,
+body.dark-theme .drive-item,
+body.dark-theme .cp-item,
+body.dark-theme .help-item,
+body.dark-theme .game-item {
+    background: linear-gradient(180deg, #1a2a4a 0%, #0d1a30 100%);
+    border-color: #3a5a8a;
+    color: #c0c0c0;
+}
+
+body.dark-theme .project-vista-header {
+    background: linear-gradient(180deg, #2a4a7a 0%, #1a3a5a 100%);
+}
+
+body.dark-theme .tech-vista-badge {
+    background: #2a3a5a;
+    border-color: #4a6a9a;
+    color: #a0c0e0;
+}
+
+body.dark-theme .document-item span,
+body.dark-theme .cp-title {
+    color: #7eb4ea;
+}
+
+body.dark-theme .program-item {
+    border-color: #3a5a8a;
+}
+
+body.dark-theme .program-category {
+    background: linear-gradient(180deg, #2a4a7a 0%, #1a3a5a 100%);
+}
+
+body.dark-theme .drive-bar {
+    background: #2a3a5a;
+}

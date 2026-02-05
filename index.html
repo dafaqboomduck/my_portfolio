@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Razvan Nica - Portfolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="vista-styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Boot Screen -->
+    <div id="bootScreen" class="boot-screen">
+        <div class="boot-content">
+            <img src="images/win-vista-logo.png" alt="Windows Vista" class="boot-logo">
+            <div class="boot-text">Microsoft<sup>®</sup> Windows Vista<sup>™</sup></div>
+            <div class="boot-loader">
+                <div class="boot-progress"></div>
+            </div>
+            <div class="boot-copyright">© Microsoft Corporation</div>
+        </div>
+    </div>
+
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen" class="welcome-screen hidden">
+        <div class="welcome-overlay"></div>
+        <div class="welcome-content">
+            <div class="welcome-text">Welcome</div>
+            <div class="user-card" onclick="startDesktop()">
+                <div class="user-avatar">
+                    <img src="images/profile.jpg" alt="Razvan" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'bi bi-person-fill\'></i>'">
+                </div>
+                <div class="user-name">Razvan Nica</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Desktop -->
+    <div id="desktop" class="desktop hidden">
+        <!-- Desktop Icons -->
+        <div class="desktop-icons">
+            <div class="desktop-icon" ondblclick="openWindow('about')">
+                <img src="images/vista-explorer.png" alt="About Me">
+                <span>About Me</span>
+            </div>
+            <div class="desktop-icon" ondblclick="openWindow('skills')">
+                <img src="images/vista-explorer.png" alt="Skills">
+                <span>My Skills</span>
+            </div>
+            <div class="desktop-icon" ondblclick="openWindow('projects')">
+                <img src="images/vista-explorer.png" alt="Projects">
+                <span>Projects</span>
+            </div>
+            <div class="desktop-icon" ondblclick="openWindow('contact')">
+                <img src="images/outlook-logo-2007.png" alt="Contact">
+                <span>Contact Me</span>
+            </div>
+            <div class="desktop-icon" ondblclick="openWindow('resume')">
+                <img src="images/acrobat-logo-2007.png" alt="Resume">
+                <span>Resume.pdf</span>
+            </div>
+            <div class="desktop-icon" ondblclick="openWindow('recycle')">
+                <img src="images/vista-recycle-bin.png" alt="Recycle Bin">
+                <span>Recycle Bin</span>
+            </div>
+        </div>
+
+        <!-- Windows Container -->
+        <div id="windowsContainer"></div>
+
+        <!-- Taskbar -->
+        <div class="taskbar">
+            <button class="start-button" onclick="toggleStartMenu()">
+                <img src="images/win-vista-logo.png" alt="Start">
+            </button>
+            <div class="quick-launch">
+                <div class="ql-separator"></div>
+            </div>
+            <div class="taskbar-windows" id="taskbarWindows"></div>
+            <div class="system-tray">
+                <div class="tray-icons">
+                    <i class="bi bi-volume-up-fill"></i>
+                    <i class="bi bi-wifi"></i>
+                </div>
+                <div class="tray-clock" id="trayClock"></div>
+            </div>
+        </div>
+
+        <!-- Start Menu -->
+        <div id="startMenu" class="start-menu hidden">
+            <div class="start-menu-left">
+                <div class="start-user">
+                    <div class="start-user-avatar">
+                        <img src="images/profile.jpg" alt="Razvan" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'bi bi-person-fill\'></i>'">
+                    </div>
+                    <span>Razvan Nica</span>
+                </div>
+                <div class="start-separator"></div>
+                <div class="start-programs">
+                    <div class="start-item" onclick="openWindow('about'); toggleStartMenu();">
+                        <img src="images/vista-explorer.png" alt="">
+                        <span>About Me</span>
+                    </div>
+                    <div class="start-item" onclick="openWindow('skills'); toggleStartMenu();">
+                        <img src="images/vista-explorer.png" alt="">
+                        <span>My Skills</span>
+                    </div>
+                    <div class="start-item" onclick="openWindow('projects'); toggleStartMenu();">
+                        <img src="images/vista-explorer.png" alt="">
+                        <span>Projects</span>
+                    </div>
+                    <div class="start-item" onclick="openWindow('contact'); toggleStartMenu();">
+                        <img src="images/outlook-logo-2007.png" alt="">
+                        <span>Contact Me</span>
+                    </div>
+                    <div class="start-item" onclick="openWindow('resume'); toggleStartMenu();">
+                        <img src="images/acrobat-logo-2007.png" alt="">
+                        <span>My Resume</span>
+                    </div>
+                </div>
+                <div class="start-separator"></div>
+                <div class="start-item">
+                    <i class="bi bi-search"></i>
+                    <span>Search</span>
+                </div>
+            </div>
+            <div class="start-menu-right">
+                <div class="start-item-right" onclick="openWindow('documents'); toggleStartMenu();">
+                    <span>Documents</span>
+                </div>
+                <div class="start-item-right" onclick="openWindow('games'); toggleStartMenu();">
+                    <span>Games</span>
+                </div>
+                <div class="start-item-right" onclick="openWindow('computer'); toggleStartMenu();">
+                    <span>Computer</span>
+                </div>
+                <div class="start-item-right" onclick="openWindow('contact'); toggleStartMenu();">
+                    <span>Network</span>
+                </div>
+                <div class="start-separator-right"></div>
+                <div class="start-item-right" onclick="openWindow('controlpanel'); toggleStartMenu();">
+                    <span>Control Panel</span>
+                </div>
+                <div class="start-item-right" onclick="openWindow('programs'); toggleStartMenu();">
+                    <span>Default Programs</span>
+                </div>
+                <div class="start-item-right" onclick="openWindow('help'); toggleStartMenu();">
+                    <span>Help and Support</span>
+                </div>
+            </div>
+            <div class="start-bottom">
+                <button class="start-shutdown" onclick="shutdown()">
+                    <i class="bi bi-power"></i>
+                </button>
+                <span>Shut down</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shutdown Screen -->
+    <div id="shutdownScreen" class="shutdown-screen hidden">
+        <div class="shutdown-content">
+            <div class="shutdown-text">Shutting down...</div>
+        </div>
+    </div>
+
+    <!-- IMPORTANT: projectData.js must be loaded BEFORE vista-script.js -->
+    <script src="projectData.js"></script>
+    <script src="mineSweeper.js"></script>
+    <script src="vista-script.js"></script>
+</body>
+</html>
