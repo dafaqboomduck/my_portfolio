@@ -482,8 +482,8 @@ const windowContent = {
             <div class="vista-info-box" style="margin-top:20px">
                 <h4>⚙️ System Information</h4>
                 <table class="system-info-table">
-                    <tr><td>Processor:</td><td>Creative Mind™ @ 3.5 GHz</td></tr>
-                    <tr><td>RAM:</td><td>Unlimited Imagination</td></tr>
+                    <tr><td>Processor:</td><td>Ryzen i9 9900x™ @ 3.5 GHz</td></tr>
+                    <tr><td>RAM:</td><td>N/A</td></tr>
                     <tr><td>Graphics:</td><td>Windows Vista Aero™</td></tr>
                     <tr><td>OS:</td><td>Windows Vista Portfolio Edition</td></tr>
                     <tr><td>Developer:</td><td>Razvan Nica</td></tr>
