@@ -175,7 +175,7 @@ class Minesweeper {
                     <button class="ms-face" onclick="minesweeperGame.init()">${faceEmoji}</button>
                     <div class="ms-display timer">${String(this.timeElapsed).padStart(3, '0')}</div>
                 </div>
-                <div class="ms-board">${this.renderBoard()}</div>
+                <div class="ms-board" style="grid-template-columns: repeat(${this.cols}, 25px);">${this.renderBoard()}</div>
                 ${this.gameOver ? '<div class="ms-message ms-lose">💥 Game Over! Click face to restart.</div>' : ''}
                 ${this.gameWon ? '<div class="ms-message ms-win">🎉 You Win! Time: ' + this.timeElapsed + 's</div>' : ''}
                 <div class="ms-controls">
@@ -295,7 +295,6 @@ function injectMinesweeperStyles() {
         }
         .ms-board { 
             display: grid; 
-            grid-template-columns: repeat(${minesweeperGame ? minesweeperGame.cols : 9}, 25px);
             gap: 0;
             border: 3px solid;
             border-color: #808080 #fff #fff #808080;
