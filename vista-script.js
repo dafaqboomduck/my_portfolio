@@ -98,8 +98,10 @@ document.addEventListener('DOMContentLoaded', function () {
 function startDesktop() {
     document.getElementById('welcomeScreen').classList.add('hidden');
     document.getElementById('desktop').classList.remove('hidden');
+    
+    // Auto-open Welcome Center for first-time visitors
+    setTimeout(() => openWindow('welcome'), 300);
 }
-
 // ========== WINDOW MANAGEMENT ==========
 
 function createWindow(id, content, historyStack) {

@@ -226,6 +226,80 @@ function generateProjectDetailContent(project) {
 // ========== STATIC PAGE CONTENT ==========
 
 const windowContent = {
+    welcome: {
+        title: 'Welcome Center',
+        icon: 'images/win-vista-logo.png',
+        path: 'C:\\Windows\\Welcome Center',
+        content: `
+            <div class="welcome-window-header">
+                <h2>👋 Welcome to My Portfolio</h2>
+                <p>Thanks for stopping by! This portfolio is built as an interactive Windows Vista experience. Here's a quick guide to get you started.</p>
+            </div>
+
+            <div class="vista-info-box" style="background:linear-gradient(135deg, #fff8e0 0%, #fff0c0 100%); border-color:#e0c080">
+                <h4>🧭 How to Navigate</h4>
+                <p style="margin:0">
+                    <strong>Double-click</strong> desktop icons or use the <strong>Start Menu</strong> (green button, bottom-left) to open windows.
+                    Drag windows by their title bar, and use the <strong>Back</strong> button to retrace your steps.
+                </p>
+            </div>
+
+            <h3>🚀 Recommended Tour</h3>
+            <p>Short on time? Click any card below to jump straight in:</p>
+
+            <div class="welcome-links-grid">
+                <div class="welcome-link-card" onclick="closeWindow('welcome'); openWindow('about');">
+                    <i class="bi bi-person-fill"></i>
+                    <div>
+                        <strong>About Me</strong>
+                        <span>Who I am, my background & education</span>
+                    </div>
+                </div>
+                <div class="welcome-link-card" onclick="closeWindow('welcome'); openWindow('projects');">
+                    <i class="bi bi-folder-fill"></i>
+                    <div>
+                        <strong>Projects</strong>
+                        <span>Production ML systems & full-stack builds</span>
+                    </div>
+                </div>
+                <div class="welcome-link-card" onclick="closeWindow('welcome'); openWindow('skills');">
+                    <i class="bi bi-gear-wide-connected"></i>
+                    <div>
+                        <strong>Skills</strong>
+                        <span>Core competencies & tech expertise</span>
+                    </div>
+                </div>
+                <div class="welcome-link-card" onclick="closeWindow('welcome'); openWindow('resume');">
+                    <i class="bi bi-file-earmark-pdf-fill"></i>
+                    <div>
+                        <strong>Resume</strong>
+                        <span>Download my CV</span>
+                    </div>
+                </div>
+                <div class="welcome-link-card" onclick="closeWindow('welcome'); openWindow('contact');">
+                    <i class="bi bi-envelope-fill"></i>
+                    <div>
+                        <strong>Contact</strong>
+                        <span>Email, LinkedIn & GitHub</span>
+                    </div>
+                </div>
+                <div class="welcome-link-card" onclick="closeWindow('welcome'); openWindow('games');">
+                    <i class="bi bi-controller"></i>
+                    <div>
+                        <strong>Games</strong>
+                        <span>Take a break with Minesweeper</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vista-info-box" style="margin-top: 20px">
+                <h4>💡 Pro Tips</h4>
+                <p style="margin:0 0 6px 0">• Check out <strong>Start → Default Programs</strong> for my full technology stack</p>
+                <p style="margin:0 0 6px 0">• The <strong>Control Panel</strong> links to every section in one place</p>
+                <p style="margin:0">• Press <kbd style="background:#e0e0e0;border:1px solid #aaa;border-radius:3px;padding:1px 5px;font-size:11px">Esc</kbd> to quickly close the active window</p>
+            </div>
+        `
+    },
     about: {
         title: 'About Me',
         icon: 'images/vista-explorer.png',
