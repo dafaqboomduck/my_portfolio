@@ -248,42 +248,42 @@ const windowContent = {
             <p>Short on time? Click any card below to jump straight in:</p>
 
             <div class="welcome-links-grid">
-                <div class="welcome-link-card" onclick="closeWindow('welcome'); openWindow('about');">
+                <div class="welcome-link-card" onclick="navigateTo('welcome', 'about');">
                     <i class="bi bi-person-fill"></i>
                     <div>
                         <strong>About Me</strong>
                         <span>Who I am, my background & education</span>
                     </div>
                 </div>
-                <div class="welcome-link-card" onclick="closeWindow('welcome'); openWindow('projects');">
+                <div class="welcome-link-card" onclick="navigateTo('welcome', 'projects');">
                     <i class="bi bi-folder-fill"></i>
                     <div>
                         <strong>Projects</strong>
                         <span>Production ML systems & full-stack builds</span>
                     </div>
                 </div>
-                <div class="welcome-link-card" onclick="closeWindow('welcome'); openWindow('skills');">
+                <div class="welcome-link-card" onclick="navigateTo('welcome', 'skills');">
                     <i class="bi bi-gear-wide-connected"></i>
                     <div>
                         <strong>Skills</strong>
                         <span>Core competencies & tech expertise</span>
                     </div>
                 </div>
-                <div class="welcome-link-card" onclick="closeWindow('welcome'); openWindow('resume');">
+                <div class="welcome-link-card" onclick="navigateTo('welcome', 'resume');">
                     <i class="bi bi-file-earmark-pdf-fill"></i>
                     <div>
                         <strong>Resume</strong>
                         <span>Download my CV</span>
                     </div>
                 </div>
-                <div class="welcome-link-card" onclick="closeWindow('welcome'); openWindow('contact');">
+                <div class="welcome-link-card" onclick="navigateTo('welcome', 'contact');">
                     <i class="bi bi-envelope-fill"></i>
                     <div>
                         <strong>Contact</strong>
                         <span>Email, LinkedIn & GitHub</span>
                     </div>
                 </div>
-                <div class="welcome-link-card" onclick="closeWindow('welcome'); openWindow('games');">
+                <div class="welcome-link-card" onclick="navigateTo('welcome', 'games');">
                     <i class="bi bi-controller"></i>
                     <div>
                         <strong>Games</strong>
