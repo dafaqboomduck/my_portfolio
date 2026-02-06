@@ -54,37 +54,61 @@ body {
     opacity: 0.9;
 }
 
+.boot-edition {
+    color: rgba(255,255,255,0.7);
+    font-size: 12px;
+    letter-spacing: 2px;
+    margin-top: -25px;
+    margin-bottom: 40px;
+    text-align: right;
+    padding-right: 20px;
+    width: 280px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .boot-loader {
-    width: 200px;
+    width: 220px;
     height: 6px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 3px;
     margin: 0 auto 30px;
-    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.boot-progress {
-    width: 0%;
+.boot-track {
+    width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, #0078d4, #00bcf2, #0078d4);
-    background-size: 200% 100%;
+    position: relative;
+    overflow: hidden;
     border-radius: 3px;
-    animation: bootProgress 3s ease-out forwards, shimmer 1s linear infinite;
 }
 
-@keyframes bootProgress {
-    0% { width: 0%; }
-    100% { width: 100%; }
+.boot-dots-group {
+    position: absolute;
+    top: 0;
+    left: -60px;
+    width: 60px;
+    height: 100%;
+    background: radial-gradient(circle at 10% 50%, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 100%),
+                linear-gradient(90deg, 
+                    transparent 0%, 
+                    rgba(0,150,255,0.15) 10%, 
+                    rgba(0,180,255,0.4) 25%, 
+                    rgba(0,200,255,0.8) 40%, 
+                    rgba(100,220,255,1) 50%, 
+                    rgba(0,200,255,0.8) 60%, 
+                    rgba(0,180,255,0.4) 75%, 
+                    rgba(0,150,255,0.15) 90%, 
+                    transparent 100%);
+    border-radius: 3px;
+    animation: dotsSweep 1.8s cubic-bezier(0.4, 0.0, 0.6, 1.0) infinite;
+    filter: drop-shadow(0 0 4px rgba(0, 180, 255, 0.6));
 }
 
-@keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}
-
-.boot-copyright {
-    color: rgba(255,255,255,0.4);
-    font-size: 11px;
+@keyframes dotsSweep {
+    0% { left: -60px; }
+    100% { left: 220px; }
 }
 
 /* ========== WELCOME SCREEN ========== */

@@ -5,7 +5,7 @@ let windows = {};
 let windowZIndex = 100;
 let activeWindow = null;
 let dragState = { isDragging: false, window: null, offsetX: 0, offsetY: 0 };
-let navigationHistory = {}; // Track navigation history per window
+let navigationHistory = {}; // Full back-stack per window
 
 // Technology stack for Default Programs
 const installedPrograms = [
@@ -26,7 +26,27 @@ const installedPrograms = [
     { name: 'SQLAlchemy', icon: 'bi-database-gear', category: 'ORM', publisher: 'SQLAlchemy Authors' }
 ];
 
-// Generate project cards HTML from projectData
+// ========== NAVIGATION HELPERS ==========
+// Build a full history stack: parent's stack + parent itself
+function buildHistoryStack(fromWindow) {
+    if (!fromWindow) return [];
+    const parentStack = navigationHistory[fromWindow] || [];
+    return [...parentStack, fromWindow];
+}
+
+// Navigate away from a parent window to a target window
+// Saves history chain before closing the parent
+function navigateTo(fromWindowId, targetWindowId, openFn) {
+    const stack = buildHistoryStack(fromWindowId);
+    closeWindow(fromWindowId);
+    if (openFn) {
+        openFn(stack);
+    } else {
+        openWindow(targetWindowId, null, stack);
+    }
+}
+
+// ========== PROJECT CARDS ==========
 function generateProjectCards() {
     let html = '';
     for (const [key, project] of Object.entries(projectData)) {
@@ -47,13 +67,13 @@ function generateProjectCards() {
     return html;
 }
 
-// Navigate from Projects to project detail
 function navigateFromProjects(projectKey) {
-    closeWindow('projects');
-    openProjectDetail(projectKey, 'projects');
+    navigateTo('projects', null, (stack) => {
+        openProjectDetail(projectKey, stack);
+    });
 }
 
-// Generate documents view (project files)
+// ========== DOCUMENTS VIEW ==========
 function generateDocumentsView() {
     let html = '<div class="documents-grid">';
     for (const [key, project] of Object.entries(projectData)) {
@@ -72,13 +92,13 @@ function generateDocumentsView() {
     return html;
 }
 
-// Navigate from Documents to project detail
 function navigateFromDocuments(projectKey) {
-    closeWindow('documents');
-    openProjectDetail(projectKey, 'documents');
+    navigateTo('documents', null, (stack) => {
+        openProjectDetail(projectKey, stack);
+    });
 }
 
-// Generate Games content
+// ========== GAMES ==========
 function generateGamesContent() {
     return `
         <h2>🎮 Games</h2>
@@ -113,13 +133,11 @@ function generateGamesContent() {
     `;
 }
 
-// Navigate from Games (keeps history)
 function navigateFromGames(targetWindow) {
-    closeWindow('games');
-    openWindow(targetWindow, 'games');
+    navigateTo('games', targetWindow);
 }
 
-// Generate Control Panel content
+// ========== CONTROL PANEL ==========
 function generateControlPanelContent() {
     return `
         <h2>⚙️ Control Panel</h2>
@@ -186,20 +204,16 @@ function generateControlPanelContent() {
     `;
 }
 
-// Navigate from Control Panel (keeps history)
 function navigateFromControlPanel(targetWindow) {
-    closeWindow('controlpanel');
-    openWindow(targetWindow, 'controlpanel');
+    navigateTo('controlpanel', targetWindow);
 }
 
-// Navigate from Help (keeps history)
 function navigateFromHelp(targetWindow) {
-    closeWindow('help');
-    openWindow(targetWindow, 'help');
+    navigateTo('help', targetWindow);
 }
 
-// Open project detail window
-function openProjectDetail(projectKey, fromWindow = null) {
+// ========== PROJECT DETAIL ==========
+function openProjectDetail(projectKey, historyStack) {
     const project = projectData[projectKey];
     if (!project) return;
     
@@ -208,6 +222,16 @@ function openProjectDetail(projectKey, fromWindow = null) {
     if (windows[detailId]) {
         focusWindow(detailId);
         return;
+    }
+    
+    // historyStack can be an array (new style) or a string (legacy fromWindow)
+    let stack;
+    if (Array.isArray(historyStack)) {
+        stack = historyStack;
+    } else if (typeof historyStack === 'string') {
+        stack = buildHistoryStack(historyStack);
+    } else {
+        stack = [];
     }
     
     const content = {
@@ -250,10 +274,10 @@ function openProjectDetail(projectKey, fromWindow = null) {
         `
     };
     
-    createWindow(detailId, content, fromWindow);
+    createWindow(detailId, content, stack);
 }
 
-// Window content templates
+// ========== WINDOW CONTENT TEMPLATES ==========
 const windowContent = {
     about: {
         title: 'About Me',
@@ -336,13 +360,13 @@ const windowContent = {
         title: 'Projects',
         icon: 'images/vista-explorer.png',
         path: 'C:\\Users\\Razvan\\Documents\\Projects',
-        content: '' // Will be generated dynamically
+        content: '' // Generated dynamically
     },
     documents: {
         title: 'Documents',
         icon: 'images/vista-explorer.png',
         path: 'C:\\Users\\Razvan\\Documents',
-        content: '' // Will be generated dynamically
+        content: '' // Generated dynamically
     },
     contact: {
         title: 'Contact Me - Outlook',
@@ -434,7 +458,7 @@ const windowContent = {
         title: 'Default Programs',
         icon: 'images/vista-explorer.png',
         path: 'Control Panel\\Default Programs',
-        content: '' // Will be generated dynamically
+        content: '' // Generated dynamically
     },
     computer: {
         title: 'Computer',
@@ -587,7 +611,6 @@ function generateProgramsContent() {
         <p>Technologies and tools in my development environment</p>
         <div class="programs-list">
     `;
-    
     categories.forEach(cat => {
         html += `<div class="program-category"><h4>${cat}</h4></div>`;
         installedPrograms.filter(p => p.category === cat).forEach(prog => {
@@ -602,7 +625,6 @@ function generateProgramsContent() {
             `;
         });
     });
-    
     html += '</div>';
     return html;
 }
@@ -624,7 +646,7 @@ function startDesktop() {
 }
 
 // ========== WINDOW MANAGEMENT ==========
-function createWindow(id, content, fromWindow = null) {
+function createWindow(id, content, historyStack) {
     const windowEl = document.createElement('div');
     windowEl.className = 'vista-window';
     windowEl.id = 'window-' + id;
@@ -633,8 +655,12 @@ function createWindow(id, content, fromWindow = null) {
     windowEl.style.left = (100 + Object.keys(windows).length * 30) + 'px';
     windowEl.style.top = (50 + Object.keys(windows).length * 30) + 'px';
     
-    // Initialize navigation history for this window
-    navigationHistory[id] = fromWindow ? [fromWindow] : [];
+    // Set navigation history for this window
+    if (Array.isArray(historyStack)) {
+        navigationHistory[id] = historyStack;
+    } else {
+        navigationHistory[id] = [];
+    }
     
     const hasHistory = navigationHistory[id].length > 0;
     
@@ -675,7 +701,7 @@ function createWindow(id, content, fromWindow = null) {
     windowEl.addEventListener('mousedown', () => focusWindow(id));
 }
 
-function openWindow(id, fromWindow = null) {
+function openWindow(id, fromWindow, historyStack) {
     if (windows[id]) {
         focusWindow(id);
         if (windows[id].minimized) {
@@ -687,6 +713,16 @@ function openWindow(id, fromWindow = null) {
     
     let content = windowContent[id];
     if (!content) return;
+    
+    // Determine history stack
+    let stack;
+    if (Array.isArray(historyStack)) {
+        stack = historyStack;
+    } else if (fromWindow) {
+        stack = buildHistoryStack(fromWindow);
+    } else {
+        stack = [];
+    }
     
     // Generate dynamic content
     if (id === 'projects') {
@@ -707,7 +743,7 @@ function openWindow(id, fromWindow = null) {
         content = { ...content, content: generateGamesContent() };
     } else if (id === 'minesweeper') {
         content = { ...content, content: `<div id="minesweeper-container"></div>` };
-        createWindow(id, content, fromWindow);
+        createWindow(id, content, stack);
         injectMinesweeperStyles();
         setTimeout(() => {
             const container = document.getElementById('minesweeper-container');
@@ -718,7 +754,7 @@ function openWindow(id, fromWindow = null) {
         content = { ...content, content: generateControlPanelContent() };
     }
     
-    createWindow(id, content, fromWindow);
+    createWindow(id, content, stack);
 }
 
 function closeWindow(id) {
@@ -735,9 +771,13 @@ function closeWindow(id) {
 function goBack(id) {
     if (!navigationHistory[id] || navigationHistory[id].length === 0) return;
     
-    const previousWindow = navigationHistory[id].pop();
+    // Copy the current stack, pop the last entry as our destination
+    const stack = [...navigationHistory[id]];
+    const previousWindow = stack.pop();
+    
+    // Close this window, open the previous one with the remaining stack
     closeWindow(id);
-    openWindow(previousWindow);
+    openWindow(previousWindow, null, stack);
 }
 
 function minimizeWindow(id) {
@@ -867,8 +907,6 @@ let darkTheme = false;
 function toggleTheme() {
     darkTheme = !darkTheme;
     document.body.classList.toggle('dark-theme', darkTheme);
-    
-    // Show notification
     showNotification(darkTheme ? '🌙 Dark theme enabled' : '☀️ Light theme enabled');
 }
 
