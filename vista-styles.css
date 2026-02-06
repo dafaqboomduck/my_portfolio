@@ -46,54 +46,68 @@ body {
     50% { filter: brightness(1.2) drop-shadow(0 0 40px rgba(0, 150, 255, 0.8)); }
 }
 
+.boot-text-group {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
 .boot-text {
     color: #fff;
     font-size: 14px;
     letter-spacing: 3px;
-    margin-bottom: 40px;
     opacity: 0.9;
+}
+
+.boot-edition {
+    color: rgba(255,255,255,0.5);
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-top: 6px;
+    text-align: right;
 }
 
 .boot-loader {
     width: 200px;
-    height: 30px;
+    height: 16px;
     margin: 0 auto 30px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.boot-dots {
-    display: flex;
-    gap: 8px;
-    align-items: center;
+.boot-progress-track {
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
 }
 
-.boot-dots span {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #fff;
-    opacity: 0.2;
-    animation: dotPulse 1.5s ease-in-out infinite;
+.boot-progress-bars {
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    left: -60px;
+    width: 60px;
+    background: repeating-linear-gradient(
+        90deg,
+        #4a9edd 0px,
+        #4a9edd 4px,
+        transparent 4px,
+        transparent 7px
+    );
+    filter: drop-shadow(0 0 4px rgba(74, 158, 221, 0.6));
+    animation: vistaSlide 1.8s linear infinite;
 }
 
-.boot-dots span:nth-child(1) { animation-delay: 0s; }
-.boot-dots span:nth-child(2) { animation-delay: 0.15s; }
-.boot-dots span:nth-child(3) { animation-delay: 0.3s; }
-.boot-dots span:nth-child(4) { animation-delay: 0.45s; }
-.boot-dots span:nth-child(5) { animation-delay: 0.6s; }
-
-@keyframes dotPulse {
-    0%, 60%, 100% {
-        opacity: 0.2;
-        transform: scale(1);
-        filter: none;
+@keyframes vistaSlide {
+    0% {
+        left: -60px;
     }
-    30% {
-        opacity: 1;
-        transform: scale(1.3);
-        filter: drop-shadow(0 0 6px rgba(0, 188, 242, 0.8));
+    100% {
+        left: 200px;
     }
 }
 
