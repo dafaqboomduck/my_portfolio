@@ -200,6 +200,15 @@ function openWindow(id, fromWindow, historyStack) {
         content = { ...content, content: generateProgramsContent() };
     } else if (id === 'games') {
         content = { ...content, content: generateGamesContent() };
+    } else if (id === 'resume') {
+        content = { ...content, content: generatePdfReaderContent('documents/CV2.pdf') };
+        createWindow(id, content, stack);
+        injectPdfReaderStyles();
+        setTimeout(() => {
+            const container = document.querySelector('#window-' + id + ' .pdf-reader');
+            if (container) initPdfReader(container);
+        }, 100);
+        return;
     } else if (id === 'minesweeper') {
         content = { ...content, content: `<div id="minesweeper-container"></div>` };
         createWindow(id, content, stack);

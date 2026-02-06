@@ -419,30 +419,10 @@ const windowContent = {
         `
     },
     resume: {
-        title: 'Resume.pdf - Adobe Reader',
+        title: 'Resume.pdf - Abobe Reader',
         icon: 'images/acrobat-logo-2007.png',
         path: 'C:\\Users\\Razvan\\Documents\\CV2.pdf',
-        content: `
-            <h2>📄 Razvan Nica - Resume</h2>
-            <p style="color:#666">PDF Document Preview</p>
-            
-            <div class="vista-info-box" style="text-align:center; padding:30px">
-                <i class="bi bi-file-earmark-pdf" style="font-size:64px; color:#dc3545"></i>
-                <h4 style="margin-top:15px">Resume Document</h4>
-                <p>Click below to download the full PDF</p>
-                <a href="documents/CV2.pdf" target="_blank" class="vista-btn" style="display:inline-block; margin-top:10px; text-decoration:none">
-                    <i class="bi bi-download"></i> Download CV
-                </a>
-            </div>
-            
-            <h3>Quick Overview</h3>
-            <ul>
-                <li><strong>Education:</strong> BSc Data Science & AI - Breda University</li>
-                <li><strong>Focus:</strong> Machine Learning, Computer Vision, NLP</li>
-                <li><strong>Skills:</strong> Python, TensorFlow, Flask, PostgreSQL</li>
-                <li><strong>Languages:</strong> English (Fluent), Romanian (Native)</li>
-            </ul>
-        `
+        content: '' // Generated dynamically by PDF reader
     },
     recycle: {
         title: 'Recycle Bin',
