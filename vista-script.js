@@ -8,6 +8,7 @@ let windowZIndex = 100;
 let activeWindow = null;
 let dragState = { isDragging: false, window: null, offsetX: 0, offsetY: 0 };
 let navigationHistory = {}; // Full back-stack per window
+let scrollPositions = {};   // Saved scroll positions for back navigation
 
 // ========== NAVIGATION ==========
 
@@ -20,6 +21,11 @@ function buildHistoryStack(fromWindow) {
 
 // Navigate from a parent window to a target, preserving the full chain
 function navigateTo(fromWindowId, targetWindowId, openFn) {
+    // Save scroll position before closing
+    if (windows[fromWindowId]) {
+        const content = windows[fromWindowId].element.querySelector('.window-content');
+        if (content) scrollPositions[fromWindowId] = content.scrollTop;
+    }
     const stack = buildHistoryStack(fromWindowId);
     closeWindow(fromWindowId);
     if (openFn) {
@@ -229,6 +235,17 @@ function goBack(id) {
 
     closeWindow(id);
     openWindow(previousWindow, null, stack);
+
+    // Restore saved scroll position
+    if (scrollPositions[previousWindow] != null && windows[previousWindow]) {
+        const content = windows[previousWindow].element.querySelector('.window-content');
+        if (content) {
+            requestAnimationFrame(() => {
+                content.scrollTop = scrollPositions[previousWindow];
+                delete scrollPositions[previousWindow];
+            });
+        }
+    }
 }
 
 function minimizeWindow(id) {
