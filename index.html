@@ -14,14 +14,13 @@
     <div id="bootScreen" class="boot-screen">
         <div class="boot-content">
             <img src="images/win-vista-logo.png" alt="Windows Vista" class="boot-logo">
-            <div class="boot-text">Microsoft<sup>®</sup> Windows Vista<sup>™</sup></div>
-            <div class="boot-edition">Portfolio Edition</div>
+            <div class="boot-text">MS Win Vista<sup>™</sup> Portfolio Edition</div>
             <div class="boot-loader">
-                <div class="boot-track">
-                    <div class="boot-dots-group"></div>
+                <div class="boot-dots">
+                    <span></span><span></span><span></span><span></span><span></span>
                 </div>
             </div>
-            <div class="boot-copyright">© Razvan Nica</div>
+            <div class="boot-copyright">by Razvan Nica</div>
         </div>
     </div>
 
@@ -168,8 +167,9 @@
         </div>
     </div>
 
-    <!-- IMPORTANT: projectData.js must be loaded BEFORE vista-script.js -->
+    <!-- Load order: projectData → pageData → mineSweeper → vista-script -->
     <script src="projectData.js"></script>
+    <script src="pageData.js"></script>
     <script src="mineSweeper.js"></script>
     <script src="vista-script.js"></script>
 </body>
