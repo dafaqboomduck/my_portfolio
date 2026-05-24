@@ -92,10 +92,16 @@ function openProjectDetail(projectKey, historyStack) {
 // ========== BOOT SEQUENCE ==========
 
 document.addEventListener('DOMContentLoaded', function () {
-    setTimeout(() => {
+    let bootTimer = setTimeout(() => {
         document.getElementById('bootScreen').classList.add('hidden');
         document.getElementById('welcomeScreen').classList.remove('hidden');
     }, 3500);
+    
+    document.getElementById('bootScreen').addEventListener('dblclick', () => {
+        clearTimeout(bootTimer);
+        document.getElementById('bootScreen').classList.add('hidden');
+        document.getElementById('welcomeScreen').classList.remove('hidden');
+    });
 
     updateClock();
     setInterval(updateClock, 1000);
@@ -296,7 +302,12 @@ function addToTaskbar(id, content) {
         }
         focusWindow(id);
     };
-    item.innerHTML = `<img src="${content.icon}" alt=""><span>${content.title}</span>`;
+    item.innerHTML = `
+        <div class="taskbar-preview">
+            <img src="${content.icon}" alt="" style="width:32px; height:32px; display:block; margin: 0 auto 5px auto;">
+            <strong>${content.title}</strong>
+        </div>
+        <img src="${content.icon}" alt=""><span>${content.title}</span>`;
     taskbarWindows.appendChild(item);
 }
 
@@ -604,4 +615,47 @@ desktop.addEventListener("mousedown", (e) => {
         });
     }
 });
+
+
+
+function initCalendarGadget() {
+    const grid = document.getElementById("calGrid");
+    const header = document.getElementById("calMonthYear");
+    if (!grid || !header) return;
+
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const today = now.getDate();
+    
+    header.innerText = now.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+    
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    
+    grid.innerHTML = "";
+    const days = ["S", "M", "T", "W", "T", "F", "S"];
+    days.forEach(d => {
+        const el = document.createElement("div");
+        el.className = "cal-day";
+        el.style.fontWeight = "bold";
+        el.innerText = d;
+        grid.appendChild(el);
+    });
+
+    for (let i = 0; i < firstDay; i++) {
+        const el = document.createElement("div");
+        el.className = "cal-day empty";
+        grid.appendChild(el);
+    }
+    
+    for (let i = 1; i <= daysInMonth; i++) {
+        const el = document.createElement("div");
+        el.className = "cal-day" + (i === today ? " today" : "");
+        el.innerText = i;
+        grid.appendChild(el);
+    }
+}
+setTimeout(initCalendarGadget, 500);
+
 

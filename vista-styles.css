@@ -1773,3 +1773,80 @@ body.dark-theme .vista-window {
     transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.1) !important;
 }
 
+
+/* Calendar Gadget */
+.calendar-gadget {
+    margin-top: 20px;
+    width: 150px;
+    background: rgba(20, 20, 20, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    padding: 10px;
+    color: white;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    transform: translateY(0);
+    transition: transform 0.2s;
+}
+.calendar-gadget:hover {
+    transform: scale(1.05);
+}
+.cal-header {
+    text-align: center;
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 8px;
+    color: #ffaa00;
+    text-shadow: 0 1px 2px black;
+}
+.cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    text-align: center;
+    font-size: 11px;
+}
+.cal-day {
+    padding: 2px 0;
+    opacity: 0.8;
+}
+.cal-day.today {
+    background: rgba(255, 170, 0, 0.8);
+    color: black;
+    border-radius: 3px;
+    font-weight: bold;
+    opacity: 1;
+}
+.cal-day.empty { opacity: 0; }
+
+
+/* Taskbar Previews */
+.taskbar-item { position: relative; }
+.taskbar-preview {
+    position: absolute;
+    bottom: 55px; /* above the taskbar */
+    left: 50%;
+    transform: translateX(-50%) scale(0.8);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+    background: rgba(30, 60, 90, 0.85);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 6px;
+    padding: 8px;
+    color: white;
+    font-family: "Segoe UI", sans-serif;
+    font-size: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.3);
+    min-width: 120px;
+    text-align: center;
+    z-index: 10000;
+}
+.taskbar-item:hover .taskbar-preview {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+    pointer-events: auto;
+}
+
