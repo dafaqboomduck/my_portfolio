@@ -22,7 +22,7 @@ const projectData = {
             'Designed with affordability and workflow integration for clinical settings',
             'Transparency through XAI ensures clinical trust and regulatory compliance'
         ],
-        github: '#',
+        github: 'https://github.com/dafaqboomduck/chest-vision-project',
         demo: '#'
     },
     project2: {
