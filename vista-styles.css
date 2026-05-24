@@ -1733,3 +1733,10 @@ body.dark-theme .vista-window {
     border: 1px solid rgba(255, 255, 255, 0.3) !important;
 }
 
+
+@media (max-width: 768px) {
+    .vista-sidebar {
+        display: none !important;
+    }
+}
+
