@@ -356,7 +356,10 @@ function updateClock() {
     const now = new Date();
     const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     const date = now.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
-    document.getElementById('trayClock').innerHTML = `${time}<br>${date}`;
+    const fullDate = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    const clockEl = document.getElementById('trayClock');
+    clockEl.innerHTML = `${time}<br>${date}`;
+    clockEl.title = fullDate;
 }
 
 // ========== SHUTDOWN ==========
