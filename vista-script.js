@@ -601,22 +601,51 @@ document.addEventListener("mouseup", function(e) {
     }
 });
 
-// Cursor wait when clicking icons
+// Unified Desktop Icon UX Logic
+let lastIconClickTime = 0;
+let lastClickedIconEl = null;
+
 document.querySelectorAll(".desktop-icon").forEach(icon => {
     icon.addEventListener("dblclick", () => {
         document.body.style.cursor = "wait";
-        setTimeout(() => document.body.style.cursor = "default", 300);
+        setTimeout(() => document.body.style.cursor = "default", 350);
     });
-    icon.addEventListener("click", () => {
+
+    icon.addEventListener("click", (e) => {
+        const now = Date.now();
+        const isSameIcon = (lastClickedIconEl === icon);
+        const timeDiff = now - lastIconClickTime;
+
+        // If clicked again within a generous 1.5s OR if it is already selected, open it!
+        if (isSameIcon && (timeDiff < 1500 || icon.classList.contains("selected"))) {
+            const action = icon.getAttribute("ondblclick");
+            if (action) {
+                document.body.style.cursor = "wait";
+                setTimeout(() => document.body.style.cursor = "default", 350);
+                lastIconClickTime = 0;
+                lastClickedIconEl = null;
+                // Safely evaluate the openWindow call
+                eval(action);
+                return;
+            }
+        }
+
+        // Selection Phase
+        lastIconClickTime = now;
+        lastClickedIconEl = icon;
+
         document.querySelectorAll(".desktop-icon").forEach(i => {
             i.style.background = "";
             i.style.border = "1px solid transparent";
             i.classList.remove("selected");
         });
+        
         icon.style.background = "rgba(255, 255, 255, 0.2)";
         icon.style.border = "1px dotted rgba(255, 255, 255, 0.5)";
         icon.style.borderRadius = "4px";
         icon.classList.add("selected");
+        
+        e.stopPropagation();
     });
 });
 
@@ -628,6 +657,16 @@ desktop.addEventListener("mousedown", (e) => {
             i.style.border = "1px solid transparent";
             i.classList.remove("selected");
         });
+        lastClickedIconEl = null;
+    }
+});
+
+// Windows UX: Clicking ANY element inside a window focuses it
+document.addEventListener("mousedown", (e) => {
+    const win = e.target.closest(".vista-window");
+    if (win) {
+        const id = win.id.replace("window-", "");
+        focusWindow(id);
     }
 });
 
@@ -730,4 +769,20 @@ function filterStartMenu(query) {
         }
     });
 }
+
+
+// Execute selected app with Enter Key
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        const selectedIcon = document.querySelector(".desktop-icon.selected");
+        if (selectedIcon) {
+            const action = selectedIcon.getAttribute("ondblclick");
+            if (action) {
+                document.body.style.cursor = "wait";
+                setTimeout(() => document.body.style.cursor = "default", 350);
+                eval(action);
+            }
+        }
+    }
+});
 

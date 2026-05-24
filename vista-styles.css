@@ -1,5 +1,5 @@
 /* ========== VISTA PORTFOLIO STYLES ========== */
-@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
 
 * {
     margin: 0;
@@ -9,7 +9,7 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', 'Open Sans', Tahoma, Geneva, Verdana, sans-serif;
     overflow: hidden;
     background: #000;
 }
@@ -1784,7 +1784,7 @@ body.dark-theme .vista-window {
     box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     padding: 10px;
     color: white;
-    font-family: "Segoe UI", Tahoma, sans-serif;
+    font-family: "Segoe UI", "Open Sans", Tahoma, sans-serif;
     transform: translateY(0);
     transition: transform 0.2s;
 }
@@ -1837,7 +1837,7 @@ body.dark-theme .vista-window {
     border-radius: 6px;
     padding: 8px;
     color: white;
-    font-family: "Segoe UI", sans-serif;
+    font-family: "Segoe UI", "Open Sans", sans-serif;
     font-size: 12px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.3);
     min-width: 120px;
@@ -1879,7 +1879,7 @@ body.is-dragging .window-content { pointer-events: none !important; }
     border: none;
     outline: none;
     width: 100%;
-    font-family: "Segoe UI", sans-serif;
+    font-family: "Segoe UI", "Open Sans", sans-serif;
     font-size: 13px;
     background: transparent;
 }
