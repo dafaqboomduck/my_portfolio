@@ -1854,7 +1854,6 @@ body.dark-theme .vista-window {
 body.is-dragging .window-content { pointer-events: none !important; }
 .vista-window.active {
     box-shadow: 0 0 0 1px rgba(255,255,255,0.6), 0 0 0 2px rgba(0,0,0,0.4), 0 10px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.8) !important;
-    z-index: 101 !important;
 }
 .vista-window:not(.active) {
     box-shadow: 0 0 0 1px rgba(255,255,255,0.3), 0 0 0 2px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.4) !important;
