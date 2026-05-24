@@ -100,6 +100,9 @@
                 <img src="images/win-vista-logo.png" alt="Start">
             </button>
             <div class="quick-launch">
+                <div class="ql-icon" onclick="toggleShowDesktop()" title="Show Desktop">
+                    <img src="images/vista-display.png" alt="Show Desktop" onerror="this.src=''; this.className='bi bi-display'">
+                </div>
                 <div class="ql-separator"></div>
             </div>
             <div class="taskbar-windows" id="taskbarWindows"></div>
@@ -145,9 +148,9 @@
                     </div>
                 </div>
                 <div class="start-separator"></div>
-                <div class="start-item">
+                <div class="start-search-box">
                     <i class="bi bi-search"></i>
-                    <span>Search</span>
+                    <input type="text" id="startSearchInput" placeholder="Start Search" onkeyup="filterStartMenu(this.value)">
                 </div>
             </div>
             <div class="start-menu-right">

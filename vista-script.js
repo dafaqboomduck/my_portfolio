@@ -130,7 +130,7 @@ function createWindow(id, content, historyStack) {
     const hasHistory = navigationHistory[id].length > 0;
 
     windowEl.innerHTML = `
-        <div class="window-titlebar" onmousedown="startDrag(event, '${id}')">
+        <div class="window-titlebar" onmousedown="startDrag(event, '${id}')" ondblclick="maximizeWindow('${id}')">
             <img src="${content.icon}" class="window-icon" alt="">
             <span class="window-title">${content.title}</span>
             <div class="window-controls">
@@ -318,6 +318,7 @@ function startDrag(e, id) {
     if (windows[id].maximized) return;
     dragState.isDragging = true;
     dragState.window = id;
+    document.body.classList.add('is-dragging');
     const rect = windows[id].element.getBoundingClientRect();
     dragState.offsetX = e.clientX - rect.left;
     dragState.offsetY = e.clientY - rect.top;
@@ -336,12 +337,22 @@ document.addEventListener('mousemove', (e) => {
 document.addEventListener('mouseup', () => {
     dragState.isDragging = false;
     dragState.window = null;
+    document.body.classList.remove('is-dragging');
 });
 
 // ========== START MENU ==========
 
 function toggleStartMenu() {
-    document.getElementById('startMenu').classList.toggle('hidden');
+    const menu = document.getElementById('startMenu');
+    menu.classList.toggle('hidden');
+    if (!menu.classList.contains('hidden')) {
+        const searchInput = document.getElementById('startSearchInput');
+        if (searchInput) {
+            searchInput.value = '';
+            filterStartMenu('');
+            setTimeout(() => searchInput.focus(), 100);
+        }
+    }
 }
 
 document.addEventListener('click', (e) => {
@@ -578,6 +589,7 @@ desktop.addEventListener("contextmenu", showContextMenu);
 
 document.addEventListener("mouseup", function(e) {
     if (dragState && dragState.isDragging && dragState.window) {
+        document.body.classList.remove('is-dragging');
         const id = dragState.window;
         if (windows[id]) {
             windows[id].element.style.opacity = "";
@@ -661,4 +673,61 @@ function initCalendarGadget() {
 }
 setTimeout(initCalendarGadget, 500);
 
+
+
+// ========== SHOW DESKTOP (Aero peek equivalent) ==========
+function toggleShowDesktop() {
+    let allMinimized = true;
+    for (const id in windows) {
+        if (!windows[id].minimized) {
+            allMinimized = false;
+            break;
+        }
+    }
+    
+    if (allMinimized) {
+        // Restore all that were minimized
+        for (const id in windows) {
+            if (windows[id].minimized) {
+                windows[id].minimized = false;
+                windows[id].element.classList.remove("minimized");
+                const taskbarItem = document.getElementById("taskbar-" + id);
+                if (taskbarItem) taskbarItem.classList.add("active");
+            }
+        }
+    } else {
+        // Minimize all
+        for (const id in windows) {
+            if (!windows[id].minimized) {
+                minimizeWindow(id);
+            }
+        }
+    }
+}
+
+
+// ========== START MENU LIVE SEARCH ==========
+function filterStartMenu(query) {
+    const q = query.toLowerCase();
+    const itemsLeft = document.querySelectorAll(".start-menu-left .start-item");
+    const itemsRight = document.querySelectorAll(".start-menu-right .start-item-right");
+    
+    itemsLeft.forEach(item => {
+        const text = item.innerText.toLowerCase();
+        if (text.includes(q)) {
+            item.style.display = "flex";
+        } else {
+            item.style.display = "none";
+        }
+    });
+
+    itemsRight.forEach(item => {
+        const text = item.innerText.toLowerCase();
+        if (text.includes(q)) {
+            item.style.display = "flex";
+        } else {
+            item.style.display = "none";
+        }
+    });
+}
 
