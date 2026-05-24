@@ -561,29 +561,47 @@ function hideSelectionBox() {
 desktop.addEventListener("contextmenu", showContextMenu);
 
 
-// Snap logic inside mouseup
-const originalMouseUp = document.onmouseup;
-document.addEventListener('mouseup', function(e) {
+
+document.addEventListener("mouseup", function(e) {
     if (dragState && dragState.isDragging && dragState.window) {
         const id = dragState.window;
-        const winEl = windows[id].element;
-        // Aero snap top
-        if (e.clientY < 5) {
+        if (windows[id]) {
+            windows[id].element.style.opacity = "";
+            windows[id].element.style.transition = "";
+            if (e.clientY < 10 && !windows[id].maximized) {
                 maximizeWindow(id);
             }
         }
     }
 });
 
+// Cursor wait when clicking icons
+document.querySelectorAll(".desktop-icon").forEach(icon => {
+    icon.addEventListener("dblclick", () => {
+        document.body.style.cursor = "wait";
+        setTimeout(() => document.body.style.cursor = "default", 300);
+    });
+    icon.addEventListener("click", () => {
+        document.querySelectorAll(".desktop-icon").forEach(i => {
+            i.style.background = "";
+            i.style.border = "1px solid transparent";
+            i.classList.remove("selected");
+        });
+        icon.style.background = "rgba(255, 255, 255, 0.2)";
+        icon.style.border = "1px dotted rgba(255, 255, 255, 0.5)";
+        icon.style.borderRadius = "4px";
+        icon.classList.add("selected");
+    });
+});
 
-document.addEventListener("mouseup", function(e) {
-    if (dragState && dragState.isDragging && dragState.window) {
-        const id = dragState.window;
-        if (e.clientY < 10) {
-            if (windows[id] && !windows[id].maximized) {
-                maximizeWindow(id);
-            }
-        }
+// Deselect on desktop click
+desktop.addEventListener("mousedown", (e) => {
+    if(!e.target.closest(".desktop-icon")) {
+        document.querySelectorAll(".desktop-icon.selected").forEach(i => {
+            i.style.background = "";
+            i.style.border = "1px solid transparent";
+            i.classList.remove("selected");
+        });
     }
 });
 
