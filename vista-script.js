@@ -413,3 +413,150 @@ function showNotification(message) {
         setTimeout(() => notif.remove(), 300);
     }, 2000);
 }
+// ========== 10x IMPROVEMENTS SCRIPT ==========
+
+// Sidebar Gadget Clock Logic
+function updateGadgetClock() {
+    const now = new Date();
+    const sec = now.getSeconds();
+    const min = now.getMinutes();
+    const hr = now.getHours();
+    
+    const hrDeg = (hr % 12) * 30 + (min / 2);
+    const minDeg = min * 6 + (sec / 10);
+    const secDeg = sec * 6;
+    
+    const hHand = document.getElementById("gadgetHour");
+    const mHand = document.getElementById("gadgetMinute");
+    const sHand = document.getElementById("gadgetSecond");
+    
+    if (hHand) hHand.style.transform = `translateX(-50%) rotate(${hrDeg}deg)`;
+    if (mHand) mHand.style.transform = `translateX(-50%) rotate(${minDeg}deg)`;
+    if (sHand) sHand.style.transform = `translateX(-50%) rotate(${secDeg}deg)`;
+}
+
+// Modify existing updateClock to also update gadget
+const originalUpdateClock = typeof updateClock !== "undefined" ? updateClock : function(){};
+updateClock = function() {
+    originalUpdateClock();
+    updateGadgetClock();
+};
+
+// Context Menu Logic
+const desktop = document.getElementById("desktop");
+const ctxMenu = document.getElementById("desktopContextMenu");
+
+function showContextMenu(e) {
+    if (e.target.closest(".vista-window") || e.target.closest(".taskbar")) {
+        return; // Ensure only desktop triggers it
+    }
+    e.preventDefault();
+    ctxMenu.style.left = e.clientX + "px";
+    ctxMenu.style.top = e.clientY + "px";
+    ctxMenu.classList.remove("hidden");
+    hideSelectionBox();
+}
+
+document.addEventListener("click", function(e) {
+    if (ctxMenu && !ctxMenu.classList.contains("hidden")) {
+        ctxMenu.classList.add("hidden");
+    }
+});
+
+function refreshDesktop() {
+    const icons = document.querySelector(".desktop-icons");
+    icons.style.display = "none";
+    setTimeout(() => icons.style.display = "", 100);
+}
+
+function toggleSidebar() {
+    const sidebar = document.querySelector(".vista-sidebar");
+    if (sidebar) sidebar.classList.toggle("hidden");
+}
+
+function changeWallpaper() {
+    const desktopEl = document.getElementById("desktop");
+    const wallpapers = [
+        "url(\"images/vista-bg.jpg\")",
+        "radial-gradient(circle at center, #1a2a6c, #112 100%)",
+        "url(\"https://images.unsplash.com/photo-1477346611705-65d1883cee1e?auto=format&fit=crop&q=80&w=1920\")",
+        "url(\"https://images.unsplash.com/photo-1542451313056-b7c8e6266459?auto=format&fit=crop&q=80&w=1920\")"
+    ];
+    let currentIdx = desktopEl.dataset.wpIdx || 0;
+    currentIdx = (parseInt(currentIdx) + 1) % wallpapers.length;
+    desktopEl.style.background = wallpapers[currentIdx];
+    desktopEl.style.backgroundSize = "cover";
+    desktopEl.dataset.wpIdx = currentIdx;
+}
+
+// Selection Box Logic
+const selectionBox = document.createElement("div");
+selectionBox.id = "selectionBox";
+document.body.appendChild(selectionBox);
+
+let selStartX, selStartY, isSelecting = false;
+
+desktop.addEventListener("mousedown", function(e) {
+    if (e.button !== 0) return; // Only left click
+    if (e.target.closest(".desktop-icon") || e.target.closest(".vista-window") || e.target.closest(".taskbar") || e.target.closest(".start-menu") || e.target.closest(".vista-sidebar") || e.target.closest(".desktop-context-menu")) return;
+    
+    isSelecting = true;
+    selStartX = e.clientX;
+    selStartY = e.clientY;
+    
+    selectionBox.style.left = selStartX + "px";
+    selectionBox.style.top = selStartY + "px";
+    selectionBox.style.width = "0px";
+    selectionBox.style.height = "0px";
+    selectionBox.style.display = "block";
+});
+
+document.addEventListener("mousemove", function(e) {
+    if (!isSelecting) return;
+    
+    const currentX = e.clientX;
+    const currentY = e.clientY;
+    
+    const left = Math.min(selStartX, currentX);
+    const top = Math.min(selStartY, currentY);
+    const width = Math.abs(currentX - selStartX);
+    const height = Math.abs(currentY - selStartY);
+    
+    selectionBox.style.left = left + "px";
+    selectionBox.style.top = top + "px";
+    selectionBox.style.width = width + "px";
+    selectionBox.style.height = height + "px";
+
+    // Optional: add visual feedback for icons caught in the selection
+    const icons = document.querySelectorAll(".desktop-icon");
+    const selRect = selectionBox.getBoundingClientRect();
+    icons.forEach(icon => {
+        const iconRect = icon.getBoundingClientRect();
+        if (
+            iconRect.right > selRect.left &&
+            iconRect.left < selRect.right &&
+            iconRect.bottom > selRect.top &&
+            iconRect.top < selRect.bottom
+        ) {
+            icon.style.background = "rgba(255, 255, 255, 0.2)";
+            icon.style.borderRadius = "4px";
+            icon.style.border = "1px dotted rgba(255,255,255,0.4)";
+        } else {
+            icon.style.background = "";
+            icon.style.border = "1px border transparent";
+        }
+    });
+});
+
+document.addEventListener("mouseup", function(e) {
+    hideSelectionBox();
+});
+
+function hideSelectionBox() {
+    isSelecting = false;
+    selectionBox.style.display = "none";
+}
+
+
+desktop.addEventListener("contextmenu", showContextMenu);
+
