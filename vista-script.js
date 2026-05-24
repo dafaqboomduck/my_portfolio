@@ -560,3 +560,30 @@ function hideSelectionBox() {
 
 desktop.addEventListener("contextmenu", showContextMenu);
 
+
+// Snap logic inside mouseup
+const originalMouseUp = document.onmouseup;
+document.addEventListener('mouseup', function(e) {
+    if (dragState && dragState.isDragging && dragState.window) {
+        const id = dragState.window;
+        const winEl = windows[id].element;
+        // Aero snap top
+        if (e.clientY < 5) {
+                maximizeWindow(id);
+            }
+        }
+    }
+});
+
+
+document.addEventListener("mouseup", function(e) {
+    if (dragState && dragState.isDragging && dragState.window) {
+        const id = dragState.window;
+        if (e.clientY < 10) {
+            if (windows[id] && !windows[id].maximized) {
+                maximizeWindow(id);
+            }
+        }
+    }
+});
+
