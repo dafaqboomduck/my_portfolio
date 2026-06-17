@@ -161,8 +161,11 @@ class Minesweeper {
     }
 
     getNumberColor(num) {
-        const colors = ['', '#0000FF', '#008000', '#FF0000', '#000080', '#800000', '#008080', '#000000', '#808080'];
-        return colors[num] || '#000';
+        const dark = document.body.classList.contains('dark-theme');
+        const light = ['', '#0000FF', '#008000', '#FF0000', '#000080', '#800000', '#008080', '#000000', '#808080'];
+        const darkP = ['', '#6cb0ec', '#5fd35f', '#ff6b6b', '#9b8cff', '#ff9e6b', '#4fd0d0', '#e8e6e3', '#b0b4b8'];
+        const colors = dark ? darkP : light;
+        return colors[num] || (dark ? '#e8e6e3' : '#000');
     }
 
     render() {

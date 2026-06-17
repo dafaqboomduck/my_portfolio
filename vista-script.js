@@ -694,6 +694,8 @@ function toggleShowDesktop() {
 function toggleTheme() {
     darkTheme = !darkTheme;
     document.body.classList.toggle('dark-theme', darkTheme);
+    // Minesweeper numbers are inline-rendered, so redraw it if it's open.
+    if (typeof minesweeperGame !== 'undefined' && minesweeperGame) minesweeperGame.render();
     showNotification(darkTheme ? '🌙 Dark theme enabled' : '☀️ Light theme enabled');
 }
 
