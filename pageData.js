@@ -4,7 +4,7 @@
 
 // Technology stack for Default Programs
 const installedPrograms = [
-    { name: 'Python 3.11', icon: 'bi-filetype-py', category: 'Programming Languages', publisher: 'Python Software Foundation' },
+    { name: 'Python 3.10', icon: 'bi-filetype-py', category: 'Programming Languages', publisher: 'Python Software Foundation' },
     { name: 'TensorFlow 2.x', icon: 'bi-gpu-card', category: 'Deep Learning', publisher: 'Google' },
     { name: 'Keras', icon: 'bi-layers', category: 'Deep Learning', publisher: 'Keras Team' },
     { name: 'Pandas', icon: 'bi-table', category: 'Data Analysis', publisher: 'NumFOCUS' },

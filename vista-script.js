@@ -1,83 +1,154 @@
 // ========== WINDOWS VISTA PORTFOLIO SCRIPT ==========
 // Core window management, navigation, boot sequence, and UI interaction.
-// Depends on: projectData.js, pageData.js, mineSweeper.js
+// Depends on: projectData.js, pageData.js, mineSweeper.js, pdfReader.js
+//
+// Pointer layer: one rAF-batched pipeline for drag/resize/marquee, Aero Snap, gadgets.
+// History layer: browser Back/Forward synced to window navigation via snapshot push/restore.
 
-// Window state management
+// ========== STATE ==========
 let windows = {};
 let windowZIndex = 100;
 let activeWindow = null;
-let dragState = { isDragging: false, window: null, offsetX: 0, offsetY: 0 };
-let navigationHistory = {}; // Full back-stack per window
+let darkTheme = false;
+
+const TASKBAR_H = 40;
+const WIN_MIN_W = 400;
+const WIN_MIN_H = 300;
+const WIN_DEFAULT_W = 750;
+const WIN_DEFAULT_H = 520;
+
+let navigationHistory = {}; // Per-window drill back-stack
 let scrollPositions = {};   // Saved scroll positions for back navigation
 
-// ========== NAVIGATION ==========
+// History sync guards
+let isRestoring = false;    // true while restoring from a popstate -> never push
+let suppressPush = false;   // true inside a compound action -> inner ops don't push; the action pushes once
 
-// Build a full history stack: parent's stack + parent itself
+// Unified pointer interaction (drag / resize). Marquee tracked separately.
+let pointer = { mode: null, id: null, startX: 0, startY: 0, startLeft: 0, startTop: 0, startW: 0, startH: 0 };
+let currentSnapZone = null;
+let lastPointerEvent = null;
+let rafPending = false;
+
+let marquee = { active: false, startX: 0, startY: 0, rects: [] };
+
+// ========== DOM HELPERS (overlays created once) ==========
+const snapPreview = document.createElement('div');
+snapPreview.id = 'snapPreview';
+document.body.appendChild(snapPreview);
+
+const selectionBox = document.createElement('div');
+selectionBox.id = 'selectionBox';
+document.body.appendChild(selectionBox);
+
+const desktopEl = () => document.getElementById('desktop');
+const ctxMenuEl = () => document.getElementById('desktopContextMenu');
+
+function rectOf(el) {
+    return { left: el.offsetLeft, top: el.offsetTop, width: el.offsetWidth, height: el.offsetHeight };
+}
+function setGeom(el, l, t, w, h) {
+    el.style.left = l + 'px';
+    el.style.top = t + 'px';
+    if (w != null) el.style.width = w + 'px';
+    if (h != null) el.style.height = h + 'px';
+}
+
+// ========== BROWSER HISTORY SYNC ==========
+// A snapshot fully describes the navigable state of the desktop.
+function snapshot() {
+    const order = Object.keys(windows).sort((a, b) =>
+        (parseInt(windows[a].element.style.zIndex) || 0) - (parseInt(windows[b].element.style.zIndex) || 0));
+    const stacks = {};
+    const minimized = {};
+    order.forEach(id => {
+        stacks[id] = navigationHistory[id] ? [...navigationHistory[id]] : [];
+        minimized[id] = !!windows[id].minimized;
+    });
+    return { order, stacks, minimized, active: activeWindow };
+}
+
+function hashForActive() {
+    return activeWindow ? '#' + activeWindow : '#desktop';
+}
+
+// Push the current state as a new browser history entry (unless restoring / inside a compound action).
+function pushNav() {
+    if (isRestoring || suppressPush) return;
+    history.pushState(snapshot(), '', hashForActive());
+}
+
+// Rebuild the desktop to match a snapshot (called on popstate). Pure window ops only — no pushes.
+function restore(snap) {
+    isRestoring = true;
+    snap = snap || { order: [], stacks: {}, minimized: {}, active: null };
+    const target = new Set(snap.order);
+
+    // Close anything not in the target state.
+    Object.keys(windows).forEach(id => { if (!target.has(id)) closeWindow(id); });
+
+    // Open everything in the target state, in stacking order.
+    snap.order.forEach(id => {
+        if (!windows[id]) {
+            const stack = snap.stacks[id] || [];
+            if (id.startsWith('project-')) openProjectDetail(id.replace('project-', ''), stack);
+            else openWindow(id, null, stack);
+        }
+        if (windows[id]) {
+            const shouldMin = !!(snap.minimized && snap.minimized[id]);
+            windows[id].minimized = shouldMin;
+            windows[id].element.classList.toggle('minimized', shouldMin);
+        }
+    });
+
+    if (snap.active && windows[snap.active]) focusWindow(snap.active);
+    isRestoring = false;
+}
+
+window.addEventListener('popstate', (e) => restore(e.state));
+
+// ========== NAVIGATION ==========
 function buildHistoryStack(fromWindow) {
     if (!fromWindow) return [];
     const parentStack = navigationHistory[fromWindow] || [];
     return [...parentStack, fromWindow];
 }
 
-// Navigate from a parent window to a target, preserving the full chain
+// Compound drill action: close parent, open target, carry the stack — counts as ONE history entry.
 function navigateTo(fromWindowId, targetWindowId, openFn) {
-    // Save scroll position before closing
     if (windows[fromWindowId]) {
         const content = windows[fromWindowId].element.querySelector('.window-content');
         if (content) scrollPositions[fromWindowId] = content.scrollTop;
     }
     const stack = buildHistoryStack(fromWindowId);
+
+    suppressPush = true;
     closeWindow(fromWindowId);
-    if (openFn) {
-        openFn(stack);
-    } else {
-        openWindow(targetWindowId, null, stack);
-    }
+    if (openFn) openFn(stack);
+    else openWindow(targetWindowId, null, stack);
+    suppressPush = false;
+
+    pushNav();
 }
 
-// Navigation dispatchers called from page content onclick handlers
-function navigateFromProjects(projectKey) {
-    navigateTo('projects', null, (stack) => openProjectDetail(projectKey, stack));
-}
-
-function navigateFromDocuments(projectKey) {
-    navigateTo('documents', null, (stack) => openProjectDetail(projectKey, stack));
-}
-
-function navigateFromGames(targetWindow) {
-    navigateTo('games', targetWindow);
-}
-
-function navigateFromControlPanel(targetWindow) {
-    navigateTo('controlpanel', targetWindow);
-}
-
-function navigateFromHelp(targetWindow) {
-    navigateTo('help', targetWindow);
-}
+function navigateFromProjects(projectKey) { navigateTo('projects', null, (stack) => openProjectDetail(projectKey, stack)); }
+function navigateFromDocuments(projectKey) { navigateTo('documents', null, (stack) => openProjectDetail(projectKey, stack)); }
+function navigateFromGames(targetWindow) { navigateTo('games', targetWindow); }
+function navigateFromControlPanel(targetWindow) { navigateTo('controlpanel', targetWindow); }
+function navigateFromHelp(targetWindow) { navigateTo('help', targetWindow); }
 
 // ========== PROJECT DETAIL ==========
-
 function openProjectDetail(projectKey, historyStack) {
     const project = projectData[projectKey];
     if (!project) return;
 
     const detailId = 'project-' + projectKey;
+    if (windows[detailId]) { focusWindow(detailId); return; }
 
-    if (windows[detailId]) {
-        focusWindow(detailId);
-        return;
-    }
-
-    // Accept array (new) or string (legacy fallback)
     let stack;
-    if (Array.isArray(historyStack)) {
-        stack = historyStack;
-    } else if (typeof historyStack === 'string') {
-        stack = buildHistoryStack(historyStack);
-    } else {
-        stack = [];
-    }
+    if (Array.isArray(historyStack)) stack = historyStack;
+    else if (typeof historyStack === 'string') stack = buildHistoryStack(historyStack);
+    else stack = [];
 
     const content = {
         title: project.title,
@@ -85,76 +156,78 @@ function openProjectDetail(projectKey, historyStack) {
         path: `C:\\Users\\Razvan\\Documents\\Projects\\${project.title.replace(/[^a-zA-Z0-9]/g, '_')}`,
         content: generateProjectDetailContent(project)
     };
-
     createWindow(detailId, content, stack);
 }
 
 // ========== BOOT SEQUENCE ==========
-
 document.addEventListener('DOMContentLoaded', function () {
-    setTimeout(() => {
-        document.getElementById('bootScreen').classList.add('hidden');
-        document.getElementById('welcomeScreen').classList.remove('hidden');
-    }, 3500);
+    const bootScreen = document.getElementById('bootScreen');
+    let bootTimer = setTimeout(showWelcome, 1500);
+    bootScreen.addEventListener('dblclick', () => { clearTimeout(bootTimer); showWelcome(); });
 
-    updateClock();
-    setInterval(updateClock, 1000);
+    function showWelcome() {
+        bootScreen.classList.add('hidden');
+        document.getElementById('welcomeScreen').classList.remove('hidden');
+    }
+
+    tick();
+    setInterval(tick, 1000);
+    initCalendarGadget();
 });
 
 function startDesktop() {
     document.getElementById('welcomeScreen').classList.add('hidden');
     document.getElementById('desktop').classList.remove('hidden');
-    
-    // Auto-open Welcome Center for first-time visitors
-    setTimeout(() => openWindow('welcome'), 300);
+    // Baseline history entry = empty desktop, so Back from the first window returns here.
+    history.replaceState(snapshot(), '', '#desktop');
+    setTimeout(() => openWindow('welcome'), 300); // Auto-open Welcome Center (pushes #welcome)
 }
-// ========== WINDOW MANAGEMENT ==========
 
+// ========== WINDOW MANAGEMENT ==========
 function createWindow(id, content, historyStack) {
     const windowEl = document.createElement('div');
     windowEl.className = 'vista-window';
     windowEl.id = 'window-' + id;
-    windowEl.style.width = '750px';
-    windowEl.style.height = '520px';
+    windowEl.style.width = WIN_DEFAULT_W + 'px';
+    windowEl.style.height = WIN_DEFAULT_H + 'px';
     windowEl.style.left = (100 + Object.keys(windows).length * 30) + 'px';
     windowEl.style.top = (50 + Object.keys(windows).length * 30) + 'px';
 
     navigationHistory[id] = Array.isArray(historyStack) ? historyStack : [];
-
     const hasHistory = navigationHistory[id].length > 0;
 
     windowEl.innerHTML = `
-        <div class="window-titlebar" onmousedown="startDrag(event, '${id}')">
+        <div class="window-titlebar" onmousedown="startDrag(event, '${id}')" ondblclick="maximizeWindow('${id}')">
             <img src="${content.icon}" class="window-icon" alt="">
             <span class="window-title">${content.title}</span>
             <div class="window-controls">
-                <button class="window-btn window-btn-min" onclick="minimizeWindow('${id}')" title="Minimize">─</button>
-                <button class="window-btn window-btn-max" onclick="maximizeWindow('${id}')" title="Maximize">☐</button>
-                <button class="window-btn window-btn-close" onclick="closeWindow('${id}')" title="Close">✕</button>
+                <button class="window-btn window-btn-min" onclick="minimizeWindow('${id}')" title="Minimize">&minus;</button>
+                <button class="window-btn window-btn-max" onclick="maximizeWindow('${id}')" title="Maximize">&#9744;</button>
+                <button class="window-btn window-btn-close" onclick="userClose('${id}')" title="Close">&#10005;</button>
             </div>
         </div>
         <div class="window-toolbar">
             <button class="toolbar-btn ${hasHistory ? '' : 'disabled'}" onclick="goBack('${id}')" ${hasHistory ? '' : 'disabled'}>
-                <i class="bi bi-arrow-left"></i>
-                <span>Back</span>
+                <i class="bi bi-arrow-left"></i><span>Back</span>
             </button>
             <button class="toolbar-btn disabled" disabled>
-                <i class="bi bi-arrow-right"></i>
-                <span>Forward</span>
+                <i class="bi bi-arrow-right"></i><span>Forward</span>
             </button>
             <div class="address-bar">
-                <i class="bi bi-folder-fill"></i>
-                <span>${content.path}</span>
+                <i class="bi bi-folder-fill"></i><span>${content.path}</span>
             </div>
         </div>
-        <div class="window-content">
-            ${content.content}
-        </div>
+        <div class="window-content">${content.content}</div>
     `;
+
+    const handle = document.createElement('div');
+    handle.className = 'resize-handle';
+    handle.addEventListener('mousedown', (ev) => startResize(ev, id));
+    windowEl.appendChild(handle);
 
     document.getElementById('windowsContainer').appendChild(windowEl);
 
-    windows[id] = { element: windowEl, minimized: false, maximized: false };
+    windows[id] = { element: windowEl, minimized: false, maximized: false, prevRect: null };
     addToTaskbar(id, content);
     focusWindow(id);
     windowEl.addEventListener('mousedown', () => focusWindow(id));
@@ -162,28 +235,24 @@ function createWindow(id, content, historyStack) {
 
 function openWindow(id, fromWindow, historyStack) {
     if (windows[id]) {
+        const wasActive = (activeWindow === id) && !windows[id].minimized;
         focusWindow(id);
         if (windows[id].minimized) {
             windows[id].minimized = false;
             document.getElementById('window-' + id).classList.remove('minimized');
         }
+        if (!wasActive) pushNav();
         return;
     }
 
     let content = windowContent[id];
     if (!content) return;
 
-    // Determine history stack
     let stack;
-    if (Array.isArray(historyStack)) {
-        stack = historyStack;
-    } else if (fromWindow) {
-        stack = buildHistoryStack(fromWindow);
-    } else {
-        stack = [];
-    }
+    if (Array.isArray(historyStack)) stack = historyStack;
+    else if (fromWindow) stack = buildHistoryStack(fromWindow);
+    else stack = [];
 
-    // Generate dynamic content where needed
     if (id === 'projects') {
         content = { ...content, content: `
             <h2>📁 Featured Projects</h2>
@@ -208,6 +277,7 @@ function openWindow(id, fromWindow, historyStack) {
             const container = document.querySelector('#window-' + id + ' .pdf-reader');
             if (container) initPdfReader(container);
         }, 100);
+        pushNav();
         return;
     } else if (id === 'minesweeper') {
         content = { ...content, content: `<div id="minesweeper-container"></div>` };
@@ -217,12 +287,14 @@ function openWindow(id, fromWindow, historyStack) {
             const container = document.getElementById('minesweeper-container');
             if (container) initMinesweeper(container);
         }, 100);
+        pushNav();
         return;
     } else if (id === 'controlpanel') {
         content = { ...content, content: generateControlPanelContent() };
     }
 
     createWindow(id, content, stack);
+    pushNav();
 }
 
 function closeWindow(id) {
@@ -234,18 +306,28 @@ function closeWindow(id) {
     if (taskbarItem) taskbarItem.remove();
     const remaining = Object.keys(windows);
     if (remaining.length > 0) focusWindow(remaining[remaining.length - 1]);
+    else activeWindow = null;
 }
 
+// User-initiated close (the X button / Esc) — records a history entry.
+function userClose(id) {
+    closeWindow(id);
+    pushNav();
+}
+
+// In-app Back button: step up the drill stack. Counts as ONE history entry.
 function goBack(id) {
     if (!navigationHistory[id] || navigationHistory[id].length === 0) return;
-
     const stack = [...navigationHistory[id]];
     const previousWindow = stack.pop();
 
+    suppressPush = true;
     closeWindow(id);
-    openWindow(previousWindow, null, stack);
+    if (previousWindow.startsWith('project-')) openProjectDetail(previousWindow.replace('project-', ''), stack);
+    else openWindow(previousWindow, null, stack);
+    suppressPush = false;
+    pushNav();
 
-    // Restore saved scroll position
     if (scrollPositions[previousWindow] != null && windows[previousWindow]) {
         const content = windows[previousWindow].element.querySelector('.window-content');
         if (content) {
@@ -265,10 +347,23 @@ function minimizeWindow(id) {
     if (taskbarItem) taskbarItem.classList.remove('active');
 }
 
-function maximizeWindow(id) {
-    if (!windows[id]) return;
-    windows[id].maximized = !windows[id].maximized;
-    windows[id].element.classList.toggle('maximized');
+function maximizeWindow(id, forceOn) {
+    const w = windows[id];
+    if (!w) return;
+    const turnOn = forceOn === true ? true : !w.maximized;
+
+    if (turnOn) {
+        if (!w.maximized) w.prevRect = rectOf(w.element);
+        w.maximized = true;
+        w.element.classList.add('maximized');
+    } else {
+        w.maximized = false;
+        w.element.classList.remove('maximized');
+        if (w.prevRect) {
+            setGeom(w.element, w.prevRect.left, w.prevRect.top, w.prevRect.width, w.prevRect.height);
+            w.prevRect = null;
+        }
+    }
 }
 
 function focusWindow(id) {
@@ -283,7 +378,6 @@ function focusWindow(id) {
 }
 
 // ========== TASKBAR ==========
-
 function addToTaskbar(id, content) {
     const taskbarWindows = document.getElementById('taskbarWindows');
     const item = document.createElement('div');
@@ -296,60 +390,323 @@ function addToTaskbar(id, content) {
         }
         focusWindow(id);
     };
-    item.innerHTML = `<img src="${content.icon}" alt=""><span>${content.title}</span>`;
+    item.innerHTML = `
+        <div class="taskbar-preview">
+            <img src="${content.icon}" alt="" style="width:32px; height:32px; display:block; margin:0 auto 5px auto;">
+            <strong>${content.title}</strong>
+        </div>
+        <img src="${content.icon}" alt=""><span>${content.title}</span>`;
     taskbarWindows.appendChild(item);
 }
 
-// ========== DRAG ==========
-
+// ========== POINTER PIPELINE (drag / resize / marquee, all rAF-batched) ==========
 function startDrag(e, id) {
     if (e.target.closest('.window-controls')) return;
-    if (windows[id].maximized) return;
-    dragState.isDragging = true;
-    dragState.window = id;
-    const rect = windows[id].element.getBoundingClientRect();
-    dragState.offsetX = e.clientX - rect.left;
-    dragState.offsetY = e.clientY - rect.top;
+    const w = windows[id];
+    if (!w) return;
     focusWindow(id);
+
+    if (w.maximized) {
+        const pw = (w.prevRect && w.prevRect.width) || WIN_DEFAULT_W;
+        const ph = (w.prevRect && w.prevRect.height) || WIN_DEFAULT_H;
+        w.maximized = false;
+        w.element.classList.remove('maximized');
+        w.prevRect = null;
+        const nl = Math.max(0, Math.min(e.clientX - pw / 2, window.innerWidth - pw));
+        setGeom(w.element, nl, 0, pw, ph);
+    }
+
+    pointer.mode = 'drag';
+    pointer.id = id;
+    pointer.startX = e.clientX;
+    pointer.startY = e.clientY;
+    pointer.startLeft = w.element.offsetLeft;
+    pointer.startTop = w.element.offsetTop;
+    document.body.classList.add('is-dragging');
+    e.preventDefault();
 }
 
-document.addEventListener('mousemove', (e) => {
-    if (!dragState.isDragging) return;
-    const windowEl = windows[dragState.window].element;
-    let newX = Math.max(0, Math.min(e.clientX - dragState.offsetX, window.innerWidth - 100));
-    let newY = Math.max(0, Math.min(e.clientY - dragState.offsetY, window.innerHeight - 100));
-    windowEl.style.left = newX + 'px';
-    windowEl.style.top = newY + 'px';
-});
+function startResize(e, id) {
+    const w = windows[id];
+    if (!w || w.maximized) return;
+    focusWindow(id);
+    pointer.mode = 'resize';
+    pointer.id = id;
+    pointer.startX = e.clientX;
+    pointer.startY = e.clientY;
+    pointer.startW = w.element.offsetWidth;
+    pointer.startH = w.element.offsetHeight;
+    e.preventDefault();
+    e.stopPropagation();
+}
 
-document.addEventListener('mouseup', () => {
-    dragState.isDragging = false;
-    dragState.window = null;
-});
+function onPointerMove(e) {
+    lastPointerEvent = e;
+    if (!rafPending) {
+        rafPending = true;
+        requestAnimationFrame(processPointer);
+    }
+}
+
+function processPointer() {
+    rafPending = false;
+    const e = lastPointerEvent;
+    if (!e) return;
+
+    if (pointer.mode === 'drag' && windows[pointer.id]) {
+        const el = windows[pointer.id].element;
+        let nx = pointer.startLeft + (e.clientX - pointer.startX);
+        let ny = pointer.startTop + (e.clientY - pointer.startY);
+        nx = Math.max(-(el.offsetWidth - 120), Math.min(nx, window.innerWidth - 120));
+        ny = Math.max(0, Math.min(ny, window.innerHeight - TASKBAR_H - 28));
+        el.style.left = nx + 'px';
+        el.style.top = ny + 'px';
+        detectSnap(e.clientX, e.clientY);
+
+    } else if (pointer.mode === 'resize' && windows[pointer.id]) {
+        const el = windows[pointer.id].element;
+        const nw = Math.max(WIN_MIN_W, pointer.startW + (e.clientX - pointer.startX));
+        const nh = Math.max(WIN_MIN_H, pointer.startH + (e.clientY - pointer.startY));
+        el.style.width = nw + 'px';
+        el.style.height = nh + 'px';
+
+    } else if (marquee.active) {
+        const l = Math.min(marquee.startX, e.clientX);
+        const t = Math.min(marquee.startY, e.clientY);
+        const w = Math.abs(e.clientX - marquee.startX);
+        const h = Math.abs(e.clientY - marquee.startY);
+        selectionBox.style.left = l + 'px';
+        selectionBox.style.top = t + 'px';
+        selectionBox.style.width = w + 'px';
+        selectionBox.style.height = h + 'px';
+        const sel = { left: l, top: t, right: l + w, bottom: t + h };
+        marquee.rects.forEach(({ el, r }) => {
+            const hit = r.right > sel.left && r.left < sel.right && r.bottom > sel.top && r.top < sel.bottom;
+            el.classList.toggle('selected', hit);
+        });
+    }
+}
+
+function onPointerUp() {
+    if (pointer.mode === 'drag') {
+        document.body.classList.remove('is-dragging');
+        if (currentSnapZone && windows[pointer.id]) applySnap(pointer.id);
+    }
+    pointer.mode = null;
+    pointer.id = null;
+    currentSnapZone = null;
+    snapPreview.style.display = 'none';
+    if (marquee.active) {
+        marquee.active = false;
+        selectionBox.style.display = 'none';
+    }
+}
+
+// ---- Aero Snap ----
+function detectSnap(x, y) {
+    const availH = window.innerHeight - TASKBAR_H;
+    let zone = null;
+    if (y <= 6) zone = 'max';
+    else if (x <= 6) zone = 'left';
+    else if (x >= window.innerWidth - 6) zone = 'right';
+
+    currentSnapZone = zone;
+    if (!zone) { snapPreview.style.display = 'none'; return; }
+
+    let g;
+    if (zone === 'max') g = { left: 0, top: 0, width: window.innerWidth, height: availH };
+    else if (zone === 'left') g = { left: 0, top: 0, width: Math.floor(window.innerWidth / 2), height: availH };
+    else g = { left: Math.ceil(window.innerWidth / 2), top: 0, width: Math.floor(window.innerWidth / 2), height: availH };
+
+    snapPreview.style.left = g.left + 'px';
+    snapPreview.style.top = g.top + 'px';
+    snapPreview.style.width = g.width + 'px';
+    snapPreview.style.height = g.height + 'px';
+    snapPreview.style.display = 'block';
+}
+
+function applySnap(id) {
+    const w = windows[id];
+    if (!w || !currentSnapZone) return;
+    const availH = window.innerHeight - TASKBAR_H;
+
+    if (currentSnapZone === 'max') { maximizeWindow(id, true); return; }
+    if (!w.prevRect) w.prevRect = { left: w.element.offsetLeft, top: w.element.offsetTop, width: WIN_DEFAULT_W, height: WIN_DEFAULT_H };
+    w.maximized = false;
+    w.element.classList.remove('maximized');
+    if (currentSnapZone === 'left') setGeom(w.element, 0, 0, Math.floor(window.innerWidth / 2), availH);
+    else setGeom(w.element, Math.ceil(window.innerWidth / 2), 0, Math.floor(window.innerWidth / 2), availH);
+}
+
+document.addEventListener('mousemove', (e) => { if (pointer.mode || marquee.active) onPointerMove(e); });
+document.addEventListener('mouseup', onPointerUp);
 
 // ========== START MENU ==========
-
 function toggleStartMenu() {
-    document.getElementById('startMenu').classList.toggle('hidden');
+    const menu = document.getElementById('startMenu');
+    menu.classList.toggle('hidden');
+    if (!menu.classList.contains('hidden')) {
+        const searchInput = document.getElementById('startSearchInput');
+        if (searchInput) {
+            searchInput.value = '';
+            filterStartMenu('');
+            setTimeout(() => searchInput.focus(), 100);
+        }
+    }
 }
 
-document.addEventListener('click', (e) => {
-    const menu = document.getElementById('startMenu');
-    const startBtn = document.querySelector('.start-button');
-    if (!menu.contains(e.target) && !startBtn.contains(e.target)) menu.classList.add('hidden');
-});
+// ========== START MENU SEARCH ==========
+let _searchIndex = null;
+function getSearchIndex() {
+    if (_searchIndex) return _searchIndex;
+    _searchIndex = [
+        { id: 'about',        label: 'About Me',         icon: 'bi-person-fill',           keywords: 'about me background education bio who profile' },
+        { id: 'skills',       label: 'My Skills',        icon: 'bi-gear-wide-connected',   keywords: 'skills competencies tech expertise ml nlp computer vision mlops backend' },
+        { id: 'projects',     label: 'Projects',         icon: 'bi-folder-fill',           keywords: 'projects work portfolio builds featured ml systems' },
+        { id: 'documents',    label: 'Documents',        icon: 'bi-folder2-open',          keywords: 'documents files my documents' },
+        { id: 'contact',      label: 'Contact Me',       icon: 'bi-envelope-fill',         keywords: 'contact email linkedin github network reach get in touch outlook' },
+        { id: 'resume',       label: 'Resume (CV)',      icon: 'bi-file-earmark-pdf-fill', keywords: 'resume cv pdf curriculum vitae download' },
+        { id: 'recycle',      label: 'Recycle Bin',      icon: 'bi-trash3',                keywords: 'recycle bin trash deleted' },
+        { id: 'games',        label: 'Games',            icon: 'bi-controller',            keywords: 'games play minesweeper' },
+        { id: 'minesweeper',  label: 'Minesweeper',      icon: 'bi-grid-3x3-gap-fill',     keywords: 'minesweeper mines game play' },
+        { id: 'programs',     label: 'Default Programs', icon: 'bi-box-seam-fill',         keywords: 'default programs technologies stack tools installed software' },
+        { id: 'computer',     label: 'Computer',         icon: 'bi-pc-display',            keywords: 'computer system drives specs hardware my computer' },
+        { id: 'controlpanel', label: 'Control Panel',    icon: 'bi-sliders',               keywords: 'control panel settings preferences personalization theme dark light' },
+        { id: 'help',         label: 'Help and Support', icon: 'bi-question-circle-fill',  keywords: 'help support guide assistance how to faq' }
+    ];
+    if (typeof projectData !== 'undefined') {
+        Object.entries(projectData).forEach(([key, p]) => {
+            _searchIndex.push({
+                id: 'project-' + key,
+                projectKey: key,
+                label: p.title,
+                icon: 'bi-file-earmark-code',
+                keywords: (p.title + ' ' + p.tag + ' ' + (p.technologies || []).join(' ')).toLowerCase()
+            });
+        });
+    }
+    return _searchIndex;
+}
 
-// ========== CLOCK ==========
+function ensureSearchResultsEl() {
+    let el = document.getElementById('startSearchResults');
+    if (el) return el;
+    const programs = document.querySelector('.start-programs');
+    if (!programs) return null;
+    el = document.createElement('div');
+    el.id = 'startSearchResults';
+    el.style.display = 'none';
+    programs.parentNode.insertBefore(el, programs.nextSibling);
+    return el;
+}
 
-function updateClock() {
+function openSearchResult(item) {
+    if (!item) return;
+    if (item.projectKey) openProjectDetail(item.projectKey, []);
+    else openWindow(item.id);
+    toggleStartMenu(); // close the menu
+}
+
+// Live search across every location (windows + project pages)
+function filterStartMenu(query) {
+    const q = (query || '').trim().toLowerCase();
+    const programs = document.querySelector('.start-programs');
+    const right = document.querySelector('.start-menu-right');
+    const results = ensureSearchResultsEl();
+
+    if (!q) { // empty -> normal two-column menu
+        if (programs) programs.style.display = '';
+        if (right) right.style.display = '';
+        if (results) { results.style.display = 'none'; results.innerHTML = ''; }
+        return;
+    }
+
+    const tokens = q.split(/\s+/);
+    const matches = getSearchIndex().filter(item => {
+        const hay = (item.label + ' ' + item.keywords).toLowerCase();
+        return tokens.every(t => hay.includes(t));
+    });
+
+    if (programs) programs.style.display = 'none';
+    if (right) right.style.display = 'none';
+    if (!results) return;
+    results.style.display = '';
+
+    if (matches.length === 0) {
+        results.innerHTML = `<div class="start-search-empty">No results found</div>`;
+        return;
+    }
+    results.innerHTML = matches.map(m =>
+        `<div class="start-item start-search-hit" data-id="${m.id}"><i class="bi ${m.icon}"></i><span>${m.label}</span></div>`
+    ).join('');
+    results.querySelectorAll('.start-search-hit').forEach(el => {
+        el.addEventListener('click', () => openSearchResult(getSearchIndex().find(x => x.id === el.dataset.id)));
+    });
+}
+
+// ========== CLOCK + GADGETS ==========
+function updateGadgetClock() {
+    const now = new Date();
+    const sec = now.getSeconds(), min = now.getMinutes(), hr = now.getHours();
+    const hrDeg = (hr % 12) * 30 + (min / 2);
+    const minDeg = min * 6 + (sec / 10);
+    const secDeg = sec * 6;
+    const h = document.getElementById('gadgetHour');
+    const m = document.getElementById('gadgetMinute');
+    const s = document.getElementById('gadgetSecond');
+    if (h) h.style.transform = `translateX(-50%) rotate(${hrDeg}deg)`;
+    if (m) m.style.transform = `translateX(-50%) rotate(${minDeg}deg)`;
+    if (s) s.style.transform = `translateX(-50%) rotate(${secDeg}deg)`;
+}
+
+function tick() {
     const now = new Date();
     const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     const date = now.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
-    document.getElementById('trayClock').innerHTML = `${time}<br>${date}`;
+    const fullDate = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    const clockEl = document.getElementById('trayClock');
+    if (clockEl) {
+        clockEl.innerHTML = `${time}<br>${date}`;
+        clockEl.title = fullDate;
+    }
+    updateGadgetClock();
+}
+function updateClock() { tick(); }
+
+function initCalendarGadget() {
+    const grid = document.getElementById('calGrid');
+    const header = document.getElementById('calMonthYear');
+    if (!grid || !header) return;
+
+    const now = new Date();
+    const year = now.getFullYear(), month = now.getMonth(), today = now.getDate();
+    header.innerText = now.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    grid.innerHTML = '';
+    ['S', 'M', 'T', 'W', 'T', 'F', 'S'].forEach(d => {
+        const el = document.createElement('div');
+        el.className = 'cal-day';
+        el.style.fontWeight = 'bold';
+        el.innerText = d;
+        grid.appendChild(el);
+    });
+    for (let i = 0; i < firstDay; i++) {
+        const el = document.createElement('div');
+        el.className = 'cal-day empty';
+        grid.appendChild(el);
+    }
+    for (let i = 1; i <= daysInMonth; i++) {
+        const el = document.createElement('div');
+        el.className = 'cal-day' + (i === today ? ' today' : '');
+        el.innerText = i;
+        grid.appendChild(el);
+    }
 }
 
 // ========== SHUTDOWN ==========
-
 function shutdown() {
     toggleStartMenu();
     document.getElementById('shutdownScreen').classList.remove('hidden');
@@ -361,55 +718,152 @@ function shutdown() {
                     <p style="margin-bottom:20px">Thanks for visiting!</p>
                     <button onclick="location.reload()" class="vista-btn"><i class="bi bi-arrow-clockwise"></i> Restart</button>
                 </div>
-            </div>
-        `;
+            </div>`;
     }, 2000);
 }
 
-// ========== KEYBOARD SHORTCUTS ==========
+// ========== CONTEXT MENU / DESKTOP ACTIONS ==========
+function refreshDesktop() {
+    const icons = document.querySelector('.desktop-icons');
+    if (!icons) return;
+    icons.style.display = 'none';
+    setTimeout(() => icons.style.display = '', 100);
+}
 
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Meta' || (e.ctrlKey && e.key === 'Escape')) toggleStartMenu();
-    if (e.key === 'Escape' && activeWindow) closeWindow(activeWindow);
-});
+function toggleSidebar() {
+    const sidebar = document.querySelector('.vista-sidebar');
+    if (sidebar) sidebar.classList.toggle('hidden');
+}
 
-// ========== DESKTOP ICON SELECTION ==========
+function changeWallpaper() {
+    const d = document.getElementById('desktop');
+    const wallpapers = [
+        "url('images/window-vista-bkg.jpg') center/cover no-repeat",
+        "radial-gradient(circle at center, #1a2a6c, #112 100%)",
+        "linear-gradient(135deg, #2a6aaa 0%, #0a1628 100%)",
+        "linear-gradient(135deg, #6a2a5a 0%, #16081a 100%)"
+    ];
+    let idx = parseInt(d.dataset.wpIdx || 0);
+    idx = (idx + 1) % wallpapers.length;
+    d.style.background = wallpapers[idx];
+    d.style.backgroundColor = '#0a1628';
+    d.dataset.wpIdx = idx;
+}
 
-document.querySelectorAll('.desktop-icon').forEach(icon => {
-    icon.addEventListener('click', function () {
-        document.querySelectorAll('.desktop-icon').forEach(i => i.classList.remove('selected'));
-        this.classList.add('selected');
-    });
-});
+// ========== SHOW DESKTOP (Aero peek equivalent) ==========
+function toggleShowDesktop() {
+    let allMinimized = true;
+    for (const id in windows) { if (!windows[id].minimized) { allMinimized = false; break; } }
 
-document.getElementById('desktop')?.addEventListener('click', (e) => {
-    if (e.target.id === 'desktop' || e.target.classList.contains('desktop')) {
-        document.querySelectorAll('.desktop-icon').forEach(i => i.classList.remove('selected'));
+    if (allMinimized) {
+        for (const id in windows) {
+            if (windows[id].minimized) {
+                windows[id].minimized = false;
+                windows[id].element.classList.remove('minimized');
+                const t = document.getElementById('taskbar-' + id);
+                if (t) t.classList.add('active');
+            }
+        }
+    } else {
+        for (const id in windows) { if (!windows[id].minimized) minimizeWindow(id); }
     }
-});
+}
 
-// ========== THEME TOGGLE ==========
-
-let darkTheme = false;
-
+// ========== THEME ==========
 function toggleTheme() {
     darkTheme = !darkTheme;
     document.body.classList.toggle('dark-theme', darkTheme);
+    // Minesweeper numbers are inline-rendered, so redraw it if it's open.
+    if (typeof minesweeperGame !== 'undefined' && minesweeperGame) minesweeperGame.render();
     showNotification(darkTheme ? '🌙 Dark theme enabled' : '☀️ Light theme enabled');
 }
 
 function showNotification(message) {
     const existing = document.querySelector('.vista-notification');
     if (existing) existing.remove();
-
     const notif = document.createElement('div');
     notif.className = 'vista-notification';
     notif.innerHTML = message;
     document.body.appendChild(notif);
-
     setTimeout(() => notif.classList.add('show'), 10);
-    setTimeout(() => {
-        notif.classList.remove('show');
-        setTimeout(() => notif.remove(), 300);
-    }, 2000);
+    setTimeout(() => { notif.classList.remove('show'); setTimeout(() => notif.remove(), 300); }, 2000);
 }
+
+// ========== DESKTOP ICON INTERACTION ==========
+function deselectIcons() {
+    document.querySelectorAll('.desktop-icon.selected').forEach(i => i.classList.remove('selected'));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const iconsContainer = document.querySelector('.desktop-icons');
+    if (iconsContainer) {
+        iconsContainer.addEventListener('click', (e) => {
+            const icon = e.target.closest('.desktop-icon');
+            if (!icon) return;
+            deselectIcons();
+            icon.classList.add('selected');
+            e.stopPropagation();
+        });
+    }
+
+    const desktop = desktopEl();
+    if (!desktop) return;
+
+    desktop.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return;
+        if (e.target.closest('.desktop-icon')) return;
+        if (e.target.closest('.vista-window, .taskbar, .start-menu, .vista-sidebar, .desktop-context-menu')) return;
+
+        deselectIcons();
+        marquee.active = true;
+        marquee.startX = e.clientX;
+        marquee.startY = e.clientY;
+        marquee.rects = [...document.querySelectorAll('.desktop-icon')].map(ic => ({ el: ic, r: ic.getBoundingClientRect() }));
+        selectionBox.style.left = e.clientX + 'px';
+        selectionBox.style.top = e.clientY + 'px';
+        selectionBox.style.width = '0px';
+        selectionBox.style.height = '0px';
+        selectionBox.style.display = 'block';
+    });
+
+    desktop.addEventListener('contextmenu', (e) => {
+        if (e.target.closest('.vista-window, .taskbar')) return;
+        e.preventDefault();
+        const ctx = ctxMenuEl();
+        ctx.style.left = e.clientX + 'px';
+        ctx.style.top = e.clientY + 'px';
+        ctx.classList.remove('hidden');
+    });
+});
+
+// ========== GLOBAL CLICK: close start menu + context menu ==========
+document.addEventListener('click', (e) => {
+    const ctx = ctxMenuEl();
+    if (ctx && !ctx.classList.contains('hidden') && !ctx.contains(e.target)) ctx.classList.add('hidden');
+
+    const menu = document.getElementById('startMenu');
+    const startBtn = document.querySelector('.start-button');
+    if (menu && startBtn && !menu.contains(e.target) && !startBtn.contains(e.target)) menu.classList.add('hidden');
+});
+
+// ========== KEYBOARD SHORTCUTS ==========
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Meta' || (e.ctrlKey && e.key === 'Escape')) toggleStartMenu();
+    if (e.key === 'Escape') {
+        const menu = document.getElementById('startMenu');
+        if (menu && !menu.classList.contains('hidden')) { toggleStartMenu(); return; }
+        if (activeWindow) userClose(activeWindow);
+    }
+    if (e.key === 'Enter') {
+        if (e.target && e.target.id === 'startSearchInput') {       // search box: open top result
+            const firstHit = document.querySelector('#startSearchResults .start-search-hit');
+            if (firstHit) firstHit.click();
+            return;
+        }
+        const sel = document.querySelector('.desktop-icon.selected');
+        if (sel) {
+            const m = (sel.getAttribute('ondblclick') || '').match(/openWindow\(['"]([^'"]+)['"]\)/);
+            if (m) openWindow(m[1]);
+        }
+    }
+});
