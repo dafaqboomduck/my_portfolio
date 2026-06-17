@@ -436,6 +436,10 @@ body.dark-theme .welcome-link-card span { color: #a0a0a0; }
 body.dark-theme .welcome-window-header { border-bottom-color: #3a5a8a; }
 body.dark-theme .welcome-window-header p { color: #a0a0a0; }
 
+/* Start menu search results */
+#startSearchResults { max-height: 250px; overflow-y: auto; }
+.start-search-empty { padding: 12px 15px; font-size: 12px; color: #888; }
+
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
     .vista-window { min-width: 100% !important; width: 100% !important; left: 0 !important; top: 0 !important; height: calc(100% - 40px) !important; border-radius: 0; }
