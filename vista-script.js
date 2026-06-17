@@ -1,27 +1,64 @@
 // ========== WINDOWS VISTA PORTFOLIO SCRIPT ==========
 // Core window management, navigation, boot sequence, and UI interaction.
-// Depends on: projectData.js, pageData.js, mineSweeper.js
+// Depends on: projectData.js, pageData.js, mineSweeper.js, pdfReader.js
+//
+// Rebuilt "10x" layer: one rAF-batched pointer pipeline for drag/resize/marquee,
+// real Aero Snap (edges + corners), working analog clock + calendar gadgets,
+// and a single clean desktop-icon interaction model (click = select, dblclick = open).
 
-// Window state management
+// ========== STATE ==========
 let windows = {};
 let windowZIndex = 100;
 let activeWindow = null;
-let dragState = { isDragging: false, window: null, offsetX: 0, offsetY: 0 };
+let darkTheme = false;
+
+const TASKBAR_H = 40;
+const WIN_MIN_W = 400;
+const WIN_MIN_H = 300;
+const WIN_DEFAULT_W = 750;
+const WIN_DEFAULT_H = 520;
+
 let navigationHistory = {}; // Full back-stack per window
 let scrollPositions = {};   // Saved scroll positions for back navigation
 
-// ========== NAVIGATION ==========
+// Unified pointer interaction (drag / resize). Marquee tracked separately.
+let pointer = { mode: null, id: null, startX: 0, startY: 0, startLeft: 0, startTop: 0, startW: 0, startH: 0 };
+let currentSnapZone = null;
+let lastPointerEvent = null;
+let rafPending = false;
 
-// Build a full history stack: parent's stack + parent itself
+let marquee = { active: false, startX: 0, startY: 0, rects: [] };
+
+// ========== DOM HELPERS (overlays created once) ==========
+const snapPreview = document.createElement('div');
+snapPreview.id = 'snapPreview';
+document.body.appendChild(snapPreview);
+
+const selectionBox = document.createElement('div');
+selectionBox.id = 'selectionBox';
+document.body.appendChild(selectionBox);
+
+const desktopEl = () => document.getElementById('desktop');
+const ctxMenuEl = () => document.getElementById('desktopContextMenu');
+
+function rectOf(el) {
+    return { left: el.offsetLeft, top: el.offsetTop, width: el.offsetWidth, height: el.offsetHeight };
+}
+function setGeom(el, l, t, w, h) {
+    el.style.left = l + 'px';
+    el.style.top = t + 'px';
+    if (w != null) el.style.width = w + 'px';
+    if (h != null) el.style.height = h + 'px';
+}
+
+// ========== NAVIGATION ==========
 function buildHistoryStack(fromWindow) {
     if (!fromWindow) return [];
     const parentStack = navigationHistory[fromWindow] || [];
     return [...parentStack, fromWindow];
 }
 
-// Navigate from a parent window to a target, preserving the full chain
 function navigateTo(fromWindowId, targetWindowId, openFn) {
-    // Save scroll position before closing
     if (windows[fromWindowId]) {
         const content = windows[fromWindowId].element.querySelector('.window-content');
         if (content) scrollPositions[fromWindowId] = content.scrollTop;
@@ -35,49 +72,24 @@ function navigateTo(fromWindowId, targetWindowId, openFn) {
     }
 }
 
-// Navigation dispatchers called from page content onclick handlers
-function navigateFromProjects(projectKey) {
-    navigateTo('projects', null, (stack) => openProjectDetail(projectKey, stack));
-}
-
-function navigateFromDocuments(projectKey) {
-    navigateTo('documents', null, (stack) => openProjectDetail(projectKey, stack));
-}
-
-function navigateFromGames(targetWindow) {
-    navigateTo('games', targetWindow);
-}
-
-function navigateFromControlPanel(targetWindow) {
-    navigateTo('controlpanel', targetWindow);
-}
-
-function navigateFromHelp(targetWindow) {
-    navigateTo('help', targetWindow);
-}
+function navigateFromProjects(projectKey) { navigateTo('projects', null, (stack) => openProjectDetail(projectKey, stack)); }
+function navigateFromDocuments(projectKey) { navigateTo('documents', null, (stack) => openProjectDetail(projectKey, stack)); }
+function navigateFromGames(targetWindow) { navigateTo('games', targetWindow); }
+function navigateFromControlPanel(targetWindow) { navigateTo('controlpanel', targetWindow); }
+function navigateFromHelp(targetWindow) { navigateTo('help', targetWindow); }
 
 // ========== PROJECT DETAIL ==========
-
 function openProjectDetail(projectKey, historyStack) {
     const project = projectData[projectKey];
     if (!project) return;
 
     const detailId = 'project-' + projectKey;
+    if (windows[detailId]) { focusWindow(detailId); return; }
 
-    if (windows[detailId]) {
-        focusWindow(detailId);
-        return;
-    }
-
-    // Accept array (new) or string (legacy fallback)
     let stack;
-    if (Array.isArray(historyStack)) {
-        stack = historyStack;
-    } else if (typeof historyStack === 'string') {
-        stack = buildHistoryStack(historyStack);
-    } else {
-        stack = [];
-    }
+    if (Array.isArray(historyStack)) stack = historyStack;
+    else if (typeof historyStack === 'string') stack = buildHistoryStack(historyStack);
+    else stack = [];
 
     const content = {
         title: project.title,
@@ -85,48 +97,43 @@ function openProjectDetail(projectKey, historyStack) {
         path: `C:\\Users\\Razvan\\Documents\\Projects\\${project.title.replace(/[^a-zA-Z0-9]/g, '_')}`,
         content: generateProjectDetailContent(project)
     };
-
     createWindow(detailId, content, stack);
 }
 
 // ========== BOOT SEQUENCE ==========
-
 document.addEventListener('DOMContentLoaded', function () {
-    let bootTimer = setTimeout(() => {
-        document.getElementById('bootScreen').classList.add('hidden');
-        document.getElementById('welcomeScreen').classList.remove('hidden');
-    }, 3500);
-    
-    document.getElementById('bootScreen').addEventListener('dblclick', () => {
-        clearTimeout(bootTimer);
-        document.getElementById('bootScreen').classList.add('hidden');
-        document.getElementById('welcomeScreen').classList.remove('hidden');
-    });
+    const bootScreen = document.getElementById('bootScreen');
+    let bootTimer = setTimeout(showWelcome, 3500);
+    bootScreen.addEventListener('dblclick', () => { clearTimeout(bootTimer); showWelcome(); });
 
-    updateClock();
-    setInterval(updateClock, 1000);
+    function showWelcome() {
+        bootScreen.classList.add('hidden');
+        document.getElementById('welcomeScreen').classList.remove('hidden');
+    }
+
+    // Single clock pipeline (tray + gadget), plus calendar gadget.
+    tick();
+    setInterval(tick, 1000);
+    initCalendarGadget();
 });
 
 function startDesktop() {
     document.getElementById('welcomeScreen').classList.add('hidden');
     document.getElementById('desktop').classList.remove('hidden');
-    
-    // Auto-open Welcome Center for first-time visitors
-    setTimeout(() => openWindow('welcome'), 300);
+    setTimeout(() => openWindow('welcome'), 300); // Auto-open Welcome Center
 }
-// ========== WINDOW MANAGEMENT ==========
 
+// ========== WINDOW MANAGEMENT ==========
 function createWindow(id, content, historyStack) {
     const windowEl = document.createElement('div');
     windowEl.className = 'vista-window';
     windowEl.id = 'window-' + id;
-    windowEl.style.width = '750px';
-    windowEl.style.height = '520px';
+    windowEl.style.width = WIN_DEFAULT_W + 'px';
+    windowEl.style.height = WIN_DEFAULT_H + 'px';
     windowEl.style.left = (100 + Object.keys(windows).length * 30) + 'px';
     windowEl.style.top = (50 + Object.keys(windows).length * 30) + 'px';
 
     navigationHistory[id] = Array.isArray(historyStack) ? historyStack : [];
-
     const hasHistory = navigationHistory[id].length > 0;
 
     windowEl.innerHTML = `
@@ -134,33 +141,34 @@ function createWindow(id, content, historyStack) {
             <img src="${content.icon}" class="window-icon" alt="">
             <span class="window-title">${content.title}</span>
             <div class="window-controls">
-                <button class="window-btn window-btn-min" onclick="minimizeWindow('${id}')" title="Minimize">─</button>
-                <button class="window-btn window-btn-max" onclick="maximizeWindow('${id}')" title="Maximize">☐</button>
-                <button class="window-btn window-btn-close" onclick="closeWindow('${id}')" title="Close">✕</button>
+                <button class="window-btn window-btn-min" onclick="minimizeWindow('${id}')" title="Minimize">&minus;</button>
+                <button class="window-btn window-btn-max" onclick="maximizeWindow('${id}')" title="Maximize">&#9744;</button>
+                <button class="window-btn window-btn-close" onclick="closeWindow('${id}')" title="Close">&#10005;</button>
             </div>
         </div>
         <div class="window-toolbar">
             <button class="toolbar-btn ${hasHistory ? '' : 'disabled'}" onclick="goBack('${id}')" ${hasHistory ? '' : 'disabled'}>
-                <i class="bi bi-arrow-left"></i>
-                <span>Back</span>
+                <i class="bi bi-arrow-left"></i><span>Back</span>
             </button>
             <button class="toolbar-btn disabled" disabled>
-                <i class="bi bi-arrow-right"></i>
-                <span>Forward</span>
+                <i class="bi bi-arrow-right"></i><span>Forward</span>
             </button>
             <div class="address-bar">
-                <i class="bi bi-folder-fill"></i>
-                <span>${content.path}</span>
+                <i class="bi bi-folder-fill"></i><span>${content.path}</span>
             </div>
         </div>
-        <div class="window-content">
-            ${content.content}
-        </div>
+        <div class="window-content">${content.content}</div>
     `;
+
+    // Resize grip (bottom-right)
+    const handle = document.createElement('div');
+    handle.className = 'resize-handle';
+    handle.addEventListener('mousedown', (ev) => startResize(ev, id));
+    windowEl.appendChild(handle);
 
     document.getElementById('windowsContainer').appendChild(windowEl);
 
-    windows[id] = { element: windowEl, minimized: false, maximized: false };
+    windows[id] = { element: windowEl, minimized: false, maximized: false, prevRect: null };
     addToTaskbar(id, content);
     focusWindow(id);
     windowEl.addEventListener('mousedown', () => focusWindow(id));
@@ -179,17 +187,11 @@ function openWindow(id, fromWindow, historyStack) {
     let content = windowContent[id];
     if (!content) return;
 
-    // Determine history stack
     let stack;
-    if (Array.isArray(historyStack)) {
-        stack = historyStack;
-    } else if (fromWindow) {
-        stack = buildHistoryStack(fromWindow);
-    } else {
-        stack = [];
-    }
+    if (Array.isArray(historyStack)) stack = historyStack;
+    else if (fromWindow) stack = buildHistoryStack(fromWindow);
+    else stack = [];
 
-    // Generate dynamic content where needed
     if (id === 'projects') {
         content = { ...content, content: `
             <h2>📁 Featured Projects</h2>
@@ -244,14 +246,11 @@ function closeWindow(id) {
 
 function goBack(id) {
     if (!navigationHistory[id] || navigationHistory[id].length === 0) return;
-
     const stack = [...navigationHistory[id]];
     const previousWindow = stack.pop();
-
     closeWindow(id);
     openWindow(previousWindow, null, stack);
 
-    // Restore saved scroll position
     if (scrollPositions[previousWindow] != null && windows[previousWindow]) {
         const content = windows[previousWindow].element.querySelector('.window-content');
         if (content) {
@@ -271,10 +270,25 @@ function minimizeWindow(id) {
     if (taskbarItem) taskbarItem.classList.remove('active');
 }
 
-function maximizeWindow(id) {
-    if (!windows[id]) return;
-    windows[id].maximized = !windows[id].maximized;
-    windows[id].element.classList.toggle('maximized');
+// Toggle maximize, or force on with forceOn === true. Remembers the prior
+// rectangle so restore (and drag-to-unmaximize) returns to the right size.
+function maximizeWindow(id, forceOn) {
+    const w = windows[id];
+    if (!w) return;
+    const turnOn = forceOn === true ? true : !w.maximized;
+
+    if (turnOn) {
+        if (!w.maximized) w.prevRect = rectOf(w.element);
+        w.maximized = true;
+        w.element.classList.add('maximized');
+    } else {
+        w.maximized = false;
+        w.element.classList.remove('maximized');
+        if (w.prevRect) {
+            setGeom(w.element, w.prevRect.left, w.prevRect.top, w.prevRect.width, w.prevRect.height);
+            w.prevRect = null;
+        }
+    }
 }
 
 function focusWindow(id) {
@@ -289,7 +303,6 @@ function focusWindow(id) {
 }
 
 // ========== TASKBAR ==========
-
 function addToTaskbar(id, content) {
     const taskbarWindows = document.getElementById('taskbarWindows');
     const item = document.createElement('div');
@@ -304,44 +317,165 @@ function addToTaskbar(id, content) {
     };
     item.innerHTML = `
         <div class="taskbar-preview">
-            <img src="${content.icon}" alt="" style="width:32px; height:32px; display:block; margin: 0 auto 5px auto;">
+            <img src="${content.icon}" alt="" style="width:32px; height:32px; display:block; margin:0 auto 5px auto;">
             <strong>${content.title}</strong>
         </div>
         <img src="${content.icon}" alt=""><span>${content.title}</span>`;
     taskbarWindows.appendChild(item);
 }
 
-// ========== DRAG ==========
+// ========== POINTER PIPELINE (drag / resize / marquee, all rAF-batched) ==========
 
+// Called from window titlebar: onmousedown="startDrag(event, 'id')"
 function startDrag(e, id) {
     if (e.target.closest('.window-controls')) return;
-    if (windows[id].maximized) return;
-    dragState.isDragging = true;
-    dragState.window = id;
-    document.body.classList.add('is-dragging');
-    const rect = windows[id].element.getBoundingClientRect();
-    dragState.offsetX = e.clientX - rect.left;
-    dragState.offsetY = e.clientY - rect.top;
+    const w = windows[id];
+    if (!w) return;
     focusWindow(id);
+
+    // Dragging a maximized window restores it to a floating size under the cursor.
+    if (w.maximized) {
+        const pw = (w.prevRect && w.prevRect.width) || WIN_DEFAULT_W;
+        const ph = (w.prevRect && w.prevRect.height) || WIN_DEFAULT_H;
+        w.maximized = false;
+        w.element.classList.remove('maximized');
+        w.prevRect = null;
+        const nl = Math.max(0, Math.min(e.clientX - pw / 2, window.innerWidth - pw));
+        setGeom(w.element, nl, 0, pw, ph);
+    }
+
+    pointer.mode = 'drag';
+    pointer.id = id;
+    pointer.startX = e.clientX;
+    pointer.startY = e.clientY;
+    pointer.startLeft = w.element.offsetLeft;
+    pointer.startTop = w.element.offsetTop;
+    document.body.classList.add('is-dragging');
+    e.preventDefault();
 }
 
-document.addEventListener('mousemove', (e) => {
-    if (!dragState.isDragging) return;
-    const windowEl = windows[dragState.window].element;
-    let newX = Math.max(0, Math.min(e.clientX - dragState.offsetX, window.innerWidth - 100));
-    let newY = Math.max(0, Math.min(e.clientY - dragState.offsetY, window.innerHeight - 100));
-    windowEl.style.left = newX + 'px';
-    windowEl.style.top = newY + 'px';
-});
+function startResize(e, id) {
+    const w = windows[id];
+    if (!w || w.maximized) return;
+    focusWindow(id);
+    pointer.mode = 'resize';
+    pointer.id = id;
+    pointer.startX = e.clientX;
+    pointer.startY = e.clientY;
+    pointer.startW = w.element.offsetWidth;
+    pointer.startH = w.element.offsetHeight;
+    e.preventDefault();
+    e.stopPropagation();
+}
 
-document.addEventListener('mouseup', () => {
-    dragState.isDragging = false;
-    dragState.window = null;
-    document.body.classList.remove('is-dragging');
-});
+function onPointerMove(e) {
+    lastPointerEvent = e;
+    if (!rafPending) {
+        rafPending = true;
+        requestAnimationFrame(processPointer);
+    }
+}
+
+function processPointer() {
+    rafPending = false;
+    const e = lastPointerEvent;
+    if (!e) return;
+
+    if (pointer.mode === 'drag' && windows[pointer.id]) {
+        const el = windows[pointer.id].element;
+        let nx = pointer.startLeft + (e.clientX - pointer.startX);
+        let ny = pointer.startTop + (e.clientY - pointer.startY);
+        nx = Math.max(-(el.offsetWidth - 120), Math.min(nx, window.innerWidth - 120));
+        ny = Math.max(0, Math.min(ny, window.innerHeight - TASKBAR_H - 28));
+        el.style.left = nx + 'px';
+        el.style.top = ny + 'px';
+        detectSnap(e.clientX, e.clientY);
+
+    } else if (pointer.mode === 'resize' && windows[pointer.id]) {
+        const el = windows[pointer.id].element;
+        const nw = Math.max(WIN_MIN_W, pointer.startW + (e.clientX - pointer.startX));
+        const nh = Math.max(WIN_MIN_H, pointer.startH + (e.clientY - pointer.startY));
+        el.style.width = nw + 'px';
+        el.style.height = nh + 'px';
+
+    } else if (marquee.active) {
+        const l = Math.min(marquee.startX, e.clientX);
+        const t = Math.min(marquee.startY, e.clientY);
+        const w = Math.abs(e.clientX - marquee.startX);
+        const h = Math.abs(e.clientY - marquee.startY);
+        selectionBox.style.left = l + 'px';
+        selectionBox.style.top = t + 'px';
+        selectionBox.style.width = w + 'px';
+        selectionBox.style.height = h + 'px';
+        const sel = { left: l, top: t, right: l + w, bottom: t + h };
+        // Icon rects were cached on mousedown -> no per-frame layout reads.
+        marquee.rects.forEach(({ el, r }) => {
+            const hit = r.right > sel.left && r.left < sel.right && r.bottom > sel.top && r.top < sel.bottom;
+            el.classList.toggle('selected', hit);
+        });
+    }
+}
+
+function onPointerUp() {
+    if (pointer.mode === 'drag') {
+        document.body.classList.remove('is-dragging');
+        if (currentSnapZone && windows[pointer.id]) applySnap(pointer.id);
+    }
+    pointer.mode = null;
+    pointer.id = null;
+    currentSnapZone = null;
+    snapPreview.style.display = 'none';
+    if (marquee.active) {
+        marquee.active = false;
+        selectionBox.style.display = 'none';
+    }
+}
+
+// ---- Aero Snap ----
+function detectSnap(x, y) {
+    const availH = window.innerHeight - TASKBAR_H;
+    let zone = null;
+    if (y <= 6) zone = 'max';
+    else if (x <= 6) zone = 'left';
+    else if (x >= window.innerWidth - 6) zone = 'right';
+
+    currentSnapZone = zone;
+    if (!zone) { snapPreview.style.display = 'none'; return; }
+
+    let g;
+    if (zone === 'max') g = { left: 0, top: 0, width: window.innerWidth, height: availH };
+    else if (zone === 'left') g = { left: 0, top: 0, width: Math.floor(window.innerWidth / 2), height: availH };
+    else g = { left: Math.ceil(window.innerWidth / 2), top: 0, width: Math.floor(window.innerWidth / 2), height: availH };
+
+    snapPreview.style.left = g.left + 'px';
+    snapPreview.style.top = g.top + 'px';
+    snapPreview.style.width = g.width + 'px';
+    snapPreview.style.height = g.height + 'px';
+    snapPreview.style.display = 'block';
+}
+
+function applySnap(id) {
+    const w = windows[id];
+    if (!w || !currentSnapZone) return;
+    const availH = window.innerHeight - TASKBAR_H;
+
+    if (currentSnapZone === 'max') {
+        maximizeWindow(id, true);
+        return;
+    }
+    // Half-snap: remember a restore size, then set explicit geometry.
+    if (!w.prevRect) w.prevRect = { left: w.element.offsetLeft, top: w.element.offsetTop, width: WIN_DEFAULT_W, height: WIN_DEFAULT_H };
+    w.maximized = false;
+    w.element.classList.remove('maximized');
+    if (currentSnapZone === 'left') setGeom(w.element, 0, 0, Math.floor(window.innerWidth / 2), availH);
+    else setGeom(w.element, Math.ceil(window.innerWidth / 2), 0, Math.floor(window.innerWidth / 2), availH);
+}
+
+// Global pointer listeners (one each)
+document.addEventListener('mousemove', (e) => { if (pointer.mode || marquee.active) onPointerMove(e); });
+document.addEventListener('mouseup', onPointerUp);
 
 // ========== START MENU ==========
-
 function toggleStartMenu() {
     const menu = document.getElementById('startMenu');
     menu.classList.toggle('hidden');
@@ -355,26 +489,81 @@ function toggleStartMenu() {
     }
 }
 
-document.addEventListener('click', (e) => {
-    const menu = document.getElementById('startMenu');
-    const startBtn = document.querySelector('.start-button');
-    if (!menu.contains(e.target) && !startBtn.contains(e.target)) menu.classList.add('hidden');
-});
+function filterStartMenu(query) {
+    const q = query.toLowerCase();
+    document.querySelectorAll('.start-menu-left .start-item').forEach(item => {
+        item.style.display = item.innerText.toLowerCase().includes(q) ? 'flex' : 'none';
+    });
+    document.querySelectorAll('.start-menu-right .start-item-right').forEach(item => {
+        item.style.display = item.innerText.toLowerCase().includes(q) ? 'flex' : 'none';
+    });
+}
 
-// ========== CLOCK ==========
+// ========== CLOCK + GADGETS ==========
+function updateGadgetClock() {
+    const now = new Date();
+    const sec = now.getSeconds(), min = now.getMinutes(), hr = now.getHours();
+    const hrDeg = (hr % 12) * 30 + (min / 2);
+    const minDeg = min * 6 + (sec / 10);
+    const secDeg = sec * 6;
+    const h = document.getElementById('gadgetHour');
+    const m = document.getElementById('gadgetMinute');
+    const s = document.getElementById('gadgetSecond');
+    if (h) h.style.transform = `translateX(-50%) rotate(${hrDeg}deg)`;
+    if (m) m.style.transform = `translateX(-50%) rotate(${minDeg}deg)`;
+    if (s) s.style.transform = `translateX(-50%) rotate(${secDeg}deg)`;
+}
 
-function updateClock() {
+// Single tick drives tray clock AND the analog gadget (no fragile reassignment).
+function tick() {
     const now = new Date();
     const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     const date = now.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
     const fullDate = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
     const clockEl = document.getElementById('trayClock');
-    clockEl.innerHTML = `${time}<br>${date}`;
-    clockEl.title = fullDate;
+    if (clockEl) {
+        clockEl.innerHTML = `${time}<br>${date}`;
+        clockEl.title = fullDate;
+    }
+    updateGadgetClock();
+}
+// Back-compat alias in case anything else calls updateClock()
+function updateClock() { tick(); }
+
+function initCalendarGadget() {
+    const grid = document.getElementById('calGrid');
+    const header = document.getElementById('calMonthYear');
+    if (!grid || !header) return;
+
+    const now = new Date();
+    const year = now.getFullYear(), month = now.getMonth(), today = now.getDate();
+    header.innerText = now.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    grid.innerHTML = '';
+    ['S', 'M', 'T', 'W', 'T', 'F', 'S'].forEach(d => {
+        const el = document.createElement('div');
+        el.className = 'cal-day';
+        el.style.fontWeight = 'bold';
+        el.innerText = d;
+        grid.appendChild(el);
+    });
+    for (let i = 0; i < firstDay; i++) {
+        const el = document.createElement('div');
+        el.className = 'cal-day empty';
+        grid.appendChild(el);
+    }
+    for (let i = 1; i <= daysInMonth; i++) {
+        const el = document.createElement('div');
+        el.className = 'cal-day' + (i === today ? ' today' : '');
+        el.innerText = i;
+        grid.appendChild(el);
+    }
 }
 
 // ========== SHUTDOWN ==========
-
 function shutdown() {
     toggleStartMenu();
     document.getElementById('shutdownScreen').classList.remove('hidden');
@@ -386,37 +575,58 @@ function shutdown() {
                     <p style="margin-bottom:20px">Thanks for visiting!</p>
                     <button onclick="location.reload()" class="vista-btn"><i class="bi bi-arrow-clockwise"></i> Restart</button>
                 </div>
-            </div>
-        `;
+            </div>`;
     }, 2000);
 }
 
-// ========== KEYBOARD SHORTCUTS ==========
+// ========== CONTEXT MENU / DESKTOP ACTIONS ==========
+function refreshDesktop() {
+    const icons = document.querySelector('.desktop-icons');
+    if (!icons) return;
+    icons.style.display = 'none';
+    setTimeout(() => icons.style.display = '', 100);
+}
 
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Meta' || (e.ctrlKey && e.key === 'Escape')) toggleStartMenu();
-    if (e.key === 'Escape' && activeWindow) closeWindow(activeWindow);
-});
+function toggleSidebar() {
+    const sidebar = document.querySelector('.vista-sidebar');
+    if (sidebar) sidebar.classList.toggle('hidden');
+}
 
-// ========== DESKTOP ICON SELECTION ==========
+function changeWallpaper() {
+    const d = document.getElementById('desktop');
+    const wallpapers = [
+        "url('images/window-vista-bkg.jpg') center/cover no-repeat",
+        "radial-gradient(circle at center, #1a2a6c, #112 100%)",
+        "linear-gradient(135deg, #2a6aaa 0%, #0a1628 100%)",
+        "linear-gradient(135deg, #6a2a5a 0%, #16081a 100%)"
+    ];
+    let idx = parseInt(d.dataset.wpIdx || 0);
+    idx = (idx + 1) % wallpapers.length;
+    d.style.background = wallpapers[idx];
+    d.style.backgroundColor = '#0a1628';
+    d.dataset.wpIdx = idx;
+}
 
-document.querySelectorAll('.desktop-icon').forEach(icon => {
-    icon.addEventListener('click', function () {
-        document.querySelectorAll('.desktop-icon').forEach(i => i.classList.remove('selected'));
-        this.classList.add('selected');
-    });
-});
+// ========== SHOW DESKTOP (Aero peek equivalent) ==========
+function toggleShowDesktop() {
+    let allMinimized = true;
+    for (const id in windows) { if (!windows[id].minimized) { allMinimized = false; break; } }
 
-document.getElementById('desktop')?.addEventListener('click', (e) => {
-    if (e.target.id === 'desktop' || e.target.classList.contains('desktop')) {
-        document.querySelectorAll('.desktop-icon').forEach(i => i.classList.remove('selected'));
+    if (allMinimized) {
+        for (const id in windows) {
+            if (windows[id].minimized) {
+                windows[id].minimized = false;
+                windows[id].element.classList.remove('minimized');
+                const t = document.getElementById('taskbar-' + id);
+                if (t) t.classList.add('active');
+            }
+        }
+    } else {
+        for (const id in windows) { if (!windows[id].minimized) minimizeWindow(id); }
     }
-});
+}
 
-// ========== THEME TOGGLE ==========
-
-let darkTheme = false;
-
+// ========== THEME ==========
 function toggleTheme() {
     darkTheme = !darkTheme;
     document.body.classList.toggle('dark-theme', darkTheme);
@@ -426,363 +636,83 @@ function toggleTheme() {
 function showNotification(message) {
     const existing = document.querySelector('.vista-notification');
     if (existing) existing.remove();
-
     const notif = document.createElement('div');
     notif.className = 'vista-notification';
     notif.innerHTML = message;
     document.body.appendChild(notif);
-
     setTimeout(() => notif.classList.add('show'), 10);
-    setTimeout(() => {
-        notif.classList.remove('show');
-        setTimeout(() => notif.remove(), 300);
-    }, 2000);
-}
-// ========== 10x IMPROVEMENTS SCRIPT ==========
-
-// Sidebar Gadget Clock Logic
-function updateGadgetClock() {
-    const now = new Date();
-    const sec = now.getSeconds();
-    const min = now.getMinutes();
-    const hr = now.getHours();
-    
-    const hrDeg = (hr % 12) * 30 + (min / 2);
-    const minDeg = min * 6 + (sec / 10);
-    const secDeg = sec * 6;
-    
-    const hHand = document.getElementById("gadgetHour");
-    const mHand = document.getElementById("gadgetMinute");
-    const sHand = document.getElementById("gadgetSecond");
-    
-    if (hHand) hHand.style.transform = `translateX(-50%) rotate(${hrDeg}deg)`;
-    if (mHand) mHand.style.transform = `translateX(-50%) rotate(${minDeg}deg)`;
-    if (sHand) sHand.style.transform = `translateX(-50%) rotate(${secDeg}deg)`;
+    setTimeout(() => { notif.classList.remove('show'); setTimeout(() => notif.remove(), 300); }, 2000);
 }
 
-// Modify existing updateClock to also update gadget
-const originalUpdateClock = typeof updateClock !== "undefined" ? updateClock : function(){};
-updateClock = function() {
-    originalUpdateClock();
-    updateGadgetClock();
-};
-
-// Context Menu Logic
-const desktop = document.getElementById("desktop");
-const ctxMenu = document.getElementById("desktopContextMenu");
-
-function showContextMenu(e) {
-    if (e.target.closest(".vista-window") || e.target.closest(".taskbar")) {
-        return; // Ensure only desktop triggers it
-    }
-    e.preventDefault();
-    ctxMenu.style.left = e.clientX + "px";
-    ctxMenu.style.top = e.clientY + "px";
-    ctxMenu.classList.remove("hidden");
-    hideSelectionBox();
+// ========== DESKTOP ICON INTERACTION ==========
+// Single click selects; double click opens (native ondblclick="openWindow('..')").
+function deselectIcons() {
+    document.querySelectorAll('.desktop-icon.selected').forEach(i => i.classList.remove('selected'));
 }
 
-document.addEventListener("click", function(e) {
-    if (ctxMenu && !ctxMenu.classList.contains("hidden")) {
-        ctxMenu.classList.add("hidden");
-    }
-});
-
-function refreshDesktop() {
-    const icons = document.querySelector(".desktop-icons");
-    icons.style.display = "none";
-    setTimeout(() => icons.style.display = "", 100);
-}
-
-function toggleSidebar() {
-    const sidebar = document.querySelector(".vista-sidebar");
-    if (sidebar) sidebar.classList.toggle("hidden");
-}
-
-function changeWallpaper() {
-    const desktopEl = document.getElementById("desktop");
-    const wallpapers = [
-        "url(\"images/vista-bg.jpg\")",
-        "radial-gradient(circle at center, #1a2a6c, #112 100%)",
-        "url(\"https://images.unsplash.com/photo-1477346611705-65d1883cee1e?auto=format&fit=crop&q=80&w=1920\")",
-        "url(\"https://images.unsplash.com/photo-1542451313056-b7c8e6266459?auto=format&fit=crop&q=80&w=1920\")"
-    ];
-    let currentIdx = desktopEl.dataset.wpIdx || 0;
-    currentIdx = (parseInt(currentIdx) + 1) % wallpapers.length;
-    desktopEl.style.background = wallpapers[currentIdx];
-    desktopEl.style.backgroundSize = "cover";
-    desktopEl.dataset.wpIdx = currentIdx;
-}
-
-// Selection Box Logic
-const selectionBox = document.createElement("div");
-selectionBox.id = "selectionBox";
-document.body.appendChild(selectionBox);
-
-let selStartX, selStartY, isSelecting = false;
-
-desktop.addEventListener("mousedown", function(e) {
-    if (e.button !== 0) return; // Only left click
-    if (e.target.closest(".desktop-icon") || e.target.closest(".vista-window") || e.target.closest(".taskbar") || e.target.closest(".start-menu") || e.target.closest(".vista-sidebar") || e.target.closest(".desktop-context-menu")) return;
-    
-    isSelecting = true;
-    selStartX = e.clientX;
-    selStartY = e.clientY;
-    
-    selectionBox.style.left = selStartX + "px";
-    selectionBox.style.top = selStartY + "px";
-    selectionBox.style.width = "0px";
-    selectionBox.style.height = "0px";
-    selectionBox.style.display = "block";
-});
-
-document.addEventListener("mousemove", function(e) {
-    if (!isSelecting) return;
-    
-    const currentX = e.clientX;
-    const currentY = e.clientY;
-    
-    const left = Math.min(selStartX, currentX);
-    const top = Math.min(selStartY, currentY);
-    const width = Math.abs(currentX - selStartX);
-    const height = Math.abs(currentY - selStartY);
-    
-    selectionBox.style.left = left + "px";
-    selectionBox.style.top = top + "px";
-    selectionBox.style.width = width + "px";
-    selectionBox.style.height = height + "px";
-
-    // Optional: add visual feedback for icons caught in the selection
-    const icons = document.querySelectorAll(".desktop-icon");
-    const selRect = selectionBox.getBoundingClientRect();
-    icons.forEach(icon => {
-        const iconRect = icon.getBoundingClientRect();
-        if (
-            iconRect.right > selRect.left &&
-            iconRect.left < selRect.right &&
-            iconRect.bottom > selRect.top &&
-            iconRect.top < selRect.bottom
-        ) {
-            icon.style.background = "rgba(255, 255, 255, 0.2)";
-            icon.style.borderRadius = "4px";
-            icon.style.border = "1px dotted rgba(255,255,255,0.4)";
-        } else {
-            icon.style.background = "";
-            icon.style.border = "1px border transparent";
-        }
-    });
-});
-
-document.addEventListener("mouseup", function(e) {
-    hideSelectionBox();
-});
-
-function hideSelectionBox() {
-    isSelecting = false;
-    selectionBox.style.display = "none";
-}
-
-
-desktop.addEventListener("contextmenu", showContextMenu);
-
-
-
-document.addEventListener("mouseup", function(e) {
-    if (dragState && dragState.isDragging && dragState.window) {
-        document.body.classList.remove('is-dragging');
-        const id = dragState.window;
-        if (windows[id]) {
-            windows[id].element.style.opacity = "";
-            windows[id].element.style.transition = "";
-            if (e.clientY < 10 && !windows[id].maximized) {
-                maximizeWindow(id);
-            }
-        }
-    }
-});
-
-// Unified Desktop Icon UX Logic
-let lastIconClickTime = 0;
-let lastClickedIconEl = null;
-
-document.querySelectorAll(".desktop-icon").forEach(icon => {
-    icon.addEventListener("dblclick", () => {
-        document.body.style.cursor = "wait";
-        setTimeout(() => document.body.style.cursor = "default", 350);
-    });
-
-    icon.addEventListener("click", (e) => {
-        const now = Date.now();
-        const isSameIcon = (lastClickedIconEl === icon);
-        const timeDiff = now - lastIconClickTime;
-
-        // If clicked again within a generous 1.5s OR if it is already selected, open it!
-        if (isSameIcon && (timeDiff < 1500 || icon.classList.contains("selected"))) {
-            const action = icon.getAttribute("ondblclick");
-            if (action) {
-                document.body.style.cursor = "wait";
-                setTimeout(() => document.body.style.cursor = "default", 350);
-                lastIconClickTime = 0;
-                lastClickedIconEl = null;
-                // Safely evaluate the openWindow call
-                eval(action);
-                return;
-            }
-        }
-
-        // Selection Phase
-        lastIconClickTime = now;
-        lastClickedIconEl = icon;
-
-        document.querySelectorAll(".desktop-icon").forEach(i => {
-            i.style.background = "";
-            i.style.border = "1px solid transparent";
-            i.classList.remove("selected");
+document.addEventListener('DOMContentLoaded', () => {
+    const iconsContainer = document.querySelector('.desktop-icons');
+    if (iconsContainer) {
+        iconsContainer.addEventListener('click', (e) => {
+            const icon = e.target.closest('.desktop-icon');
+            if (!icon) return;
+            deselectIcons();
+            icon.classList.add('selected');
+            e.stopPropagation();
         });
-        
-        icon.style.background = "rgba(255, 255, 255, 0.2)";
-        icon.style.border = "1px dotted rgba(255, 255, 255, 0.5)";
-        icon.style.borderRadius = "4px";
-        icon.classList.add("selected");
-        
-        e.stopPropagation();
+    }
+
+    const desktop = desktopEl();
+    if (!desktop) return;
+
+    // Empty-desktop mousedown: deselect + begin marquee. Anything interactive bails out.
+    desktop.addEventListener('mousedown', (e) => {
+        if (e.button !== 0) return;
+        if (e.target.closest('.desktop-icon')) return; // let icon handler manage selection
+        if (e.target.closest('.vista-window, .taskbar, .start-menu, .vista-sidebar, .desktop-context-menu')) return;
+
+        deselectIcons();
+        marquee.active = true;
+        marquee.startX = e.clientX;
+        marquee.startY = e.clientY;
+        marquee.rects = [...document.querySelectorAll('.desktop-icon')].map(ic => ({ el: ic, r: ic.getBoundingClientRect() }));
+        selectionBox.style.left = e.clientX + 'px';
+        selectionBox.style.top = e.clientY + 'px';
+        selectionBox.style.width = '0px';
+        selectionBox.style.height = '0px';
+        selectionBox.style.display = 'block';
+    });
+
+    // Right-click desktop -> context menu
+    desktop.addEventListener('contextmenu', (e) => {
+        if (e.target.closest('.vista-window, .taskbar')) return;
+        e.preventDefault();
+        const ctx = ctxMenuEl();
+        ctx.style.left = e.clientX + 'px';
+        ctx.style.top = e.clientY + 'px';
+        ctx.classList.remove('hidden');
     });
 });
 
-// Deselect on desktop click
-desktop.addEventListener("mousedown", (e) => {
-    if(!e.target.closest(".desktop-icon")) {
-        document.querySelectorAll(".desktop-icon.selected").forEach(i => {
-            i.style.background = "";
-            i.style.border = "1px solid transparent";
-            i.classList.remove("selected");
-        });
-        lastClickedIconEl = null;
-    }
+// ========== GLOBAL CLICK: close start menu + context menu ==========
+document.addEventListener('click', (e) => {
+    const ctx = ctxMenuEl();
+    if (ctx && !ctx.classList.contains('hidden') && !ctx.contains(e.target)) ctx.classList.add('hidden');
+
+    const menu = document.getElementById('startMenu');
+    const startBtn = document.querySelector('.start-button');
+    if (menu && startBtn && !menu.contains(e.target) && !startBtn.contains(e.target)) menu.classList.add('hidden');
 });
 
-// Windows UX: Clicking ANY element inside a window focuses it
-document.addEventListener("mousedown", (e) => {
-    const win = e.target.closest(".vista-window");
-    if (win) {
-        const id = win.id.replace("window-", "");
-        focusWindow(id);
-    }
-});
-
-
-
-function initCalendarGadget() {
-    const grid = document.getElementById("calGrid");
-    const header = document.getElementById("calMonthYear");
-    if (!grid || !header) return;
-
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth();
-    const today = now.getDate();
-    
-    header.innerText = now.toLocaleDateString("en-US", { month: "short", year: "numeric" });
-    
-    const firstDay = new Date(year, month, 1).getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    
-    grid.innerHTML = "";
-    const days = ["S", "M", "T", "W", "T", "F", "S"];
-    days.forEach(d => {
-        const el = document.createElement("div");
-        el.className = "cal-day";
-        el.style.fontWeight = "bold";
-        el.innerText = d;
-        grid.appendChild(el);
-    });
-
-    for (let i = 0; i < firstDay; i++) {
-        const el = document.createElement("div");
-        el.className = "cal-day empty";
-        grid.appendChild(el);
-    }
-    
-    for (let i = 1; i <= daysInMonth; i++) {
-        const el = document.createElement("div");
-        el.className = "cal-day" + (i === today ? " today" : "");
-        el.innerText = i;
-        grid.appendChild(el);
-    }
-}
-setTimeout(initCalendarGadget, 500);
-
-
-
-// ========== SHOW DESKTOP (Aero peek equivalent) ==========
-function toggleShowDesktop() {
-    let allMinimized = true;
-    for (const id in windows) {
-        if (!windows[id].minimized) {
-            allMinimized = false;
-            break;
-        }
-    }
-    
-    if (allMinimized) {
-        // Restore all that were minimized
-        for (const id in windows) {
-            if (windows[id].minimized) {
-                windows[id].minimized = false;
-                windows[id].element.classList.remove("minimized");
-                const taskbarItem = document.getElementById("taskbar-" + id);
-                if (taskbarItem) taskbarItem.classList.add("active");
-            }
-        }
-    } else {
-        // Minimize all
-        for (const id in windows) {
-            if (!windows[id].minimized) {
-                minimizeWindow(id);
-            }
-        }
-    }
-}
-
-
-// ========== START MENU LIVE SEARCH ==========
-function filterStartMenu(query) {
-    const q = query.toLowerCase();
-    const itemsLeft = document.querySelectorAll(".start-menu-left .start-item");
-    const itemsRight = document.querySelectorAll(".start-menu-right .start-item-right");
-    
-    itemsLeft.forEach(item => {
-        const text = item.innerText.toLowerCase();
-        if (text.includes(q)) {
-            item.style.display = "flex";
-        } else {
-            item.style.display = "none";
-        }
-    });
-
-    itemsRight.forEach(item => {
-        const text = item.innerText.toLowerCase();
-        if (text.includes(q)) {
-            item.style.display = "flex";
-        } else {
-            item.style.display = "none";
-        }
-    });
-}
-
-
-// Execute selected app with Enter Key
-document.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-        const selectedIcon = document.querySelector(".desktop-icon.selected");
-        if (selectedIcon) {
-            const action = selectedIcon.getAttribute("ondblclick");
-            if (action) {
-                document.body.style.cursor = "wait";
-                setTimeout(() => document.body.style.cursor = "default", 350);
-                eval(action);
-            }
+// ========== KEYBOARD SHORTCUTS ==========
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Meta' || (e.ctrlKey && e.key === 'Escape')) toggleStartMenu();
+    if (e.key === 'Escape' && activeWindow) closeWindow(activeWindow);
+    if (e.key === 'Enter') {
+        const sel = document.querySelector('.desktop-icon.selected');
+        if (sel) {
+            const m = (sel.getAttribute('ondblclick') || '').match(/openWindow\(['"]([^'"]+)['"]\)/);
+            if (m) openWindow(m[1]);
         }
     }
 });
-
