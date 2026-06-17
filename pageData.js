@@ -402,10 +402,12 @@ const windowContent = {
                 <p style="margin:0"><a href="mailto:razvan.al.nica@gmail.com" style="color:#1e5799">razvan.al.nica@gmail.com</a></p>
             </div>
             
+            <!-- LinkedIn: add URL and uncomment when ready
             <div class="vista-info-box contact-link">
                 <h4>🔗 LinkedIn</h4>
-                <p style="margin:0"><a href="https://linkedin.com/in/yourusername" target="_blank" style="color:#1e5799">linkedin.com/in/yourusername</a></p>
+                <p style="margin:0"><a href="https://linkedin.com/in/YOUR_USERNAME" target="_blank" style="color:#1e5799">linkedin.com/in/YOUR_USERNAME</a></p>
             </div>
+            -->
             
             <div class="vista-info-box contact-link">
                 <h4>💻 GitHub</h4>
@@ -507,7 +509,7 @@ const windowContent = {
             <div class="vista-info-box" style="margin-top:20px">
                 <h4>⚙️ System Information</h4>
                 <table class="system-info-table">
-                    <tr><td>Processor:</td><td>Ryzen i9 9900x™ @ 3.5 GHz</td></tr>
+                    <tr><td>Processor:</td><td>BigBrain Tech™ Core 11 @ 9.0 GHz</td></tr>
                     <tr><td>RAM:</td><td>N/A</td></tr>
                     <tr><td>Graphics:</td><td>Windows Vista Aero™</td></tr>
                     <tr><td>OS:</td><td>Windows Vista Portfolio Edition</td></tr>
