@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#000000">
+    <title>Razvan Nica — Portfolio (Phone Edition)</title>
+
+    <!-- Device guard: keep larger screens on the Vista desktop edition.
+         ?phone=1 forces this edition, ?desktop=1 forces the desktop one. -->
+    <script>
+    (function () {
+        var qs = location.search;
+        if (/[?&]phone=1/.test(qs)) return;                                  // forced phone
+        if (/[?&]desktop=1/.test(qs)) { location.replace('index.html' + qs + (location.hash || '')); return; }
+        var shortSide = Math.min(window.innerWidth, window.innerHeight);
+        if (shortSide > 600) { location.replace('index.html?desktop=1' + (location.hash || '')); }
+    })();
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="phone-styles.css">
+</head>
+<body>
+    <!-- Lock screen -->
+    <div id="lock" class="lock">
+        <div class="lock-status" id="lockStatus">
+            <span class="sig"><i></i><i></i><i></i><i></i><i></i></span>
+            <i class="bi bi-wifi" style="font-size:13px"></i>
+            <span>82%</span>
+        </div>
+        <div class="lock-clock">
+            <div class="lock-time" id="lockTime">--:--</div>
+            <div class="lock-date" id="lockDate"></div>
+        </div>
+        <div class="lock-brand">
+            <div class="lock-os">Windows Vista Portfolio</div>
+            <div class="lock-edition">Phone Edition</div>
+        </div>
+        <div class="lock-hint"><i class="bi bi-chevron-up"></i><span>swipe up to unlock</span></div>
+    </div>
+
+    <!-- Phone shell -->
+    <div id="phone" class="phone hidden">
+        <div class="statusbar">
+            <span class="sb-left">Vista Portfolio</span>
+            <span class="sb-right">
+                <span class="sig"><i></i><i></i><i></i><i></i><i></i></span>
+                <i class="bi bi-wifi" style="font-size:13px"></i>
+                <span class="batt"><span class="batt-shell"><span class="batt-fill" id="battFill" style="width:82%"></span></span><span id="battPct">82%</span></span>
+                <span id="barClock">--:--</span>
+            </span>
+        </div>
+
+        <main id="view" class="view"></main>
+
+        <nav id="appbar" class="appbar hidden">
+            <button id="abBack"><span class="ab-ico"><i class="bi bi-chevron-left"></i></span><span>back</span></button>
+            <button id="abHome"><span class="ab-ico"><i class="bi bi-grid-fill" style="font-size:14px"></i></span><span>start</span></button>
+        </nav>
+    </div>
+
+    <!-- Shared project data (the same file the desktop edition uses) -->
+    <script src="projectData.js"></script>
+    <script src="phone-script.js"></script>
+</body>
+</html>
