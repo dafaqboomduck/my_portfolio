@@ -103,7 +103,7 @@ function openProjectDetail(projectKey, historyStack) {
 // ========== BOOT SEQUENCE ==========
 document.addEventListener('DOMContentLoaded', function () {
     const bootScreen = document.getElementById('bootScreen');
-    let bootTimer = setTimeout(showWelcome, 3500);
+    let bootTimer = setTimeout(showWelcome, 1500);
     bootScreen.addEventListener('dblclick', () => { clearTimeout(bootTimer); showWelcome(); });
 
     function showWelcome() {
