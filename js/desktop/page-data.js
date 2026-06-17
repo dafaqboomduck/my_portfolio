@@ -1,25 +1,7 @@
 // ========== PAGE DATA & CONTENT GENERATORS ==========
-// All static page content, installed programs list, and dynamic HTML generators.
-// Loaded before vista-script.js. Depends on projectData.js for project entries.
-
-// Technology stack for Default Programs
-const installedPrograms = [
-    { name: 'Python 3.10', icon: 'bi-filetype-py', category: 'Programming Languages', publisher: 'Python Software Foundation' },
-    { name: 'TensorFlow 2.x', icon: 'bi-gpu-card', category: 'Deep Learning', publisher: 'Google' },
-    { name: 'Keras', icon: 'bi-layers', category: 'Deep Learning', publisher: 'Keras Team' },
-    { name: 'Pandas', icon: 'bi-table', category: 'Data Analysis', publisher: 'NumFOCUS' },
-    { name: 'NumPy', icon: 'bi-grid-3x3', category: 'Scientific Computing', publisher: 'NumFOCUS' },
-    { name: 'Scikit-learn', icon: 'bi-diagram-3', category: 'Machine Learning', publisher: 'Scikit-learn Developers' },
-    { name: 'PostgreSQL', icon: 'bi-database', category: 'Database', publisher: 'PostgreSQL Global Dev Group' },
-    { name: 'Flask', icon: 'bi-server', category: 'Web Framework', publisher: 'Pallets Projects' },
-    { name: 'PyQt5', icon: 'bi-window', category: 'GUI Framework', publisher: 'Riverbank Computing' },
-    { name: 'HTML5 / CSS3 / JavaScript', icon: 'bi-code-slash', category: 'Web Development', publisher: 'W3C' },
-    { name: 'Power BI Desktop', icon: 'bi-bar-chart-fill', category: 'Business Intelligence', publisher: 'Microsoft Corporation' },
-    { name: 'Git', icon: 'bi-git', category: 'Version Control', publisher: 'Git Community' },
-    { name: 'XGBoost', icon: 'bi-tree', category: 'Machine Learning', publisher: 'DMLC' },
-    { name: 'OpenCV', icon: 'bi-eye', category: 'Computer Vision', publisher: 'OpenCV Team' },
-    { name: 'SQLAlchemy', icon: 'bi-database-gear', category: 'ORM', publisher: 'SQLAlchemy Authors' }
-];
+// All static page content and dynamic HTML generators.
+// installedPrograms is loaded from data/programs-data.js.
+// projectData is loaded from data/project-data.js.
 
 // ========== DYNAMIC CONTENT GENERATORS ==========
 
@@ -65,7 +47,7 @@ function generateGamesContent() {
     return `
         <h2>🎮 Games</h2>
         <p>Classic Windows games for your entertainment</p>
-        
+
         <div class="games-grid">
             <div class="game-item" ondblclick="navigateFromGames('minesweeper')">
                 <i class="bi bi-grid-3x3-gap-fill"></i>
@@ -87,7 +69,7 @@ function generateGamesContent() {
                 <small>Coming Soon</small>
             </div>
         </div>
-        
+
         <div class="vista-info-box" style="margin-top:20px">
             <h4>💡 Tip</h4>
             <p style="margin:0">Double-click Minesweeper to start playing! Right-click to place flags.</p>
@@ -99,7 +81,7 @@ function generateControlPanelContent() {
     return `
         <h2>⚙️ Control Panel</h2>
         <p>Adjust portfolio settings and preferences</p>
-        
+
         <div class="cp-grid">
             <div class="cp-item" onclick="navigateFromControlPanel('programs')">
                 <i class="bi bi-box-seam-fill"></i>
@@ -190,27 +172,27 @@ function generateProjectDetailContent(project) {
     return `
         <h2>${project.title}</h2>
         <span class="project-vista-tag" style="font-size:13px;padding:5px 12px">${project.tag}</span>
-        
+
         <div class="vista-info-box" style="margin-top:20px">
             <h4>📋 Overview</h4>
             <p style="margin:0">${project.fullDescription}</p>
         </div>
-        
+
         <h3>🛠️ Technologies Used</h3>
         <div class="project-vista-tech" style="margin:15px 0">
             ${project.technologies.map(t => `<span class="tech-vista-badge">${t}</span>`).join('')}
         </div>
-        
+
         <h3>✨ Key Features</h3>
         <ul>
             ${project.features.map(f => `<li>${f}</li>`).join('')}
         </ul>
-        
+
         <h3>🏆 Achievements</h3>
         <ul>
             ${project.achievements.map(a => `<li>${a}</li>`).join('')}
         </ul>
-        
+
         ${project.github !== '#' || project.demo !== '#' ? `
         <div class="vista-info-box" style="margin-top:20px">
             <h4>🔗 Links</h4>
@@ -308,16 +290,16 @@ const windowContent = {
             <h2>👋 Hello, I'm Razvan Nica</h2>
             <p><strong>Data Scientist | AI Engineer | Backend Developer</strong></p>
             <p>Building intelligent systems from data to deployment. Specializing in deep learning, computer vision, natural language processing, and production-ready ML applications.</p>
-            
+
             <div class="vista-info-box">
                 <h4>📍 Current Status</h4>
                 <p style="margin:0">Available for opportunities • Based in Netherlands</p>
             </div>
-            
+
             <h3>About My Work</h3>
             <p>I'm a Data & AI student at Breda University specializing in production-ready machine learning systems. I build end-to-end solutions: from model training to deployment, with expertise in deep learning, computer vision, and natural language processing.</p>
             <p>My work spans healthcare diagnostics, financial analytics, and predictive modeling. I focus on creating scalable, explainable AI systems that integrate seamlessly into real-world workflows.</p>
-            
+
             <h3>🎓 Education</h3>
             <div class="vista-info-box">
                 <h4>Breda University of Applied Sciences</h4>
@@ -327,7 +309,7 @@ const windowContent = {
                 <h4>National College "Cantemir Voda"</h4>
                 <p style="margin:0">Mathematics and Computer Science, Bilingual English</p>
             </div>
-            
+
             <h3>🏆 Recent Achievements</h3>
             <ul>
                 <li><strong>Mar-Jun 2025:</strong> NASDAQ-100 Stock Price Prediction Platform</li>
@@ -342,7 +324,7 @@ const windowContent = {
         content: `
             <h2>💻 Core Competencies</h2>
             <p>Technical expertise meets creative problem-solving</p>
-            
+
             <div class="skills-vista-grid">
                 <div class="skill-vista-item">
                     <i class="bi bi-graph-up"></i>
@@ -370,7 +352,7 @@ const windowContent = {
                     <p>BERT, GPT, Hugging Face, fine-tuning</p>
                 </div>
             </div>
-            
+
             <div class="vista-info-box" style="margin-top:20px">
                 <h4>💡 Tip</h4>
                 <p style="margin:0">View my complete technology stack in <strong>Start Menu → Default Programs</strong></p>
@@ -396,24 +378,24 @@ const windowContent = {
         content: `
             <h2>📧 Get In Touch</h2>
             <p>Let's build something together! I'm always interested in new projects and opportunities.</p>
-            
+
             <div class="vista-info-box contact-link">
                 <h4>📬 Email</h4>
                 <p style="margin:0"><a href="mailto:razvan.al.nica@gmail.com" style="color:#1e5799">razvan.al.nica@gmail.com</a></p>
             </div>
-            
+
             <!-- LinkedIn: add URL and uncomment when ready
             <div class="vista-info-box contact-link">
                 <h4>🔗 LinkedIn</h4>
                 <p style="margin:0"><a href="https://linkedin.com/in/YOUR_USERNAME" target="_blank" style="color:#1e5799">linkedin.com/in/YOUR_USERNAME</a></p>
             </div>
             -->
-            
+
             <div class="vista-info-box contact-link">
                 <h4>💻 GitHub</h4>
                 <p style="margin:0"><a href="https://github.com/dafaqboomduck" target="_blank" style="color:#1e5799">github.com/dafaqboomduck</a></p>
             </div>
-            
+
             <div class="vista-info-box" style="margin-top:30px;text-align:center">
                 <i class="bi bi-envelope-paper" style="font-size:48px;color:#1e5799;display:block;margin-bottom:10px"></i>
                 <p style="margin:0;color:#666">Click any link above to get in touch!</p>
@@ -433,12 +415,12 @@ const windowContent = {
         content: `
             <h2>🗑️ Recycle Bin</h2>
             <p style="color:#666">Contains files and folders that you have deleted.</p>
-            
+
             <div style="text-align:center; padding:60px 20px; color:#888">
                 <i class="bi bi-trash3" style="font-size:80px; opacity:0.3"></i>
                 <p style="margin-top:20px; font-size:14px">The Recycle Bin is empty.</p>
             </div>
-            
+
             <div class="vista-info-box">
                 <h4>💡 Did you know?</h4>
                 <p style="margin:0">This portfolio was crafted with passion using HTML, CSS, and JavaScript to recreate the nostalgic Windows Vista experience!</p>
@@ -470,7 +452,7 @@ const windowContent = {
         content: `
             <h2>💻 Computer</h2>
             <p style="color:#666">View drives and system information</p>
-            
+
             <div class="drives-section">
                 <h3>Hard Disk Drives</h3>
                 <div class="drive-item">
@@ -494,7 +476,7 @@ const windowContent = {
                     </div>
                 </div>
             </div>
-            
+
             <div class="drives-section">
                 <h3>Devices with Removable Storage</h3>
                 <div class="drive-item">
@@ -505,7 +487,7 @@ const windowContent = {
                     </div>
                 </div>
             </div>
-            
+
             <div class="vista-info-box" style="margin-top:20px">
                 <h4>⚙️ System Information</h4>
                 <table class="system-info-table">
@@ -531,12 +513,12 @@ const windowContent = {
         content: `
             <h2>❓ Help and Support</h2>
             <p>Welcome to Razvan's Portfolio Help Center</p>
-            
+
             <div class="vista-info-box" style="background:linear-gradient(135deg, #fff8e0 0%, #fff0c0 100%); border-color:#e0c080">
                 <h4>👋 Welcome!</h4>
                 <p style="margin:0">This portfolio is designed as a Windows Vista experience. Navigate using the Start Menu, desktop icons, or by double-clicking folders.</p>
             </div>
-            
+
             <h3>🧭 Navigation Guide</h3>
             <div class="help-section">
                 <div class="help-item">
@@ -564,7 +546,7 @@ const windowContent = {
                     </div>
                 </div>
             </div>
-            
+
             <h3>⌨️ Keyboard Shortcuts</h3>
             <div class="help-section">
                 <div class="help-item">
@@ -576,7 +558,7 @@ const windowContent = {
                     <div>Close active window</div>
                 </div>
             </div>
-            
+
             <h3>🎮 Minesweeper Tips</h3>
             <div class="help-section">
                 <div class="help-item">
@@ -592,12 +574,12 @@ const windowContent = {
                     <div><strong>Click the face</strong> to restart the game</div>
                 </div>
             </div>
-            
+
             <h3>📞 Need More Help?</h3>
             <div class="vista-info-box">
                 <p style="margin:0">Feel free to reach out! Visit the <a href="#" onclick="navigateFromHelp('contact'); return false;" style="color:#1e5799">Contact Me</a> section to get in touch.</p>
             </div>
-            
+
             <div class="help-footer">
                 <p>Portfolio crafted with ❤️ by <strong>Razvan Nica</strong></p>
                 <p style="font-size:11px;color:#888">Built with HTML, CSS, JavaScript • Inspired by Windows Vista</p>

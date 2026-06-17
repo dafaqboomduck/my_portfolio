@@ -1,0 +1,107 @@
+/* ========== TASKBAR (no blur) ========== */
+.taskbar {
+    position: fixed; bottom: 0; left: 0; right: 0; height: 40px;
+    background: linear-gradient(180deg, rgba(60, 100, 160, 0.97) 0%, rgba(30, 60, 110, 0.98) 50%, rgba(20, 40, 80, 0.99) 100%);
+    border-top: 1px solid rgba(255,255,255,0.3);
+    display: flex; align-items: center; z-index: 9000;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.3);
+    overflow: visible;
+}
+
+/* Start Orb — contained inside the 40px taskbar (no overflow, no escaping) */
+.start-button {
+    position: relative;
+    flex: 0 0 auto;
+    width: 54px; height: 40px;
+    margin: 0; padding: 0;
+    border: none; background: transparent; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+}
+.start-button::before {
+    content: "";
+    position: absolute;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.65);
+    background:
+        radial-gradient(circle at 50% 30%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 42%),
+        radial-gradient(circle at 50% 72%, #1f7d1f 0%, #0c4d0c 100%),
+        linear-gradient(180deg, #5fbf4f, #1f7d1f);
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.45), 0 2px 6px rgba(0,0,0,0.5), inset 0 2px 6px rgba(255,255,255,0.75), inset 0 -6px 10px rgba(0,40,0,0.5);
+    transition: box-shadow 0.2s ease, transform 0.12s ease;
+}
+.start-button:hover::before {
+    transform: scale(1.06);
+    background:
+        radial-gradient(circle at 50% 28%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0) 44%),
+        radial-gradient(circle at 50% 72%, #2a972a 0%, #0f5d0f 100%),
+        linear-gradient(180deg, #74d964, #2a972a);
+    box-shadow: 0 0 14px rgba(80,210,100,0.85), inset 0 2px 6px rgba(255,255,255,0.85);
+}
+.start-button:active::before { transform: scale(0.97); }
+.start-button img { position: relative; z-index: 1; width: 20px !important; height: 20px !important; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5)); }
+
+/* Quick Launch */
+.quick-launch { display: flex; align-items: center; padding: 0 8px; }
+.ql-separator { width: 1px; height: 24px; background: rgba(255,255,255,0.2); margin: 0 5px; }
+.ql-icon { width: 24px; height: 24px; display: flex; justify-content: center; align-items: center; cursor: pointer; border: 1px solid transparent; border-radius: 3px; margin: 0 4px; transition: background 0.15s; color: #fff; }
+.ql-icon:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.5); box-shadow: inset 0 0 5px rgba(255,255,255,0.5); }
+.ql-icon i { font-size: 16px; color: #fff; }
+.ql-icon img { width: 16px; height: 16px; }
+
+/* Taskbar Windows */
+.taskbar-windows { flex: 1; display: flex; align-items: center; padding: 0 10px; gap: 3px; overflow-x: auto; }
+.taskbar-item { position: relative; height: 28px; min-width: 160px; max-width: 200px; background: linear-gradient(180deg, rgba(80, 130, 200, 0.85) 0%, rgba(50, 90, 150, 0.85) 100%); border: 1px solid rgba(255,255,255,0.3); border-radius: 3px; display: flex; align-items: center; padding: 0 10px; cursor: pointer; transition: all 0.2s; }
+.taskbar-item:hover { background: linear-gradient(180deg, rgba(100, 150, 220, 0.95) 0%, rgba(70, 110, 170, 0.95) 100%); }
+.taskbar-item.active { background: linear-gradient(180deg, rgba(255, 255, 255, 0.32) 0%, rgba(200, 220, 255, 0.32) 100%); border-color: rgba(255,255,255,0.5); }
+.taskbar-item img { width: 16px; height: 16px; margin-right: 8px; }
+.taskbar-item span { color: #fff; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+
+/* Taskbar live-preview thumbnails (no blur) */
+.taskbar-preview { position: absolute; bottom: 48px; left: 50%; transform: translateX(-50%) scale(.85); opacity: 0; pointer-events: none; transition: opacity .15s ease, transform .15s cubic-bezier(.2,.9,.3,1.1); background: rgba(28,52,86,0.96); border: 1px solid rgba(255,255,255,.5); border-radius: 6px; padding: 8px; color: #fff; font-size: 12px; box-shadow: 0 6px 18px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.3); min-width: 120px; text-align: center; z-index: 10000; }
+.taskbar-item:hover .taskbar-preview { opacity: 1; transform: translateX(-50%) scale(1); }
+
+/* System Tray */
+.system-tray { display: flex; align-items: center; padding: 0 15px; gap: 15px; border-left: 1px solid rgba(255,255,255,0.2); }
+.tray-icons { display: flex; gap: 10px; }
+.tray-icons i { color: #fff; font-size: 14px; cursor: pointer; opacity: 0.9; }
+.tray-icons i:hover { opacity: 1; }
+.tray-clock { color: #fff; font-size: 11px; text-align: right; line-height: 1.3; }
+
+/* ========== START MENU (no blur) ========== */
+.start-menu {
+    position: fixed; bottom: 40px; left: 0; width: 400px;
+    background: linear-gradient(180deg, rgba(40, 80, 140, 0.99) 0%, rgba(20, 50, 100, 0.99) 100%);
+    border: 1px solid rgba(255,255,255,0.3); border-radius: 8px 8px 0 0;
+    box-shadow: 0 -5px 30px rgba(0,0,0,0.5);
+    z-index: 9500; display: flex; flex-wrap: wrap; overflow: hidden;
+}
+.start-menu-left { width: 55%; background: rgba(255,255,255,0.97); padding: 10px 0; }
+.start-menu-right { width: 45%; padding: 10px 0; }
+.start-user { display: flex; align-items: center; padding: 10px 15px; margin-bottom: 5px; }
+.start-user-avatar { width: 48px; height: 48px; border-radius: 5px; background: linear-gradient(135deg, #4a90d9, #1e5799); margin-right: 12px; overflow: hidden; border: 2px solid #1e5799; display: flex; align-items: center; justify-content: center; }
+.start-user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.start-user-avatar i { font-size: 28px; color: #fff; }
+.start-user span { font-size: 14px; font-weight: 600; color: #1e5799; }
+.start-separator { height: 1px; background: #c0c0c0; margin: 5px 15px; }
+.start-separator-right { height: 1px; background: rgba(255,255,255,0.2); margin: 5px 10px; }
+.start-programs { max-height: 250px; overflow-y: auto; }
+.start-item { display: flex; align-items: center; padding: 8px 15px; cursor: pointer; transition: background 0.2s; }
+.start-item:hover { background: #e8f0ff; }
+.start-item img { width: 24px; height: 24px; margin-right: 10px; }
+.start-item i { font-size: 18px; margin-right: 10px; color: #1e5799; width: 24px; text-align: center; }
+.start-item span { font-size: 12px; color: #333; }
+.start-item-right { padding: 8px 15px; cursor: pointer; transition: background 0.2s; }
+.start-item-right:hover { background: rgba(255,255,255,0.1); }
+.start-item-right span { font-size: 12px; color: #fff; }
+.start-bottom { width: 100%; background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.4) 100%); padding: 8px 15px; display: flex; align-items: center; }
+.start-shutdown { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(180deg, #dc3545 0%, #a01020 100%); border: 2px solid #fff; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-right: 10px; }
+.start-shutdown:hover { background: linear-gradient(180deg, #ff4555 0%, #c02030 100%); }
+.start-bottom span { color: #fff; font-size: 12px; }
+.start-search-box { display: flex; align-items: center; background: #fff; border-radius: 12px; padding: 3px 10px; margin: 5px 12px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.2); }
+.start-search-box i { color: #666; margin-right: 6px; }
+.start-search-box input { border: none; outline: none; width: 100%; font-family: inherit; font-size: 13px; background: transparent; }
+
+/* Start menu search results */
+#startSearchResults { max-height: 250px; overflow-y: auto; }
+.start-search-empty { padding: 12px 15px; font-size: 12px; color: #888; }

@@ -1,0 +1,27 @@
+/* ---------- boot ---------- */
+.boot{ position:fixed; inset:0; z-index:120; background:#000; display:flex; align-items:center; justify-content:center; }
+.boot-inner{ text-align:center; color:#cdd6e0; padding:env(safe-area-inset-top) 20px env(safe-area-inset-bottom); }
+.boot-logo{ width:84px; opacity:.95; margin-bottom:14px; }
+.boot-os{ font-size:18px; font-weight:300; }
+.boot-os sup{ font-size:10px; }
+.boot-edition{ font-size:12px; color:#7f8a99; letter-spacing:.16em; text-transform:uppercase; margin-top:4px; }
+.boot-bar{ width:160px; height:8px; margin:26px auto 0; border:1px solid #2a2f3a; border-radius:5px; background:#0a0d12; overflow:hidden; }
+.boot-bar-fill{ width:38%; height:100%; border-radius:4px; background:linear-gradient(90deg, rgba(80,220,120,0), #57e08a 50%, rgba(80,220,120,0)); animation:bootscan 1.1s linear infinite; }
+@keyframes bootscan{ from{transform:translateX(-130%)} to{transform:translateX(330%)} }
+
+/* ---------- welcome ---------- */
+.welcome{ position:fixed; inset:0; z-index:110; display:flex; align-items:center; justify-content:center; }
+.welcome-inner{ position:relative; z-index:1; }
+.user-tile{ background:transparent; border:0; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:12px; padding:20px 34px; }
+.user-av{
+  width:104px; height:104px; border-radius:16px; display:flex; align-items:center; justify-content:center;
+  font-size:58px; color:#fff; position:relative; overflow:hidden;
+  background:linear-gradient(180deg,#5aa8e6,#205f9e);
+  border:1px solid rgba(255,255,255,.6);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.65), 0 6px 18px rgba(0,0,0,.55);
+}
+.user-av::before{ content:""; position:absolute; left:0; right:0; top:0; height:48%; background:linear-gradient(180deg, rgba(255,255,255,.5), rgba(255,255,255,0)); }
+.user-av i{ position:relative; z-index:1; }
+.user-name{ font-size:21px; color:#fff; text-shadow:0 1px 5px rgba(0,0,0,.6); }
+.user-hint{ font-size:12px; color:#bcd2ea; letter-spacing:.04em; }
+.welcome.fading{ opacity:0; transition:opacity .35s; }

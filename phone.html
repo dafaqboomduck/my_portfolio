@@ -19,7 +19,13 @@
     </script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="phone-styles.css">
+    <link rel="stylesheet" href="css/phone/base.css">
+    <link rel="stylesheet" href="css/phone/aurora.css">
+    <link rel="stylesheet" href="css/phone/boot-welcome.css">
+    <link rel="stylesheet" href="css/phone/shell.css">
+    <link rel="stylesheet" href="css/phone/home.css">
+    <link rel="stylesheet" href="css/phone/window.css">
+    <link rel="stylesheet" href="css/phone/minesweeper.css">
 </head>
 <body>
     <!-- Vista Aurora wallpaper (sits behind everything; glass panels blur it) -->
@@ -65,8 +71,16 @@
         </div>
     </div>
 
-    <!-- Shared project data (the same file the desktop edition uses) -->
-    <script src="projectData.js"></script>
-    <script src="phone-script.js"></script>
+    <!-- data: single-source globals -->
+    <script src="data/project-data.js"></script>
+    <script src="data/programs-data.js"></script>
+    <script src="data/profile-data.js"></script>
+    <script src="data/skills-data.js"></script>
+    <!-- phone app scripts -->
+    <script src="js/phone/data.js"></script>
+    <script src="js/phone/pages.js"></script>
+    <script src="js/phone/minesweeper.js"></script>
+    <script src="js/phone/router.js"></script>
+    <script src="js/phone/boot.js"></script>
 </body>
 </html>

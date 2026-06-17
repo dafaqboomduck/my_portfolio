@@ -1,4 +1,5 @@
 // ========== MINESWEEPER GAME ==========
+// CSS is linked statically via css/desktop/minesweeper.css (not injected).
 
 class Minesweeper {
     constructor(container, rows = 9, cols = 9, mines = 10) {
@@ -170,7 +171,7 @@ class Minesweeper {
 
     render() {
         const faceEmoji = this.gameOver ? '😵' : this.gameWon ? '😎' : '🙂';
-        
+
         this.container.innerHTML = `
             <div class="ms-game">
                 <div class="ms-header">
@@ -197,10 +198,10 @@ class Minesweeper {
                 const revealed = this.revealed[i][j];
                 const flagged = this.flagged[i][j];
                 const value = this.board[i][j];
-                
+
                 let cellClass = 'ms-cell';
                 let content = '';
-                
+
                 if (revealed) {
                     cellClass += ' revealed';
                     if (value === -1) {
@@ -212,9 +213,9 @@ class Minesweeper {
                 } else if (flagged) {
                     content = '🚩';
                 }
-                
-                html += `<div class="${cellClass}" data-row="${i}" data-col="${j}" 
-                    onclick="minesweeperGame.reveal(${i},${j})" 
+
+                html += `<div class="${cellClass}" data-row="${i}" data-col="${j}"
+                    onclick="minesweeperGame.reveal(${i},${j})"
                     oncontextmenu="event.preventDefault();minesweeperGame.toggleFlag(${i},${j})">${content}</div>`;
             }
         }
@@ -231,7 +232,7 @@ function initMinesweeper(container) {
 function setDifficulty(level) {
     const container = minesweeperGame.container;
     minesweeperGame.stopTimer();
-    
+
     switch(level) {
         case 'easy':
             minesweeperGame = new Minesweeper(container, 9, 9, 10);
@@ -243,114 +244,4 @@ function setDifficulty(level) {
             minesweeperGame = new Minesweeper(container, 16, 30, 99);
             break;
     }
-}
-
-// Minesweeper CSS (injected into page)
-function injectMinesweeperStyles() {
-    if (document.getElementById('minesweeper-styles')) return;
-    
-    const style = document.createElement('style');
-    style.id = 'minesweeper-styles';
-    style.textContent = `
-        .ms-game { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding: 10px;
-            background: #c0c0c0;
-            border: 3px solid;
-            border-color: #fff #808080 #808080 #fff;
-            width: fit-content;
-            margin: 0 auto;
-        }
-        .ms-header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-            width: 100%;
-            padding: 5px;
-            margin-bottom: 10px;
-            background: #c0c0c0;
-            border: 2px solid;
-            border-color: #808080 #fff #fff #808080;
-        }
-        .ms-display { 
-            background: #000; 
-            color: #f00; 
-            font-family: 'Consolas', monospace;
-            font-size: 24px; 
-            padding: 2px 5px;
-            min-width: 50px;
-            text-align: center;
-            border: 1px solid #808080;
-        }
-        .ms-face { 
-            font-size: 24px; 
-            width: 40px; 
-            height: 40px;
-            cursor: pointer;
-            border: 2px solid;
-            border-color: #fff #808080 #808080 #fff;
-            background: #c0c0c0;
-        }
-        .ms-face:active {
-            border-color: #808080 #fff #fff #808080;
-        }
-        .ms-board { 
-            display: grid; 
-            gap: 0;
-            border: 3px solid;
-            border-color: #808080 #fff #fff #808080;
-        }
-        .ms-cell { 
-            width: 25px; 
-            height: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            background: #c0c0c0;
-            border: 2px solid;
-            border-color: #fff #808080 #808080 #fff;
-            user-select: none;
-        }
-        .ms-cell:hover:not(.revealed) { 
-            background: #d4d4d4; 
-        }
-        .ms-cell.revealed { 
-            background: #bdbdbd;
-            border: 1px solid #808080;
-        }
-        .ms-cell.mine { 
-            background: #ff0000; 
-        }
-        .ms-message {
-            margin-top: 10px;
-            padding: 8px 15px;
-            font-weight: bold;
-            border-radius: 3px;
-        }
-        .ms-lose { 
-            background: #ffcccc; 
-            color: #cc0000;
-            border: 1px solid #cc0000;
-        }
-        .ms-win { 
-            background: #ccffcc; 
-            color: #008800;
-            border: 1px solid #008800;
-        }
-        .ms-controls {
-            margin-top: 15px;
-            display: flex;
-            gap: 10px;
-        }
-        .ms-btn {
-            padding: 5px 15px !important;
-            font-size: 11px !important;
-        }
-    `;
-    document.head.appendChild(style);
 }

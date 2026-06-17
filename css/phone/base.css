@@ -1,0 +1,59 @@
+/* ============================================================
+   Windows Vista Portfolio — Phone Edition
+   Vista Aero on a phone: Aurora wallpaper, frosted glass,
+   glossy Aero buttons + app icons, pearl Start orb.
+   Pairs with the Vista desktop (index.html).
+   ============================================================ */
+
+:root{
+  --text:#eaf4ff;
+  --muted:#a3bdd8;
+  --accent:#3a9be0;
+
+  --glass-bg:linear-gradient(180deg, rgba(200,225,255,.22), rgba(150,190,245,.09));
+  --glass-border:rgba(255,255,255,.42);
+  --glass-sheen:inset 0 1px 0 rgba(255,255,255,.55);
+
+  --body-bg:linear-gradient(180deg, rgba(8,24,46,.60), rgba(4,14,28,.66));
+
+  --font:"Segoe UI","Segoe WP",system-ui,-apple-system,"Roboto","Helvetica Neue",Arial,sans-serif;
+  --sb:26px;
+  --dock:64px;
+}
+
+*{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body{ margin:0; padding:0; min-height:100%; }
+body{
+  background:#04101f;
+  color:var(--text);
+  font-family:var(--font);
+  overscroll-behavior:none;
+  -webkit-font-smoothing:antialiased;
+}
+.hidden{ display:none !important; }
+a{ color:#8fd0ff; text-decoration:none; }
+button{ font-family:inherit; }
+
+/* ---------- Aero glass ---------- */
+.glass{
+  background:var(--glass-bg);
+  -webkit-backdrop-filter:blur(16px) saturate(150%);
+  backdrop-filter:blur(16px) saturate(150%);
+  border:1px solid var(--glass-border);
+  box-shadow:var(--glass-sheen), 0 6px 20px rgba(0,0,0,.35);
+}
+@supports not ((-webkit-backdrop-filter:blur(2px)) or (backdrop-filter:blur(2px))){
+  .glass{ background:linear-gradient(180deg, rgba(40,70,110,.85), rgba(20,40,70,.85)); }
+  .view .win-body{ background:rgba(7,20,38,.92) !important; }
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; transition:none !important; }
+}
+
+/* ---------- small phones ---------- */
+@media (max-width:340px){
+  .launch-icon{ width:74px; height:74px; font-size:32px; }
+  .tb-title{ font-size:18px; }
+}
