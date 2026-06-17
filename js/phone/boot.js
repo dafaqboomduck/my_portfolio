@@ -70,7 +70,7 @@ function init() {
     if (deep) { entered = true; enterDesktop(true); return; }
 
     // boot animation, then welcome
-    setTimeout(showWelcome, 2200);
+    setTimeout(showWelcome, 4000);
 }
 
 if (document.readyState === 'loading') {

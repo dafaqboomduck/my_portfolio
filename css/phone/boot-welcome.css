@@ -8,6 +8,8 @@
 .boot-bar{ width:160px; height:8px; margin:26px auto 0; border:1px solid #2a2f3a; border-radius:5px; background:#0a0d12; overflow:hidden; }
 .boot-bar-fill{ width:38%; height:100%; border-radius:4px; background:linear-gradient(90deg, rgba(80,220,120,0), #57e08a 50%, rgba(80,220,120,0)); animation:bootscan 1.1s linear infinite; }
 @keyframes bootscan{ from{transform:translateX(-130%)} to{transform:translateX(330%)} }
+.boot-beta{ margin-top:22px; font-size:11px; color:#9fb0c4; letter-spacing:.03em; }
+.beta-tag{ display:inline-block; margin-right:7px; padding:1px 7px; font-size:9px; font-weight:700; letter-spacing:.14em; color:#0a0d12; background:#ffb020; border-radius:3px; vertical-align:1px; }
 
 /* ---------- welcome ---------- */
 .welcome{ position:fixed; inset:0; z-index:110; display:flex; align-items:center; justify-content:center; }

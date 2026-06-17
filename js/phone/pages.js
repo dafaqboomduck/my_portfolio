@@ -50,6 +50,7 @@ function homeHTML() {
     });
     h += '</div>';
     h += '<div class="home-foot">Windows Vista Portfolio · Phone Edition<br>' +
+         '<span class="home-beta"><span class="beta-tag">BETA</span> For the full experience, view the desktop edition on a laptop or PC</span><br>' +
          '<a href="index.html?desktop=1">View desktop edition →</a></div>';
     h += '</div>';
     return h;

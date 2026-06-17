@@ -37,3 +37,4 @@
 
 .home-foot{ margin:26px 2px 0; color:var(--muted); font-size:12px; text-align:center; line-height:1.7; }
 .home-foot a{ font-size:13px; }
+.home-beta{ display:inline-block; max-width:280px; margin:4px auto 2px; color:var(--muted); font-size:11.5px; line-height:1.5; }
