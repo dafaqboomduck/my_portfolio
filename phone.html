@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#04101f">
     <title>Razvan Nica — Portfolio (Phone Edition)</title>
 
     <!-- Device guard: keep larger screens on the Vista desktop edition.
@@ -11,7 +11,7 @@
     <script>
     (function () {
         var qs = location.search;
-        if (/[?&]phone=1/.test(qs)) return;                                  // forced phone
+        if (/[?&]phone=1/.test(qs)) return;
         if (/[?&]desktop=1/.test(qs)) { location.replace('index.html' + qs + (location.hash || '')); return; }
         var shortSide = Math.min(window.innerWidth, window.innerHeight);
         if (shortSide > 600) { location.replace('index.html?desktop=1' + (location.hash || '')); }
@@ -22,27 +22,33 @@
     <link rel="stylesheet" href="phone-styles.css">
 </head>
 <body>
-    <!-- Lock screen -->
-    <div id="lock" class="lock">
-        <div class="lock-status" id="lockStatus">
-            <span class="sig"><i></i><i></i><i></i><i></i><i></i></span>
-            <i class="bi bi-wifi" style="font-size:13px"></i>
-            <span>82%</span>
+    <!-- Vista Aurora wallpaper (sits behind everything; glass panels blur it) -->
+    <div class="aurora"></div>
+
+    <!-- Boot screen -->
+    <div id="boot" class="boot">
+        <div class="boot-inner">
+            <img class="boot-logo" src="images/win-vista-logo.png" alt="Windows Vista">
+            <div class="boot-os">Microsoft<sup>&reg;</sup> Windows Vista<sup>&trade;</sup></div>
+            <div class="boot-edition">Portfolio Edition &middot; Phone</div>
+            <div class="boot-bar"><div class="boot-bar-fill"></div></div>
         </div>
-        <div class="lock-clock">
-            <div class="lock-time" id="lockTime">--:--</div>
-            <div class="lock-date" id="lockDate"></div>
+    </div>
+
+    <!-- Welcome / log-in -->
+    <div id="welcome" class="welcome hidden">
+        <div class="welcome-inner">
+            <button class="user-tile" id="userTile">
+                <span class="user-av"><i class="bi bi-person-fill"></i></span>
+                <span class="user-name">Razvan Nica</span>
+                <span class="user-hint">tap to log in</span>
+            </button>
         </div>
-        <div class="lock-brand">
-            <div class="lock-os">Windows Vista Portfolio</div>
-            <div class="lock-edition">Phone Edition</div>
-        </div>
-        <div class="lock-hint"><i class="bi bi-chevron-up"></i><span>swipe up to unlock</span></div>
     </div>
 
     <!-- Phone shell -->
     <div id="phone" class="phone hidden">
-        <div class="statusbar">
+        <div class="statusbar glass">
             <span class="sb-left">Vista Portfolio</span>
             <span class="sb-right">
                 <span class="sig"><i></i><i></i><i></i><i></i><i></i></span>
@@ -54,10 +60,9 @@
 
         <main id="view" class="view"></main>
 
-        <nav id="appbar" class="appbar hidden">
-            <button id="abBack"><span class="ab-ico"><i class="bi bi-chevron-left"></i></span><span>back</span></button>
-            <button id="abHome"><span class="ab-ico"><i class="bi bi-grid-fill" style="font-size:14px"></i></span><span>start</span></button>
-        </nav>
+        <div class="dock glass">
+            <button id="abHome" class="start-orb" title="Start"><img src="images/win-vista-logo.png" alt="Start"></button>
+        </div>
     </div>
 
     <!-- Shared project data (the same file the desktop edition uses) -->

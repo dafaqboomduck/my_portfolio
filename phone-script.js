@@ -1,7 +1,7 @@
 /* ============================================================
    Windows Vista Portfolio — Phone Edition (logic)
    Depends on projectData.js (shared with the desktop edition).
-   Content for About / Skills / Tech / Contact is inlined below so
+   About / Skills / Tech / Contact content is inlined below so
    this edition stays self-contained and slim.
    ============================================================ */
 'use strict';
@@ -9,7 +9,6 @@
 /* ---------- inlined content ---------- */
 
 const phoneAbout = {
-    name: 'Razvan Nica',
     role: 'Data Scientist · AI Engineer · Backend Developer',
     lede: 'Building intelligent systems from data to deployment — deep learning, computer vision, NLP, and production-ready ML applications.',
     paragraphs: [
@@ -58,24 +57,21 @@ const phoneContact = {
     email: 'razvan.al.nica@gmail.com',
     github: 'https://github.com/dafaqboomduck',
     githubLabel: 'github.com/dafaqboomduck'
-    // LinkedIn: add { linkedin, linkedinLabel } here and a contact-row below when ready.
+    // LinkedIn: add { linkedin, linkedinLabel } here and a contact-row in contactHTML() when ready.
 };
 
 const RESUME_URL = 'documents/CV2.pdf';
-const PROJECT_COLORS = ['#2b7de9', '#138d8d', '#3a9a4e', '#d9730d', '#6b3fa0', '#c5306c'];
+const PROJECT_COLORS = ['#4aa8ec', '#23b3b0', '#54bf64', '#ed9a3e', '#9a6fd0', '#d65a8e'];
 
-/* ---------- start screen tiles ---------- */
-
-const tiles = [
-    { route: 'about',    title: 'Razvan Nica', sub: 'data scientist · ai engineer', glyph: 'bi-person-fill', color: 'c-blue', size: 'wide',
-      live: { backTitle: 'available', backSub: 'open to internships · Netherlands' } },
-    { route: 'projects', title: 'projects', glyph: 'bi-folder-fill', color: 'c-teal' },
-    { route: 'skills',   title: 'skills',   glyph: 'bi-gear-wide-connected', color: 'c-green' },
-    { route: 'tech',     title: 'tech',     glyph: 'bi-cpu-fill', color: 'c-magenta' },
-    { route: 'resume',   title: 'resume',   glyph: 'bi-file-earmark-pdf-fill', color: 'c-orange' },
-    { route: 'contact',  title: 'contact',  glyph: 'bi-envelope-fill', color: 'c-purple',
-      live: { backTitle: phoneContact.email, backSub: 'tap to get in touch', small: true } },
-    { route: 'games',    title: 'minesweeper', glyph: 'bi-grid-3x3-gap-fill', color: 'c-blue2' }
+/* home launchers */
+const launchers = [
+    { route: 'about',    label: 'About Me',    glyph: 'bi-person-fill',          color: 'c-blue' },
+    { route: 'projects', label: 'Projects',    glyph: 'bi-folder-fill',          color: 'c-teal' },
+    { route: 'skills',   label: 'Skills',      glyph: 'bi-gear-wide-connected',  color: 'c-green' },
+    { route: 'tech',     label: 'Tech',        glyph: 'bi-cpu-fill',             color: 'c-magenta' },
+    { route: 'resume',   label: 'Resume',      glyph: 'bi-file-earmark-pdf-fill', color: 'c-orange' },
+    { route: 'contact',  label: 'Contact',     glyph: 'bi-envelope-fill',        color: 'c-purple' },
+    { route: 'games',    label: 'Minesweeper', glyph: 'bi-grid-3x3-gap-fill',    color: 'c-blue2' }
 ];
 
 /* ---------- helpers ---------- */
@@ -86,29 +82,32 @@ function esc(s) {
     });
 }
 function pad(n) { return n < 10 ? '0' + n : '' + n; }
+function pad3(n) { return ('00' + n).slice(-3); }
 function fmtTime(d) {
     let h = d.getHours(); const m = pad(d.getMinutes());
     const ampm = h >= 12 ? 'PM' : 'AM';
     h = h % 12; if (h === 0) h = 12;
     return h + ':' + m + ' ' + ampm;
 }
-function fmtDate(d) {
-    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-    return days[d.getDay()] + ', ' + months[d.getMonth()] + ' ' + d.getDate();
+
+/* a fullscreen Vista "window" wrapper for a page */
+function win(title, icon, bodyHTML) {
+    return '<div class="win">' +
+        '<div class="win-titlebar glass">' +
+            '<button class="tb-back" data-back="1" aria-label="Back"><i class="bi bi-chevron-left"></i></button>' +
+            '<span class="tb-icon"><i class="bi ' + icon + '"></i></span>' +
+            '<span class="tb-title">' + esc(title) + '</span>' +
+        '</div>' +
+        '<div class="win-body">' + bodyHTML + '</div>' +
+    '</div>';
 }
 
 /* ---------- clock + battery ---------- */
 
-function updateClocks() {
+function updateClock() {
     const now = new Date();
-    const t = fmtTime(now);
-    const lt = document.getElementById('lockTime');
-    const ld = document.getElementById('lockDate');
     const bc = document.getElementById('barClock');
-    if (lt) lt.textContent = t;
-    if (ld) ld.textContent = fmtDate(now);
-    if (bc) bc.textContent = t;
+    if (bc) bc.textContent = fmtTime(now);
 }
 
 function initBattery() {
@@ -126,69 +125,49 @@ function initBattery() {
     }).catch(function () {});
 }
 
-/* ---------- view rendering ---------- */
+/* ---------- pages ---------- */
 
-function pageHeader(kicker, title, wrap) {
-    return '<div class="page-kicker">' + esc(kicker) + '</div>' +
-           '<h1 class="page-title' + (wrap ? ' wrap' : '') + '">' + esc(title) + '</h1>';
-}
-
-function startHTML() {
-    const count = Object.keys(projectData).length;
-    let html = '<div class="start"><div class="start-word">start</div><div class="tiles">';
-    tiles.forEach(function (t) {
-        const cls = 'tile ' + t.color + (t.size === 'wide' ? ' wide' : '') + (t.live ? ' live' : '');
-        const badge = t.route === 'projects' ? '<span class="badge">' + count + '</span>' : '';
-        if (t.live) {
-            const smallFront = '';
-            html += '<button class="' + cls + '" data-go="' + t.route + '">' +
-                '<div class="flip-inner">' +
-                    '<div class="flip front"><i class="bi ' + t.glyph + ' glyph"></i>' + badge +
-                        '<span class="t-title">' + esc(t.title) + '</span>' +
-                        (t.sub ? '<span class="t-sub">' + esc(t.sub) + '</span>' : '') + '</div>' +
-                    '<div class="flip back"><i class="bi ' + t.glyph + ' glyph"></i>' +
-                        '<span class="t-title" style="' + (t.live.small ? 'font-size:13px;word-break:break-all;' : '') + '">' + esc(t.live.backTitle) + '</span>' +
-                        (t.live.backSub ? '<span class="t-sub">' + esc(t.live.backSub) + '</span>' : '') + '</div>' +
-                '</div></button>';
-        } else {
-            html += '<button class="' + cls + '" data-go="' + t.route + '">' +
-                '<i class="bi ' + t.glyph + ' glyph"></i>' + badge +
-                '<span class="t-title">' + esc(t.title) + '</span>' +
-                (t.sub ? '<span class="t-sub">' + esc(t.sub) + '</span>' : '') + '</button>';
-        }
+function homeHTML() {
+    let h = '<div class="home">';
+    h += '<div class="today glass"><span class="today-av"><i class="bi bi-person-fill"></i></span>' +
+         '<div><div class="today-name">Razvan Nica</div><div class="today-role">Data Scientist · AI Engineer</div></div></div>';
+    h += '<div class="launchers">';
+    launchers.forEach(function (t) {
+        h += '<button class="launch" data-go="' + t.route + '">' +
+                '<span class="launch-icon ' + t.color + '"><i class="bi ' + t.glyph + '"></i></span>' +
+                '<span class="launch-label">' + esc(t.label) + '</span>' +
+             '</button>';
     });
-    html += '</div>' +
-        '<div class="start-foot"><div class="os">Windows Vista Portfolio · Phone Edition</div>' +
-        '<a href="index.html?desktop=1">View desktop edition →</a></div></div>';
-    return html;
+    h += '</div>';
+    h += '<div class="home-foot">Windows Vista Portfolio · Phone Edition<br>' +
+         '<a href="index.html?desktop=1">View desktop edition →</a></div>';
+    h += '</div>';
+    return h;
 }
 
 function aboutHTML() {
     const a = phoneAbout;
-    let h = pageHeader('portfolio', 'about');
-    h += '<div class="page-body">';
-    h += '<p class="lede"><span class="role">' + esc(a.role) + '</span></p>';
-    h += '<p>' + esc(a.lede) + '</p>';
-    a.paragraphs.forEach(function (p) { h += '<p>' + esc(p) + '</p>'; });
-    h += '<div class="card"><h4>Current status</h4><p>' + esc(a.status) + '</p></div>';
-    h += '<h3>Education</h3>';
+    let b = '<p class="lede"><span class="role">' + esc(a.role) + '</span></p>';
+    b += '<p>' + esc(a.lede) + '</p>';
+    a.paragraphs.forEach(function (p) { b += '<p>' + esc(p) + '</p>'; });
+    b += '<div class="card"><h4>Current status</h4><p>' + esc(a.status) + '</p></div>';
+    b += '<h3>Education</h3>';
     a.education.forEach(function (e) {
-        h += '<div class="card"><h4>' + esc(e.school) + '</h4><p>' + esc(e.detail) + '</p></div>';
+        b += '<div class="card"><h4>' + esc(e.school) + '</h4><p>' + esc(e.detail) + '</p></div>';
     });
-    h += '<h3>Recent achievements</h3><ul>';
-    a.achievements.forEach(function (x) { h += '<li>' + x + '</li>'; });
-    h += '</ul></div>';
-    return h;
+    b += '<h3>Recent achievements</h3><ul>';
+    a.achievements.forEach(function (x) { b += '<li>' + x + '</li>'; });
+    b += '</ul>';
+    return win('About Me', 'bi-person-fill', b);
 }
 
 function projectsHTML() {
-    let h = pageHeader('portfolio', 'projects');
-    h += '<div class="page-body" style="padding-top:8px;padding-left:0;padding-right:0">';
+    let b = '';
     let i = 0;
     for (const key in projectData) {
         const p = projectData[key];
         const color = PROJECT_COLORS[i % PROJECT_COLORS.length];
-        h += '<button class="row" data-go="project/' + key + '">' +
+        b += '<button class="row" data-go="project/' + key + '">' +
                 '<span class="row-accent" style="background:' + color + '"></span>' +
                 '<span class="row-main">' +
                     '<span class="row-title">' + esc(p.title) + '</span>' +
@@ -199,99 +178,83 @@ function projectsHTML() {
              '</button>';
         i++;
     }
-    h += '</div>';
-    return h;
+    return win('Projects', 'bi-folder-fill', b);
 }
 
 function projectDetailHTML(id) {
     const p = projectData[id];
-    if (!p) {
-        return pageHeader('portfolio', 'not found', true) +
-            '<div class="page-body"><p>That project could not be found.</p></div>';
-    }
-    let h = pageHeader('project', p.title, true);
-    h += '<span class="tag">' + esc(p.tag) + '</span>';
-    h += '<div class="page-body">';
-    h += '<div class="card"><h4>Overview</h4><p>' + esc(p.fullDescription) + '</p></div>';
-    h += '<h3>Technologies</h3><div class="chips">';
-    p.technologies.forEach(function (t) { h += '<span class="chip">' + esc(t) + '</span>'; });
-    h += '</div>';
-    h += '<h3>Key features</h3><ul>';
-    p.features.forEach(function (f) { h += '<li>' + esc(f) + '</li>'; });
-    h += '</ul>';
-    h += '<h3>Achievements</h3><ul>';
-    p.achievements.forEach(function (x) { h += '<li>' + esc(x) + '</li>'; });
-    h += '</ul>';
+    if (!p) return win('Project', 'bi-folder-fill', '<p>That project could not be found.</p>');
+
+    let b = '<h2 class="proj-title">' + esc(p.title) + '</h2>';
+    b += '<span class="tag">' + esc(p.tag) + '</span>';
+    b += '<div class="card"><h4>Overview</h4><p>' + esc(p.fullDescription) + '</p></div>';
+    b += '<h3>Technologies</h3><div class="chips">';
+    p.technologies.forEach(function (t) { b += '<span class="chip">' + esc(t) + '</span>'; });
+    b += '</div>';
+    b += '<h3>Key features</h3><ul>';
+    p.features.forEach(function (f) { b += '<li>' + esc(f) + '</li>'; });
+    b += '</ul>';
+    b += '<h3>Achievements</h3><ul>';
+    p.achievements.forEach(function (x) { b += '<li>' + esc(x) + '</li>'; });
+    b += '</ul>';
     const hasGit = p.github && p.github !== '#';
     const hasDemo = p.demo && p.demo !== '#';
-    if (hasGit) h += '<a class="action" href="' + esc(p.github) + '" target="_blank" rel="noopener"><i class="bi bi-github"></i> View on GitHub</a>';
-    if (hasDemo) h += '<a class="action secondary" href="' + esc(p.demo) + '" target="_blank" rel="noopener"><i class="bi bi-play-circle"></i> Live demo</a>';
-    h += '</div>';
-    return h;
+    if (hasGit) b += '<a class="btn-aero" href="' + esc(p.github) + '" target="_blank" rel="noopener"><i class="bi bi-github"></i><span>View on GitHub</span></a>';
+    if (hasDemo) b += '<a class="btn-aero secondary" href="' + esc(p.demo) + '" target="_blank" rel="noopener"><i class="bi bi-play-circle"></i><span>Live demo</span></a>';
+    return win('Project', 'bi-folder-fill', b);
 }
 
 function skillsHTML() {
-    let h = pageHeader('portfolio', 'skills');
-    h += '<div class="page-body" style="padding-top:8px;padding-left:0;padding-right:0">';
+    let b = '';
     phoneSkills.forEach(function (s) {
-        h += '<div class="skill"><i class="bi ' + s.icon + '"></i><div>' +
+        b += '<div class="skill"><i class="bi ' + s.icon + '"></i><div>' +
                 '<div class="s-name">' + esc(s.name) + '</div>' +
                 '<div class="s-desc">' + esc(s.desc) + '</div></div></div>';
     });
-    h += '<div style="padding:18px 16px 0"><div class="card"><h4>Full technology stack</h4>' +
-         '<p>See the <a href="#tech">tech</a> tile for every tool in my environment.</p></div></div>';
-    h += '</div>';
-    return h;
+    b += '<div class="card" style="margin-top:18px"><h4>Full technology stack</h4>' +
+         '<p>See the <a href="#tech">Tech</a> tile for every tool in my environment.</p></div>';
+    return win('Skills', 'bi-gear-wide-connected', b);
 }
 
 function techHTML() {
-    let h = pageHeader('portfolio', 'tech');
-    h += '<div class="page-body" style="padding-top:8px;padding-left:0;padding-right:0">';
+    let b = '';
     const cats = [];
     installedPrograms.forEach(function (p) { if (cats.indexOf(p.category) === -1) cats.push(p.category); });
     cats.forEach(function (cat) {
-        h += '<div class="tech-cat">' + esc(cat) + '</div>';
+        b += '<div class="tech-cat">' + esc(cat) + '</div>';
         installedPrograms.filter(function (p) { return p.category === cat; }).forEach(function (p) {
-            h += '<div class="tech-item"><i class="bi ' + p.icon + '"></i><div>' +
+            b += '<div class="tech-item"><i class="bi ' + p.icon + '"></i><div>' +
                     '<div class="ti-name">' + esc(p.name) + '</div>' +
                     '<div class="ti-pub">' + esc(p.publisher) + '</div></div></div>';
         });
     });
-    h += '</div>';
-    return h;
+    return win('Tech', 'bi-cpu-fill', b);
 }
 
 function resumeHTML() {
-    let h = pageHeader('portfolio', 'resume');
-    h += '<div class="page-body" style="padding-left:0;padding-right:0">';
-    h += '<div class="doc"><div class="doc-top"><i class="bi bi-file-earmark-pdf-fill"></i>' +
-         '<div><div class="doc-name">Razvan_Nica_CV.pdf</div>' +
-         '<div class="doc-meta">PDF document</div></div></div></div>';
-    h += '<a class="action" href="' + RESUME_URL + '" target="_blank" rel="noopener"><i class="bi bi-box-arrow-up-right"></i> Open resume</a>';
-    h += '<a class="action secondary" href="' + RESUME_URL + '" download><i class="bi bi-download"></i> Download</a>';
-    h += '</div>';
-    return h;
+    let b = '<div class="doc"><div class="doc-top"><i class="bi bi-file-earmark-pdf-fill"></i>' +
+            '<div><div class="doc-name">Razvan_Nica_CV.pdf</div><div class="doc-meta">PDF document</div></div></div></div>';
+    b += '<a class="btn-aero" href="' + RESUME_URL + '" target="_blank" rel="noopener"><i class="bi bi-box-arrow-up-right"></i><span>Open resume</span></a>';
+    b += '<a class="btn-aero secondary" href="' + RESUME_URL + '" download><i class="bi bi-download"></i><span>Download</span></a>';
+    return win('Resume', 'bi-file-earmark-pdf-fill', b);
 }
 
 function contactHTML() {
     const c = phoneContact;
-    let h = pageHeader('portfolio', 'contact');
-    h += '<div class="page-body" style="padding-left:0;padding-right:0">';
-    h += '<p style="padding:0 16px">Let\'s build something together. I\'m always open to new projects and opportunities.</p>';
-    h += '<a class="contact-row" href="mailto:' + esc(c.email) + '"><i class="bi bi-envelope-fill"></i>' +
+    let b = '<p>Let\'s build something together. I\'m always open to new projects and opportunities.</p>';
+    b += '<a class="contact-row" href="mailto:' + esc(c.email) + '"><i class="bi bi-envelope-fill"></i>' +
          '<div><div class="cr-label">Email</div><div class="cr-value">' + esc(c.email) + '</div></div></a>';
-    h += '<a class="contact-row" href="' + esc(c.github) + '" target="_blank" rel="noopener"><i class="bi bi-github"></i>' +
+    b += '<a class="contact-row" href="' + esc(c.github) + '" target="_blank" rel="noopener"><i class="bi bi-github"></i>' +
          '<div><div class="cr-label">GitHub</div><div class="cr-value">' + esc(c.githubLabel) + '</div></div></a>';
     // LinkedIn: uncomment and fill in when ready
-    // h += '<a class="contact-row" href="' + esc(c.linkedin) + '" target="_blank" rel="noopener"><i class="bi bi-linkedin"></i>' +
+    // b += '<a class="contact-row" href="' + esc(c.linkedin) + '" target="_blank" rel="noopener"><i class="bi bi-linkedin"></i>' +
     //      '<div><div class="cr-label">LinkedIn</div><div class="cr-value">' + esc(c.linkedinLabel) + '</div></div></a>';
-    h += '</div>';
-    return h;
+    return win('Contact', 'bi-envelope-fill', b);
 }
 
 function gamesHTML() {
-    let h = pageHeader('games', 'minesweeper');
-    h += '<div class="ms" id="ms">' +
+    const board =
+        '<div class="ms"><div class="ms-board">' +
             '<div class="ms-hud">' +
                 '<span class="ms-count" id="msMines">010</span>' +
                 '<button class="ms-face" id="msFace">🙂</button>' +
@@ -303,29 +266,25 @@ function gamesHTML() {
             '</div>' +
             '<div class="ms-grid" id="msGrid"></div>' +
             '<div class="ms-msg" id="msMsg">tap a tile to start · long-press to flag</div>' +
-         '</div>';
-    return h;
+        '</div></div>';
+    return win('Minesweeper', 'bi-grid-3x3-gap-fill', board);
 }
 
 /* ---------- router ---------- */
 
 function render() {
-    const raw = location.hash.replace(/^#\/?/, '') || 'start';
+    const raw = location.hash.replace(/^#\/?/, '') || 'home';
     const view = document.getElementById('view');
-    const appbar = document.getElementById('appbar');
+    const dock = document.querySelector('.dock');
     window.scrollTo(0, 0);
 
-    if (raw === 'start') {
-        appbar.classList.add('hidden');
-        view.innerHTML = startHTML();
+    if (raw === 'home' || raw === 'start') {
+        view.innerHTML = homeHTML();
+        if (dock) dock.classList.remove('hidden');
         return;
     }
-    appbar.classList.remove('hidden');
+    if (raw.indexOf('project/') === 0) { view.innerHTML = projectDetailHTML(raw.slice('project/'.length)); return; }
 
-    if (raw.indexOf('project/') === 0) {
-        view.innerHTML = projectDetailHTML(raw.slice('project/'.length));
-        return;
-    }
     switch (raw) {
         case 'about':    view.innerHTML = aboutHTML(); break;
         case 'projects': view.innerHTML = projectsHTML(); break;
@@ -334,7 +293,14 @@ function render() {
         case 'resume':   view.innerHTML = resumeHTML(); break;
         case 'contact':  view.innerHTML = contactHTML(); break;
         case 'games':    view.innerHTML = gamesHTML(); initMinesweeper(); break;
-        default:         location.replace('#start');
+        default:         location.replace('#home');
+    }
+}
+
+function navBack() {
+    if (location.hash && location.hash !== '#home') {
+        if (history.length > 1) history.back();
+        else location.hash = 'home';
     }
 }
 
@@ -347,9 +313,9 @@ function initMinesweeper() {
     const grid = document.getElementById('msGrid');
     if (!grid) return;
 
-    const avail = Math.min(window.innerWidth - 32, 380);
-    let cell = Math.floor((avail - (MS.cols - 1) * 2) / MS.cols);
-    cell = Math.max(26, Math.min(38, cell));
+    const avail = Math.min(window.innerWidth - 44, 360);
+    let cell = Math.floor((avail - (MS.cols - 1) * 3) / MS.cols);
+    cell = Math.max(26, Math.min(36, cell));
     grid.style.setProperty('--ms-cell', cell + 'px');
     grid.style.gridTemplateColumns = 'repeat(' + MS.cols + ', ' + cell + 'px)';
 
@@ -359,16 +325,12 @@ function initMinesweeper() {
     document.getElementById('msDig').onclick = function () { msSetFlagMode(false); };
     document.getElementById('msFlag').onclick = function () { msSetFlagMode(true); };
 
-    // interactions (delegated)
     let lpTimer = null, lpFired = false;
     grid.addEventListener('contextmenu', function (e) { e.preventDefault(); });
     grid.addEventListener('pointerdown', function (e) {
         const c = e.target.closest('.ms-cell'); if (!c) return;
         lpFired = false;
-        lpTimer = setTimeout(function () {
-            lpFired = true;
-            msToggleFlag(+c.dataset.r, +c.dataset.c);
-        }, 420);
+        lpTimer = setTimeout(function () { lpFired = true; msToggleFlag(+c.dataset.r, +c.dataset.c); }, 420);
     });
     const clearLp = function () { if (lpTimer) { clearTimeout(lpTimer); lpTimer = null; } };
     grid.addEventListener('pointerup', clearLp);
@@ -378,8 +340,7 @@ function initMinesweeper() {
         const c = e.target.closest('.ms-cell'); if (!c) return;
         if (lpFired) { lpFired = false; return; }
         const r = +c.dataset.r, col = +c.dataset.c;
-        if (msState.flagMode) msToggleFlag(r, col);
-        else msReveal(r, col);
+        if (msState.flagMode) msToggleFlag(r, col); else msReveal(r, col);
     });
 }
 
@@ -392,16 +353,10 @@ function msSetFlagMode(on) {
 
 function msReset() {
     if (msState && msState.timer) clearInterval(msState.timer);
-    msState = {
-        grid: [], revealed: [], flagged: [],
-        started: false, over: false, win: false,
-        flagMode: false, time: 0, timer: null, revealedCount: 0
-    };
+    msState = { grid: [], revealed: [], flagged: [], started: false, over: false, win: false, flagMode: false, time: 0, timer: null, revealedCount: 0 };
     for (let r = 0; r < MS.rows; r++) {
         msState.grid[r] = []; msState.revealed[r] = []; msState.flagged[r] = [];
-        for (let c = 0; c < MS.cols; c++) {
-            msState.grid[r][c] = 0; msState.revealed[r][c] = false; msState.flagged[r][c] = false;
-        }
+        for (let c = 0; c < MS.cols; c++) { msState.grid[r][c] = 0; msState.revealed[r][c] = false; msState.flagged[r][c] = false; }
     }
     document.getElementById('msFace').textContent = '🙂';
     document.getElementById('msTime').textContent = '000';
@@ -418,8 +373,7 @@ function msPlaceMines(safeR, safeC) {
         const c = Math.floor(Math.random() * MS.cols);
         if (msState.grid[r][c] === -1) continue;
         if (r === safeR && c === safeC) continue;
-        msState.grid[r][c] = -1;
-        placed++;
+        msState.grid[r][c] = -1; placed++;
     }
     for (let r = 0; r < MS.rows; r++) {
         for (let c = 0; c < MS.cols; c++) {
@@ -448,7 +402,6 @@ function msStartTimer() {
         document.getElementById('msTime').textContent = pad3(msState.time);
     }, 1000);
 }
-function pad3(n) { return ('00' + n).slice(-3); }
 
 function msToggleFlag(r, c) {
     if (msState.over || msState.revealed[r][c]) return;
@@ -462,12 +415,8 @@ function msReveal(r, c) {
     if (msState.over || msState.revealed[r][c] || msState.flagged[r][c]) return;
     if (!msState.started) { msPlaceMines(r, c); msStartTimer(); }
 
-    if (msState.grid[r][c] === -1) {
-        msState.revealed[r][c] = true;
-        msLose(r, c);
-        return;
-    }
-    // flood fill
+    if (msState.grid[r][c] === -1) { msState.revealed[r][c] = true; msLose(r, c); return; }
+
     const stack = [[r, c]];
     while (stack.length) {
         const cur = stack.pop();
@@ -477,9 +426,7 @@ function msReveal(r, c) {
         msState.revealedCount++;
         msRenderCell(cr, cc);
         if (msState.grid[cr][cc] === 0) {
-            msNeighbors(cr, cc, function (rr, ccc) {
-                if (!msState.revealed[rr][ccc]) stack.push([rr, ccc]);
-            });
+            msNeighbors(cr, cc, function (rr, ccc) { if (!msState.revealed[rr][ccc]) stack.push([rr, ccc]); });
         }
     }
     if (msState.revealedCount === MS.rows * MS.cols - MS.mines) msWin();
@@ -514,9 +461,7 @@ function msRenderGrid() {
     const grid = document.getElementById('msGrid');
     let html = '';
     for (let r = 0; r < MS.rows; r++) {
-        for (let c = 0; c < MS.cols; c++) {
-            html += '<button class="ms-cell" data-r="' + r + '" data-c="' + c + '"></button>';
-        }
+        for (let c = 0; c < MS.cols; c++) html += '<button class="ms-cell" data-r="' + r + '" data-c="' + c + '"></button>';
     }
     grid.innerHTML = html;
 }
@@ -527,85 +472,64 @@ function msRenderCell(r, c, boom) {
     if (!cell) return;
     cell.className = 'ms-cell';
     cell.textContent = '';
-    if (msState.flagged[r][c]) {
-        cell.classList.add('flag');
-        cell.innerHTML = '<i class="bi bi-flag-fill"></i>';
-        return;
-    }
+    if (msState.flagged[r][c]) { cell.classList.add('flag'); cell.innerHTML = '<i class="bi bi-flag-fill"></i>'; return; }
     if (msState.revealed[r][c]) {
         cell.classList.add('revealed');
         const v = msState.grid[r][c];
-        if (v === -1) {
-            if (boom) cell.classList.add('boom');
-            cell.innerHTML = '<i class="bi bi-asterisk"></i>';
-        } else if (v > 0) {
-            cell.classList.add('n' + v);
-            cell.textContent = v;
-        }
+        if (v === -1) { if (boom) cell.classList.add('boom'); cell.innerHTML = '<i class="bi bi-asterisk"></i>'; }
+        else if (v > 0) { cell.classList.add('n' + v); cell.textContent = v; }
     }
 }
 
-/* ---------- lock + boot ---------- */
+/* ---------- boot → welcome → home ---------- */
 
-function unlock(skipAnim) {
-    const lock = document.getElementById('lock');
-    const phone = document.getElementById('phone');
-    if (lock.classList.contains('hidden')) return;
-    phone.classList.remove('hidden');
-    render();
-    if (skipAnim) { lock.classList.add('hidden'); return; }
-    lock.classList.add('lifting');
-    setTimeout(function () { lock.classList.add('hidden'); }, 360);
+function showWelcome() {
+    document.getElementById('boot').classList.add('hidden');
+    document.getElementById('welcome').classList.remove('hidden');
 }
 
-function initLock() {
-    const lock = document.getElementById('lock');
-    let unlocking = false;
-    const fire = function () { if (unlocking) return; unlocking = true; unlock(false); };
-
-    lock.addEventListener('click', fire);
-    let sy = null;
-    lock.addEventListener('touchstart', function (e) { sy = e.touches[0].clientY; }, { passive: true });
-    lock.addEventListener('touchmove', function (e) {
-        if (sy === null) return;
-        const dy = sy - e.touches[0].clientY;
-        if (dy > 8) lock.style.transform = 'translateY(' + (-dy) + 'px)';
-    }, { passive: true });
-    lock.addEventListener('touchend', function (e) {
-        if (sy === null) return;
-        const dy = sy - e.changedTouches[0].clientY;
-        lock.style.transform = '';
-        if (dy > 55) fire();
-        sy = null;
-    });
+function enterDesktop(skipAnim) {
+    const welcome = document.getElementById('welcome');
+    const boot = document.getElementById('boot');
+    const phone = document.getElementById('phone');
+    boot.classList.add('hidden');
+    phone.classList.remove('hidden');
+    render();
+    if (skipAnim) { welcome.classList.add('hidden'); return; }
+    welcome.classList.add('fading');
+    setTimeout(function () { welcome.classList.add('hidden'); }, 350);
 }
 
 function init() {
-    updateClocks();
-    setInterval(updateClocks, 1000);
+    updateClock();
+    setInterval(updateClock, 1000);
     initBattery();
-    initLock();
 
-    // app bar
-    document.getElementById('abBack').addEventListener('click', function () {
-        if (location.hash && location.hash !== '#start') {
-            if (history.length > 1) history.back();
-            else location.hash = 'start';
-        }
-    });
-    document.getElementById('abHome').addEventListener('click', function () { location.hash = 'start'; });
+    // dock orb → home
+    document.getElementById('abHome').addEventListener('click', function () { location.hash = 'home'; });
 
-    // tile / row navigation (delegated, survives re-renders)
+    // tile / row navigation + window back (delegated, survives re-renders)
     document.getElementById('view').addEventListener('click', function (e) {
-        const t = e.target.closest('[data-go]');
-        if (t) { location.hash = t.getAttribute('data-go'); }
+        const go = e.target.closest('[data-go]');
+        if (go) { location.hash = go.getAttribute('data-go'); return; }
+        const back = e.target.closest('[data-back]');
+        if (back) { navBack(); }
+    });
+
+    // welcome → desktop
+    let entered = false;
+    document.getElementById('userTile').addEventListener('click', function () {
+        if (entered) return; entered = true; enterDesktop(false);
     });
 
     window.addEventListener('hashchange', render);
 
-    // deep links / shared URLs skip the lock screen
-    const deep = location.hash && location.hash !== '#start' && location.hash !== '#';
-    if (deep) unlock(true);
+    // deep links / shared URLs skip boot + welcome
+    const deep = location.hash && location.hash !== '#home' && location.hash !== '#start' && location.hash !== '#';
+    if (deep) { entered = true; enterDesktop(true); return; }
+
+    // boot animation, then welcome
+    setTimeout(showWelcome, 2200);
 }
 
 if (document.readyState === 'loading') {
