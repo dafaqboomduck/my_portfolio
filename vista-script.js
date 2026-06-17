@@ -2,9 +2,8 @@
 // Core window management, navigation, boot sequence, and UI interaction.
 // Depends on: projectData.js, pageData.js, mineSweeper.js, pdfReader.js
 //
-// Rebuilt "10x" layer: one rAF-batched pointer pipeline for drag/resize/marquee,
-// real Aero Snap (edges + corners), working analog clock + calendar gadgets,
-// and a single clean desktop-icon interaction model (click = select, dblclick = open).
+// Pointer layer: one rAF-batched pipeline for drag/resize/marquee, Aero Snap, gadgets.
+// History layer: browser Back/Forward synced to window navigation via snapshot push/restore.
 
 // ========== STATE ==========
 let windows = {};
@@ -18,8 +17,12 @@ const WIN_MIN_H = 300;
 const WIN_DEFAULT_W = 750;
 const WIN_DEFAULT_H = 520;
 
-let navigationHistory = {}; // Full back-stack per window
+let navigationHistory = {}; // Per-window drill back-stack
 let scrollPositions = {};   // Saved scroll positions for back navigation
+
+// History sync guards
+let isRestoring = false;    // true while restoring from a popstate -> never push
+let suppressPush = false;   // true inside a compound action -> inner ops don't push; the action pushes once
 
 // Unified pointer interaction (drag / resize). Marquee tracked separately.
 let pointer = { mode: null, id: null, startX: 0, startY: 0, startLeft: 0, startTop: 0, startW: 0, startH: 0 };
@@ -51,6 +54,59 @@ function setGeom(el, l, t, w, h) {
     if (h != null) el.style.height = h + 'px';
 }
 
+// ========== BROWSER HISTORY SYNC ==========
+// A snapshot fully describes the navigable state of the desktop.
+function snapshot() {
+    const order = Object.keys(windows).sort((a, b) =>
+        (parseInt(windows[a].element.style.zIndex) || 0) - (parseInt(windows[b].element.style.zIndex) || 0));
+    const stacks = {};
+    const minimized = {};
+    order.forEach(id => {
+        stacks[id] = navigationHistory[id] ? [...navigationHistory[id]] : [];
+        minimized[id] = !!windows[id].minimized;
+    });
+    return { order, stacks, minimized, active: activeWindow };
+}
+
+function hashForActive() {
+    return activeWindow ? '#' + activeWindow : '#desktop';
+}
+
+// Push the current state as a new browser history entry (unless restoring / inside a compound action).
+function pushNav() {
+    if (isRestoring || suppressPush) return;
+    history.pushState(snapshot(), '', hashForActive());
+}
+
+// Rebuild the desktop to match a snapshot (called on popstate). Pure window ops only — no pushes.
+function restore(snap) {
+    isRestoring = true;
+    snap = snap || { order: [], stacks: {}, minimized: {}, active: null };
+    const target = new Set(snap.order);
+
+    // Close anything not in the target state.
+    Object.keys(windows).forEach(id => { if (!target.has(id)) closeWindow(id); });
+
+    // Open everything in the target state, in stacking order.
+    snap.order.forEach(id => {
+        if (!windows[id]) {
+            const stack = snap.stacks[id] || [];
+            if (id.startsWith('project-')) openProjectDetail(id.replace('project-', ''), stack);
+            else openWindow(id, null, stack);
+        }
+        if (windows[id]) {
+            const shouldMin = !!(snap.minimized && snap.minimized[id]);
+            windows[id].minimized = shouldMin;
+            windows[id].element.classList.toggle('minimized', shouldMin);
+        }
+    });
+
+    if (snap.active && windows[snap.active]) focusWindow(snap.active);
+    isRestoring = false;
+}
+
+window.addEventListener('popstate', (e) => restore(e.state));
+
 // ========== NAVIGATION ==========
 function buildHistoryStack(fromWindow) {
     if (!fromWindow) return [];
@@ -58,18 +114,21 @@ function buildHistoryStack(fromWindow) {
     return [...parentStack, fromWindow];
 }
 
+// Compound drill action: close parent, open target, carry the stack — counts as ONE history entry.
 function navigateTo(fromWindowId, targetWindowId, openFn) {
     if (windows[fromWindowId]) {
         const content = windows[fromWindowId].element.querySelector('.window-content');
         if (content) scrollPositions[fromWindowId] = content.scrollTop;
     }
     const stack = buildHistoryStack(fromWindowId);
+
+    suppressPush = true;
     closeWindow(fromWindowId);
-    if (openFn) {
-        openFn(stack);
-    } else {
-        openWindow(targetWindowId, null, stack);
-    }
+    if (openFn) openFn(stack);
+    else openWindow(targetWindowId, null, stack);
+    suppressPush = false;
+
+    pushNav();
 }
 
 function navigateFromProjects(projectKey) { navigateTo('projects', null, (stack) => openProjectDetail(projectKey, stack)); }
@@ -111,7 +170,6 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('welcomeScreen').classList.remove('hidden');
     }
 
-    // Single clock pipeline (tray + gadget), plus calendar gadget.
     tick();
     setInterval(tick, 1000);
     initCalendarGadget();
@@ -120,7 +178,9 @@ document.addEventListener('DOMContentLoaded', function () {
 function startDesktop() {
     document.getElementById('welcomeScreen').classList.add('hidden');
     document.getElementById('desktop').classList.remove('hidden');
-    setTimeout(() => openWindow('welcome'), 300); // Auto-open Welcome Center
+    // Baseline history entry = empty desktop, so Back from the first window returns here.
+    history.replaceState(snapshot(), '', '#desktop');
+    setTimeout(() => openWindow('welcome'), 300); // Auto-open Welcome Center (pushes #welcome)
 }
 
 // ========== WINDOW MANAGEMENT ==========
@@ -143,7 +203,7 @@ function createWindow(id, content, historyStack) {
             <div class="window-controls">
                 <button class="window-btn window-btn-min" onclick="minimizeWindow('${id}')" title="Minimize">&minus;</button>
                 <button class="window-btn window-btn-max" onclick="maximizeWindow('${id}')" title="Maximize">&#9744;</button>
-                <button class="window-btn window-btn-close" onclick="closeWindow('${id}')" title="Close">&#10005;</button>
+                <button class="window-btn window-btn-close" onclick="userClose('${id}')" title="Close">&#10005;</button>
             </div>
         </div>
         <div class="window-toolbar">
@@ -160,7 +220,6 @@ function createWindow(id, content, historyStack) {
         <div class="window-content">${content.content}</div>
     `;
 
-    // Resize grip (bottom-right)
     const handle = document.createElement('div');
     handle.className = 'resize-handle';
     handle.addEventListener('mousedown', (ev) => startResize(ev, id));
@@ -176,11 +235,13 @@ function createWindow(id, content, historyStack) {
 
 function openWindow(id, fromWindow, historyStack) {
     if (windows[id]) {
+        const wasActive = (activeWindow === id) && !windows[id].minimized;
         focusWindow(id);
         if (windows[id].minimized) {
             windows[id].minimized = false;
             document.getElementById('window-' + id).classList.remove('minimized');
         }
+        if (!wasActive) pushNav();
         return;
     }
 
@@ -216,6 +277,7 @@ function openWindow(id, fromWindow, historyStack) {
             const container = document.querySelector('#window-' + id + ' .pdf-reader');
             if (container) initPdfReader(container);
         }, 100);
+        pushNav();
         return;
     } else if (id === 'minesweeper') {
         content = { ...content, content: `<div id="minesweeper-container"></div>` };
@@ -225,12 +287,14 @@ function openWindow(id, fromWindow, historyStack) {
             const container = document.getElementById('minesweeper-container');
             if (container) initMinesweeper(container);
         }, 100);
+        pushNav();
         return;
     } else if (id === 'controlpanel') {
         content = { ...content, content: generateControlPanelContent() };
     }
 
     createWindow(id, content, stack);
+    pushNav();
 }
 
 function closeWindow(id) {
@@ -242,14 +306,27 @@ function closeWindow(id) {
     if (taskbarItem) taskbarItem.remove();
     const remaining = Object.keys(windows);
     if (remaining.length > 0) focusWindow(remaining[remaining.length - 1]);
+    else activeWindow = null;
 }
 
+// User-initiated close (the X button / Esc) — records a history entry.
+function userClose(id) {
+    closeWindow(id);
+    pushNav();
+}
+
+// In-app Back button: step up the drill stack. Counts as ONE history entry.
 function goBack(id) {
     if (!navigationHistory[id] || navigationHistory[id].length === 0) return;
     const stack = [...navigationHistory[id]];
     const previousWindow = stack.pop();
+
+    suppressPush = true;
     closeWindow(id);
-    openWindow(previousWindow, null, stack);
+    if (previousWindow.startsWith('project-')) openProjectDetail(previousWindow.replace('project-', ''), stack);
+    else openWindow(previousWindow, null, stack);
+    suppressPush = false;
+    pushNav();
 
     if (scrollPositions[previousWindow] != null && windows[previousWindow]) {
         const content = windows[previousWindow].element.querySelector('.window-content');
@@ -270,8 +347,6 @@ function minimizeWindow(id) {
     if (taskbarItem) taskbarItem.classList.remove('active');
 }
 
-// Toggle maximize, or force on with forceOn === true. Remembers the prior
-// rectangle so restore (and drag-to-unmaximize) returns to the right size.
 function maximizeWindow(id, forceOn) {
     const w = windows[id];
     if (!w) return;
@@ -325,15 +400,12 @@ function addToTaskbar(id, content) {
 }
 
 // ========== POINTER PIPELINE (drag / resize / marquee, all rAF-batched) ==========
-
-// Called from window titlebar: onmousedown="startDrag(event, 'id')"
 function startDrag(e, id) {
     if (e.target.closest('.window-controls')) return;
     const w = windows[id];
     if (!w) return;
     focusWindow(id);
 
-    // Dragging a maximized window restores it to a floating size under the cursor.
     if (w.maximized) {
         const pw = (w.prevRect && w.prevRect.width) || WIN_DEFAULT_W;
         const ph = (w.prevRect && w.prevRect.height) || WIN_DEFAULT_H;
@@ -408,7 +480,6 @@ function processPointer() {
         selectionBox.style.width = w + 'px';
         selectionBox.style.height = h + 'px';
         const sel = { left: l, top: t, right: l + w, bottom: t + h };
-        // Icon rects were cached on mousedown -> no per-frame layout reads.
         marquee.rects.forEach(({ el, r }) => {
             const hit = r.right > sel.left && r.left < sel.right && r.bottom > sel.top && r.top < sel.bottom;
             el.classList.toggle('selected', hit);
@@ -459,11 +530,7 @@ function applySnap(id) {
     if (!w || !currentSnapZone) return;
     const availH = window.innerHeight - TASKBAR_H;
 
-    if (currentSnapZone === 'max') {
-        maximizeWindow(id, true);
-        return;
-    }
-    // Half-snap: remember a restore size, then set explicit geometry.
+    if (currentSnapZone === 'max') { maximizeWindow(id, true); return; }
     if (!w.prevRect) w.prevRect = { left: w.element.offsetLeft, top: w.element.offsetTop, width: WIN_DEFAULT_W, height: WIN_DEFAULT_H };
     w.maximized = false;
     w.element.classList.remove('maximized');
@@ -471,7 +538,6 @@ function applySnap(id) {
     else setGeom(w.element, Math.ceil(window.innerWidth / 2), 0, Math.floor(window.innerWidth / 2), availH);
 }
 
-// Global pointer listeners (one each)
 document.addEventListener('mousemove', (e) => { if (pointer.mode || marquee.active) onPointerMove(e); });
 document.addEventListener('mouseup', onPointerUp);
 
@@ -514,7 +580,6 @@ function updateGadgetClock() {
     if (s) s.style.transform = `translateX(-50%) rotate(${secDeg}deg)`;
 }
 
-// Single tick drives tray clock AND the analog gadget (no fragile reassignment).
 function tick() {
     const now = new Date();
     const time = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
@@ -527,7 +592,6 @@ function tick() {
     }
     updateGadgetClock();
 }
-// Back-compat alias in case anything else calls updateClock()
 function updateClock() { tick(); }
 
 function initCalendarGadget() {
@@ -645,7 +709,6 @@ function showNotification(message) {
 }
 
 // ========== DESKTOP ICON INTERACTION ==========
-// Single click selects; double click opens (native ondblclick="openWindow('..')").
 function deselectIcons() {
     document.querySelectorAll('.desktop-icon.selected').forEach(i => i.classList.remove('selected'));
 }
@@ -665,10 +728,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const desktop = desktopEl();
     if (!desktop) return;
 
-    // Empty-desktop mousedown: deselect + begin marquee. Anything interactive bails out.
     desktop.addEventListener('mousedown', (e) => {
         if (e.button !== 0) return;
-        if (e.target.closest('.desktop-icon')) return; // let icon handler manage selection
+        if (e.target.closest('.desktop-icon')) return;
         if (e.target.closest('.vista-window, .taskbar, .start-menu, .vista-sidebar, .desktop-context-menu')) return;
 
         deselectIcons();
@@ -683,7 +745,6 @@ document.addEventListener('DOMContentLoaded', () => {
         selectionBox.style.display = 'block';
     });
 
-    // Right-click desktop -> context menu
     desktop.addEventListener('contextmenu', (e) => {
         if (e.target.closest('.vista-window, .taskbar')) return;
         e.preventDefault();
@@ -707,7 +768,7 @@ document.addEventListener('click', (e) => {
 // ========== KEYBOARD SHORTCUTS ==========
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Meta' || (e.ctrlKey && e.key === 'Escape')) toggleStartMenu();
-    if (e.key === 'Escape' && activeWindow) closeWindow(activeWindow);
+    if (e.key === 'Escape' && activeWindow) userClose(activeWindow);
     if (e.key === 'Enter') {
         const sel = document.querySelector('.desktop-icon.selected');
         if (sel) {
