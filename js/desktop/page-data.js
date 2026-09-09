@@ -278,13 +278,13 @@ const windowContent = {
                 <h4>Pro Tips</h4>
                 <p style="margin:0 0 6px 0">• Check out <strong>Start → Default Programs</strong> for my full technology stack</p>
                 <p style="margin:0 0 6px 0">• The <strong>Control Panel</strong> links to every section in one place</p>
-                <p style="margin:0">• Press <kbd style="background:#e0e0e0;border:1px solid #aaa;border-radius:3px;padding:1px 5px;font-size:11px">Esc</kbd> to quickly close the active window</p>
+                <p style="margin:0">• Press <img src="images/show-desktop.png" alt="Close Window" width="16" height="16"> to quickly close the active window</p>
             </div>
         `
     },
     about: {
         title: 'About Me',
-        icon: 'images/vista-explorer.png',
+        icon: 'images/about.png',
         path: 'C:\\Users\\Razvan\\Documents\\About Me',
         content: `
             <h2>Hello, I'm Razvan Nica</h2>
@@ -319,7 +319,7 @@ const windowContent = {
     },
     skills: {
         title: 'My Skills',
-        icon: 'images/vista-explorer.png',
+        icon: 'images/skills.png',
         path: 'C:\\Users\\Razvan\\Documents\\Skills',
         content: `
             <h2>Core Competencies</h2>
@@ -361,19 +361,19 @@ const windowContent = {
     },
     projects: {
         title: 'Projects',
-        icon: 'images/vista-explorer.png',
+        icon: 'images/projects.png',
         path: 'C:\\Users\\Razvan\\Documents\\Projects',
         content: '' // Generated dynamically in openWindow
     },
     documents: {
         title: 'Documents',
-        icon: 'images/vista-explorer.png',
+        icon: 'images/documents.png',
         path: 'C:\\Users\\Razvan\\Documents',
         content: '' // Generated dynamically in openWindow
     },
     contact: {
         title: 'Contact Me - Outlook',
-        icon: 'images/outlook-logo-2007.png',
+        icon: 'images/contact.png',
         path: 'Outlook Express - Contact Information',
         content: `
             <h2>Get In Touch</h2>
@@ -404,13 +404,13 @@ const windowContent = {
     },
     resume: {
         title: 'Resume.pdf - Abobe Reader',
-        icon: 'images/acrobat-logo-2007.png',
+        icon: 'images/resume.png',
         path: 'C:\\Users\\Razvan\\Documents\\CV2.pdf',
         content: '' // Generated dynamically by PDF reader
     },
     recycle: {
         title: 'Recycle Bin',
-        icon: 'images/vista-recycle-bin.png',
+        icon: 'images/recycle-empty.png',
         path: 'Recycle Bin',
         content: `
             <h2>Recycle Bin</h2>
@@ -429,25 +429,25 @@ const windowContent = {
     },
     games: {
         title: 'Games',
-        icon: 'images/vista-explorer.png',
+        icon: 'images/games.png',
         path: 'C:\\Program Files\\Microsoft Games',
         content: '' // Generated dynamically
     },
     minesweeper: {
         title: 'Minesweeper',
-        icon: 'images/vista-explorer.png',
+        icon: 'images/games.png',
         path: 'C:\\Program Files\\Microsoft Games\\Minesweeper',
         content: '' // Generated dynamically
     },
     programs: {
         title: 'Default Programs',
-        icon: 'images/vista-explorer.png',
+        icon: 'images/control-panel.png',
         path: 'Control Panel\\Default Programs',
         content: '' // Generated dynamically
     },
     computer: {
         title: 'Computer',
-        icon: 'images/vista-explorer.png',
+        icon: 'images/explorer.png',
         path: 'Computer',
         content: `
             <h2>Computer</h2>
@@ -502,13 +502,13 @@ const windowContent = {
     },
     controlpanel: {
         title: 'Control Panel',
-        icon: 'images/vista-control-panel.png',
+        icon: 'images/control-panel.png',
         path: 'Control Panel',
         content: '' // Generated dynamically
     },
     help: {
         title: 'Help and Support',
-        icon: 'images/vista-explorer.png',
+        icon: 'images/explorer.png',
         path: 'Help and Support Center',
         content: `
             <h2>Help and Support</h2>
