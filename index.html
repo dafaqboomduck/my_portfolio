@@ -65,27 +65,27 @@
         <!-- Desktop Icons -->
         <div class="desktop-icons">
             <div class="desktop-icon" ondblclick="openWindow('about')">
-                <img src="images/vista-explorer.png" alt="About Me">
+                <img src="images/about.png" alt="About Me">
                 <span>About Me</span>
             </div>
             <div class="desktop-icon" ondblclick="openWindow('skills')">
-                <img src="images/vista-explorer.png" alt="Skills">
+                <img src="images/skills.png" alt="Skills">
                 <span>My Skills</span>
             </div>
             <div class="desktop-icon" ondblclick="openWindow('projects')">
-                <img src="images/vista-explorer.png" alt="Projects">
+                <img src="images/projects.png" alt="Projects">
                 <span>Projects</span>
             </div>
             <div class="desktop-icon" ondblclick="openWindow('contact')">
-                <img src="images/outlook-logo-2007.png" alt="Contact">
+                <img src="images/contact.png" alt="Contact">
                 <span>Contact Me</span>
             </div>
             <div class="desktop-icon" ondblclick="openWindow('resume')">
-                <img src="images/acrobat-logo-2007.png" alt="Resume">
+                <img src="images/resume.png" alt="Resume">
                 <span>Resume.pdf</span>
             </div>
             <div class="desktop-icon" ondblclick="openWindow('recycle')">
-                <img src="images/vista-recycle-bin.png" alt="Recycle Bin">
+                <img src="images/recycle-empty.png" alt="Recycle Bin">
                 <span>Recycle Bin</span>
             </div>
         </div>
@@ -116,19 +116,19 @@
         <!-- Taskbar -->
         <div class="taskbar">
             <button class="start-button" onclick="toggleStartMenu()">
-                <img src="images/win-vista-logo.png" alt="Start">
+                <img src="images/start.png" alt="Start">
             </button>
             <div class="quick-launch">
                 <div class="ql-icon" onclick="toggleShowDesktop()" title="Show Desktop">
-                    <i class="bi bi-display"></i>
+                    <img src="images/show-desktop.png" alt="Show Desktop">
                 </div>
                 <div class="ql-separator"></div>
             </div>
             <div class="taskbar-windows" id="taskbarWindows"></div>
             <div class="system-tray">
                 <div class="tray-icons">
-                    <i class="bi bi-volume-up-fill"></i>
-                    <i class="bi bi-wifi"></i>
+                    <img src="images/tray-volume.png" alt="Volume" title="Volume">
+                    <img src="images/tray-network.png" alt="Network" title="Network">
                 </div>
                 <div class="tray-clock" id="trayClock"></div>
             </div>
@@ -146,23 +146,23 @@
                 <div class="start-separator"></div>
                 <div class="start-programs">
                     <div class="start-item" onclick="openWindow('about'); toggleStartMenu();">
-                        <img src="images/vista-explorer.png" alt="">
+                        <img src="images/about.png" alt="">
                         <span>About Me</span>
                     </div>
                     <div class="start-item" onclick="openWindow('skills'); toggleStartMenu();">
-                        <img src="images/vista-explorer.png" alt="">
+                        <img src="images/skills.png" alt="">
                         <span>My Skills</span>
                     </div>
                     <div class="start-item" onclick="openWindow('projects'); toggleStartMenu();">
-                        <img src="images/vista-explorer.png" alt="">
+                        <img src="images/projects.png" alt="">
                         <span>Projects</span>
                     </div>
                     <div class="start-item" onclick="openWindow('contact'); toggleStartMenu();">
-                        <img src="images/outlook-logo-2007.png" alt="">
+                        <img src="images/contact.png" alt="">
                         <span>Contact Me</span>
                     </div>
                     <div class="start-item" onclick="openWindow('resume'); toggleStartMenu();">
-                        <img src="images/acrobat-logo-2007.png" alt="">
+                        <img src="images/resume.png" alt="">
                         <span>My Resume</span>
                     </div>
                 </div>
@@ -224,6 +224,8 @@
     <!-- data: single-source globals -->
     <script src="data/project-data.js"></script>
     <script src="data/programs-data.js"></script>
+    <script src="data/profile-data.js"></script>
+    <script src="data/skills-data.js"></script>
     <!-- desktop app scripts -->
     <script src="js/desktop/page-data.js"></script>
     <script src="js/desktop/minesweeper.js"></script>

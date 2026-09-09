@@ -43,7 +43,7 @@ function openProjectDetail(projectKey, historyStack) {
 
     const content = {
         title: project.title,
-        icon: 'images/vista-explorer.png',
+        icon: 'images/projects.png',
         path: `C:\\Users\\Razvan\\Documents\\Projects\\${project.title.replace(/[^a-zA-Z0-9]/g, '_')}`,
         content: generateProjectDetailContent(project)
     };
