@@ -216,7 +216,7 @@ class Minesweeper {
 
                 html += `<div class="${cellClass}" data-row="${i}" data-col="${j}"
                     onclick="minesweeperGame.reveal(${i},${j})"
-                    oncontextmenu="event.preventDefault();minesweeperGame.toggleFlag(${i},${j})">${content}</div>`;
+                    oncontextmenu="event.preventDefault();event.stopPropagation();minesweeperGame.toggleFlag(${i},${j})">${content}</div>`;
             }
         }
         return html;
