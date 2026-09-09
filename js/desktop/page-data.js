@@ -45,7 +45,7 @@ function generateDocumentsView() {
 
 function generateGamesContent() {
     return `
-        <h2>🎮 Games</h2>
+        <h2>Games</h2>
         <p>Classic Windows games for your entertainment</p>
 
         <div class="games-grid">
@@ -71,7 +71,7 @@ function generateGamesContent() {
         </div>
 
         <div class="vista-info-box" style="margin-top:20px">
-            <h4>💡 Tip</h4>
+            <h4>Tip</h4>
             <p style="margin:0">Double-click Minesweeper to start playing! Right-click to place flags.</p>
         </div>
     `;
@@ -79,7 +79,7 @@ function generateGamesContent() {
 
 function generateControlPanelContent() {
     return `
-        <h2>⚙️ Control Panel</h2>
+        <h2>Control Panel</h2>
         <p>Adjust portfolio settings and preferences</p>
 
         <div class="cp-grid">
@@ -146,7 +146,7 @@ function generateControlPanelContent() {
 function generateProgramsContent() {
     const categories = [...new Set(installedPrograms.map(p => p.category))];
     let html = `
-        <h2>⚙️ Installed Programs</h2>
+        <h2>Installed Programs</h2>
         <p>Technologies and tools in my development environment</p>
         <div class="programs-list">
     `;
@@ -174,28 +174,28 @@ function generateProjectDetailContent(project) {
         <span class="project-vista-tag" style="font-size:13px;padding:5px 12px">${project.tag}</span>
 
         <div class="vista-info-box" style="margin-top:20px">
-            <h4>📋 Overview</h4>
+            <h4>Overview</h4>
             <p style="margin:0">${project.fullDescription}</p>
         </div>
 
-        <h3>🛠️ Technologies Used</h3>
+        <h3>Technologies Used</h3>
         <div class="project-vista-tech" style="margin:15px 0">
             ${project.technologies.map(t => `<span class="tech-vista-badge">${t}</span>`).join('')}
         </div>
 
-        <h3>✨ Key Features</h3>
+        <h3>Key Features</h3>
         <ul>
             ${project.features.map(f => `<li>${f}</li>`).join('')}
         </ul>
 
-        <h3>🏆 Achievements</h3>
+        <h3>Achievements</h3>
         <ul>
             ${project.achievements.map(a => `<li>${a}</li>`).join('')}
         </ul>
 
         ${project.github !== '#' || project.demo !== '#' ? `
         <div class="vista-info-box" style="margin-top:20px">
-            <h4>🔗 Links</h4>
+            <h4>Links</h4>
             <div style="display:flex;gap:10px;margin-top:10px">
                 ${project.github !== '#' ? `<a href="${project.github}" target="_blank" class="vista-btn"><i class="bi bi-github"></i> GitHub</a>` : ''}
                 ${project.demo !== '#' ? `<a href="${project.demo}" target="_blank" class="vista-btn"><i class="bi bi-play-circle"></i> Demo</a>` : ''}
@@ -214,19 +214,19 @@ const windowContent = {
         path: 'C:\\Windows\\Welcome Center',
         content: `
             <div class="welcome-window-header">
-                <h2>👋 Welcome to My Portfolio</h2>
+                <h2>Welcome to My Portfolio</h2>
                 <p>Thanks for stopping by! This portfolio is built as an interactive Windows Vista experience. Here's a quick guide to get you started.</p>
             </div>
 
             <div class="vista-info-box" style="background:linear-gradient(135deg, #fff8e0 0%, #fff0c0 100%); border-color:#e0c080">
-                <h4>🧭 How to Navigate</h4>
+                <h4>How to Navigate</h4>
                 <p style="margin:0">
                     <strong>Double-click</strong> desktop icons or use the <strong>Start Menu</strong> (green button, bottom-left) to open windows.
                     Drag windows by their title bar, and use the <strong>Back</strong> button to retrace your steps.
                 </p>
             </div>
 
-            <h3>🚀 Recommended Tour</h3>
+            <h3>Recommended Tour</h3>
             <p>Short on time? Click any card below to jump straight in:</p>
 
             <div class="welcome-links-grid">
@@ -275,7 +275,7 @@ const windowContent = {
             </div>
 
             <div class="vista-info-box" style="margin-top: 20px">
-                <h4>💡 Pro Tips</h4>
+                <h4>Pro Tips</h4>
                 <p style="margin:0 0 6px 0">• Check out <strong>Start → Default Programs</strong> for my full technology stack</p>
                 <p style="margin:0 0 6px 0">• The <strong>Control Panel</strong> links to every section in one place</p>
                 <p style="margin:0">• Press <kbd style="background:#e0e0e0;border:1px solid #aaa;border-radius:3px;padding:1px 5px;font-size:11px">Esc</kbd> to quickly close the active window</p>
@@ -287,12 +287,12 @@ const windowContent = {
         icon: 'images/vista-explorer.png',
         path: 'C:\\Users\\Razvan\\Documents\\About Me',
         content: `
-            <h2>👋 Hello, I'm Razvan Nica</h2>
+            <h2>Hello, I'm Razvan Nica</h2>
             <p><strong>Data Scientist | AI Engineer | Backend Developer</strong></p>
             <p>Building intelligent systems from data to deployment. Specializing in deep learning, computer vision, natural language processing, and production-ready ML applications.</p>
 
             <div class="vista-info-box">
-                <h4>📍 Current Status</h4>
+                <h4>Current Status</h4>
                 <p style="margin:0">Available for opportunities • Based in Netherlands</p>
             </div>
 
@@ -300,7 +300,7 @@ const windowContent = {
             <p>I'm a Data & AI student at Breda University specializing in production-ready machine learning systems. I build end-to-end solutions: from model training to deployment, with expertise in deep learning, computer vision, and natural language processing.</p>
             <p>My work spans healthcare diagnostics, financial analytics, and predictive modeling. I focus on creating scalable, explainable AI systems that integrate seamlessly into real-world workflows.</p>
 
-            <h3>🎓 Education</h3>
+            <h3>Education</h3>
             <div class="vista-info-box">
                 <h4>Breda University of Applied Sciences</h4>
                 <p style="margin:0">BSc Data Science & Artificial Intelligence</p>
@@ -310,7 +310,7 @@ const windowContent = {
                 <p style="margin:0">Mathematics and Computer Science, Bilingual English</p>
             </div>
 
-            <h3>🏆 Recent Achievements</h3>
+            <h3>Recent Achievements</h3>
             <ul>
                 <li><strong>Mar-Jun 2025:</strong> NASDAQ-100 Stock Price Prediction Platform</li>
                 <li><strong>Jan-Mar 2025:</strong> Top 3 Project - The Innovation Square (AI X-Ray System)</li>
@@ -322,7 +322,7 @@ const windowContent = {
         icon: 'images/vista-explorer.png',
         path: 'C:\\Users\\Razvan\\Documents\\Skills',
         content: `
-            <h2>💻 Core Competencies</h2>
+            <h2>Core Competencies</h2>
             <p>Technical expertise meets creative problem-solving</p>
 
             <div class="skills-vista-grid">
@@ -354,7 +354,7 @@ const windowContent = {
             </div>
 
             <div class="vista-info-box" style="margin-top:20px">
-                <h4>💡 Tip</h4>
+                <h4>Tip</h4>
                 <p style="margin:0">View my complete technology stack in <strong>Start Menu → Default Programs</strong></p>
             </div>
         `
@@ -376,23 +376,23 @@ const windowContent = {
         icon: 'images/outlook-logo-2007.png',
         path: 'Outlook Express - Contact Information',
         content: `
-            <h2>📧 Get In Touch</h2>
+            <h2>Get In Touch</h2>
             <p>Let's build something together! I'm always interested in new projects and opportunities.</p>
 
             <div class="vista-info-box contact-link">
-                <h4>📬 Email</h4>
+                <h4>Email</h4>
                 <p style="margin:0"><a href="mailto:razvan.al.nica@gmail.com" style="color:#1e5799">razvan.al.nica@gmail.com</a></p>
             </div>
 
             <!-- LinkedIn: add URL and uncomment when ready
             <div class="vista-info-box contact-link">
-                <h4>🔗 LinkedIn</h4>
+                <h4>LinkedIn</h4>
                 <p style="margin:0"><a href="https://linkedin.com/in/YOUR_USERNAME" target="_blank" style="color:#1e5799">linkedin.com/in/YOUR_USERNAME</a></p>
             </div>
             -->
 
             <div class="vista-info-box contact-link">
-                <h4>💻 GitHub</h4>
+                <h4>GitHub</h4>
                 <p style="margin:0"><a href="https://github.com/dafaqboomduck" target="_blank" style="color:#1e5799">github.com/dafaqboomduck</a></p>
             </div>
 
@@ -413,7 +413,7 @@ const windowContent = {
         icon: 'images/vista-recycle-bin.png',
         path: 'Recycle Bin',
         content: `
-            <h2>🗑️ Recycle Bin</h2>
+            <h2>Recycle Bin</h2>
             <p style="color:#666">Contains files and folders that you have deleted.</p>
 
             <div style="text-align:center; padding:60px 20px; color:#888">
@@ -422,7 +422,7 @@ const windowContent = {
             </div>
 
             <div class="vista-info-box">
-                <h4>💡 Did you know?</h4>
+                <h4>Did you know?</h4>
                 <p style="margin:0">This portfolio was crafted with passion using HTML, CSS, and JavaScript to recreate the nostalgic Windows Vista experience!</p>
             </div>
         `
@@ -450,7 +450,7 @@ const windowContent = {
         icon: 'images/vista-explorer.png',
         path: 'Computer',
         content: `
-            <h2>💻 Computer</h2>
+            <h2>Computer</h2>
             <p style="color:#666">View drives and system information</p>
 
             <div class="drives-section">
@@ -489,7 +489,7 @@ const windowContent = {
             </div>
 
             <div class="vista-info-box" style="margin-top:20px">
-                <h4>⚙️ System Information</h4>
+                <h4>System Information</h4>
                 <table class="system-info-table">
                     <tr><td>Processor:</td><td>BigBrain Tech™ Core 11 @ 9.0 GHz</td></tr>
                     <tr><td>RAM:</td><td>N/A</td></tr>
@@ -511,15 +511,15 @@ const windowContent = {
         icon: 'images/vista-explorer.png',
         path: 'Help and Support Center',
         content: `
-            <h2>❓ Help and Support</h2>
+            <h2>Help and Support</h2>
             <p>Welcome to Razvan's Portfolio Help Center</p>
 
             <div class="vista-info-box" style="background:linear-gradient(135deg, #fff8e0 0%, #fff0c0 100%); border-color:#e0c080">
-                <h4>👋 Welcome!</h4>
+                <h4>Welcome!</h4>
                 <p style="margin:0">This portfolio is designed as a Windows Vista experience. Navigate using the Start Menu, desktop icons, or by double-clicking folders.</p>
             </div>
 
-            <h3>🧭 Navigation Guide</h3>
+            <h3>Navigation Guide</h3>
             <div class="help-section">
                 <div class="help-item">
                     <i class="bi bi-mouse-fill"></i>
@@ -547,7 +547,7 @@ const windowContent = {
                 </div>
             </div>
 
-            <h3>⌨️ Keyboard Shortcuts</h3>
+            <h3>Keyboard Shortcuts</h3>
             <div class="help-section">
                 <div class="help-item">
                     <kbd>Ctrl</kbd> + <kbd>Esc</kbd>
@@ -559,7 +559,7 @@ const windowContent = {
                 </div>
             </div>
 
-            <h3>🎮 Minesweeper Tips</h3>
+            <h3>Minesweeper Tips</h3>
             <div class="help-section">
                 <div class="help-item">
                     <i class="bi bi-mouse-fill"></i>
@@ -575,13 +575,13 @@ const windowContent = {
                 </div>
             </div>
 
-            <h3>📞 Need More Help?</h3>
+            <h3>Need More Help?</h3>
             <div class="vista-info-box">
                 <p style="margin:0">Feel free to reach out! Visit the <a href="#" onclick="navigateFromHelp('contact'); return false;" style="color:#1e5799">Contact Me</a> section to get in touch.</p>
             </div>
 
             <div class="help-footer">
-                <p>Portfolio crafted with ❤️ by <strong>Razvan Nica</strong></p>
+                <p>Portfolio crafted with care by <strong>Razvan Nica</strong></p>
                 <p style="font-size:11px;color:#888">Built with HTML, CSS, JavaScript • Inspired by Windows Vista</p>
             </div>
         `
