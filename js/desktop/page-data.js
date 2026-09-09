@@ -205,6 +205,91 @@ function generateProjectDetailContent(project) {
     `;
 }
 
+// ========== PROFILE-DRIVEN GENERATORS ==========
+// profile is loaded from data/profile-data.js, skills from data/skills-data.js.
+
+function generateAboutContent() {
+    const p = profile;
+    return `
+        <h2>Hello, I'm ${p.name}</h2>
+        <p><strong>${p.role}</strong></p>
+        <p>${p.lede}</p>
+
+        <div class="vista-info-box">
+            <h4>Current Status</h4>
+            <p style="margin:0">${p.status}</p>
+        </div>
+
+        <h3>About My Work</h3>
+        ${p.paragraphs.map(t => `<p>${t}</p>`).join('')}
+
+        <h3>Education</h3>
+        ${p.education.map(e => `
+            <div class="vista-info-box">
+                <h4>${e.school}</h4>
+                <p style="margin:0">${e.detail}</p>
+            </div>
+        `).join('')}
+
+        <h3>Recent Achievements</h3>
+        <ul>
+            ${p.achievements.map(a => `<li>${a}</li>`).join('')}
+        </ul>
+    `;
+}
+
+function generateSkillsContent() {
+    return `
+        <h2>Core Competencies</h2>
+        <p>Technical expertise meets creative problem-solving</p>
+
+        <div class="skills-vista-grid">
+            ${skills.map(s => `
+                <div class="skill-vista-item">
+                    <i class="bi ${s.icon}"></i>
+                    <h5>${s.name}</h5>
+                    <p>${s.desc}</p>
+                </div>
+            `).join('')}
+        </div>
+
+        <div class="vista-info-box" style="margin-top:20px">
+            <h4>Tip</h4>
+            <p style="margin:0">View my complete technology stack in <strong>Start Menu → Default Programs</strong></p>
+        </div>
+    `;
+}
+
+function generateContactContent() {
+    const c = profile.contact;
+    return `
+        <h2>Get In Touch</h2>
+        <p>Let's build something together! I'm always interested in new projects and opportunities.</p>
+
+        <div class="vista-info-box contact-link">
+            <h4>Email</h4>
+            <p style="margin:0"><a href="mailto:${c.email}" style="color:#1e5799">${c.email}</a></p>
+        </div>
+
+        ${c.linkedin ? `
+        <div class="vista-info-box contact-link">
+            <h4>LinkedIn</h4>
+            <p style="margin:0"><a href="${c.linkedin}" target="_blank" style="color:#1e5799">${c.linkedinLabel || c.linkedin}</a></p>
+        </div>
+        ` : ''}
+
+        <div class="vista-info-box contact-link">
+            <h4>GitHub</h4>
+            <p style="margin:0"><a href="${c.github}" target="_blank" style="color:#1e5799">${c.githubLabel}</a></p>
+        </div>
+
+        <div class="vista-info-box" style="margin-top:30px;text-align:center">
+            <i class="bi bi-envelope-paper" style="font-size:48px;color:#1e5799;display:block;margin-bottom:10px"></i>
+            <p style="margin:0;color:#666">Click any link above to get in touch!</p>
+        </div>
+    `;
+}
+
 // ========== STATIC PAGE CONTENT ==========
 
 const windowContent = {
@@ -282,82 +367,17 @@ const windowContent = {
             </div>
         `
     },
-    about: {
+        about: {
         title: 'About Me',
         icon: 'images/about.png',
         path: 'C:\\Users\\Razvan\\Documents\\About Me',
-        content: `
-            <h2>Hello, I'm Razvan Nica</h2>
-            <p><strong>Data Scientist | AI Engineer | Backend Developer</strong></p>
-            <p>Building intelligent systems from data to deployment. Specializing in deep learning, computer vision, natural language processing, and production-ready ML applications.</p>
-
-            <div class="vista-info-box">
-                <h4>Current Status</h4>
-                <p style="margin:0">Available for opportunities • Based in Netherlands</p>
-            </div>
-
-            <h3>About My Work</h3>
-            <p>I'm a Data & AI student at Breda University specializing in production-ready machine learning systems. I build end-to-end solutions: from model training to deployment, with expertise in deep learning, computer vision, and natural language processing.</p>
-            <p>My work spans healthcare diagnostics, financial analytics, and predictive modeling. I focus on creating scalable, explainable AI systems that integrate seamlessly into real-world workflows.</p>
-
-            <h3>Education</h3>
-            <div class="vista-info-box">
-                <h4>Breda University of Applied Sciences</h4>
-                <p style="margin:0">BSc Data Science & Artificial Intelligence</p>
-            </div>
-            <div class="vista-info-box">
-                <h4>National College "Cantemir Voda"</h4>
-                <p style="margin:0">Mathematics and Computer Science, Bilingual English</p>
-            </div>
-
-            <h3>Recent Achievements</h3>
-            <ul>
-                <li><strong>Mar-Jun 2025:</strong> NASDAQ-100 Stock Price Prediction Platform</li>
-                <li><strong>Jan-Mar 2025:</strong> Top 3 Project - The Innovation Square (AI X-Ray System)</li>
-            </ul>
-        `
+        content: '' // Generated dynamically from `profile`
     },
-    skills: {
+        skills: {
         title: 'My Skills',
         icon: 'images/skills.png',
         path: 'C:\\Users\\Razvan\\Documents\\Skills',
-        content: `
-            <h2>Core Competencies</h2>
-            <p>Technical expertise meets creative problem-solving</p>
-
-            <div class="skills-vista-grid">
-                <div class="skill-vista-item">
-                    <i class="bi bi-graph-up"></i>
-                    <h5>ML Development</h5>
-                    <p>End-to-end ML pipelines, Scikit-learn, ensemble methods</p>
-                </div>
-                <div class="skill-vista-item">
-                    <i class="bi bi-server"></i>
-                    <h5>MLOps & Deployment</h5>
-                    <p>CI/CD, containerization, Flask APIs</p>
-                </div>
-                <div class="skill-vista-item">
-                    <i class="bi bi-code-slash"></i>
-                    <h5>Backend Development</h5>
-                    <p>Flask, PostgreSQL, SQLAlchemy, JWT</p>
-                </div>
-                <div class="skill-vista-item">
-                    <i class="bi bi-eye"></i>
-                    <h5>Computer Vision</h5>
-                    <p>CNNs, TensorFlow/Keras, Grad-CAM, LIME</p>
-                </div>
-                <div class="skill-vista-item">
-                    <i class="bi bi-chat-dots"></i>
-                    <h5>NLP & Transformers</h5>
-                    <p>BERT, GPT, Hugging Face, fine-tuning</p>
-                </div>
-            </div>
-
-            <div class="vista-info-box" style="margin-top:20px">
-                <h4>Tip</h4>
-                <p style="margin:0">View my complete technology stack in <strong>Start Menu → Default Programs</strong></p>
-            </div>
-        `
+        content: '' // Generated dynamically from `skills`
     },
     projects: {
         title: 'Projects',
@@ -371,36 +391,11 @@ const windowContent = {
         path: 'C:\\Users\\Razvan\\Documents',
         content: '' // Generated dynamically in openWindow
     },
-    contact: {
+        contact: {
         title: 'Contact Me - Outlook',
         icon: 'images/contact.png',
         path: 'Outlook Express - Contact Information',
-        content: `
-            <h2>Get In Touch</h2>
-            <p>Let's build something together! I'm always interested in new projects and opportunities.</p>
-
-            <div class="vista-info-box contact-link">
-                <h4>Email</h4>
-                <p style="margin:0"><a href="mailto:razvan.al.nica@gmail.com" style="color:#1e5799">razvan.al.nica@gmail.com</a></p>
-            </div>
-
-            <!-- LinkedIn: add URL and uncomment when ready
-            <div class="vista-info-box contact-link">
-                <h4>LinkedIn</h4>
-                <p style="margin:0"><a href="https://linkedin.com/in/YOUR_USERNAME" target="_blank" style="color:#1e5799">linkedin.com/in/YOUR_USERNAME</a></p>
-            </div>
-            -->
-
-            <div class="vista-info-box contact-link">
-                <h4>GitHub</h4>
-                <p style="margin:0"><a href="https://github.com/dafaqboomduck" target="_blank" style="color:#1e5799">github.com/dafaqboomduck</a></p>
-            </div>
-
-            <div class="vista-info-box" style="margin-top:30px;text-align:center">
-                <i class="bi bi-envelope-paper" style="font-size:48px;color:#1e5799;display:block;margin-bottom:10px"></i>
-                <p style="margin:0;color:#666">Click any link above to get in touch!</p>
-            </div>
-        `
+        content: '' // Generated dynamically from `profile.contact`
     },
     resume: {
         title: 'Resume.pdf - Abobe Reader',

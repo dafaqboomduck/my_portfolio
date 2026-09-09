@@ -85,7 +85,7 @@ function openWindow(id, fromWindow, historyStack) {
     } else if (id === 'games') {
         content = { ...content, content: generateGamesContent() };
     } else if (id === 'resume') {
-        content = { ...content, content: generatePdfReaderContent('documents/CV2.pdf') };
+        content = { ...content, content: generatePdfReaderContent(profile.resumeUrl) };
         createWindow(id, content, stack);
         // Styles are now linked statically in index.html; skip injectPdfReaderStyles().
         setTimeout(() => {
@@ -106,6 +106,12 @@ function openWindow(id, fromWindow, historyStack) {
         return;
     } else if (id === 'controlpanel') {
         content = { ...content, content: generateControlPanelContent() };
+    } else if (id === 'about') {
+        content = { ...content, content: generateAboutContent() };
+    } else if (id === 'skills') {
+        content = { ...content, content: generateSkillsContent() };
+    } else if (id === 'contact') {
+        content = { ...content, content: generateContactContent() };
     }
 
     createWindow(id, content, stack);
