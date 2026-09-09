@@ -1,0 +1,18 @@
+/* ========== VISTA PORTFOLIO STYLES ========== */
+/* NOTE: Google Fonts @import removed — it was render-blocking (fonts.gstatic.com)
+   and stalled first paint. 'Segoe UI' is the authentic Vista font anyway. */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    background: #000;
+}
+
+.hidden { display: none !important; }

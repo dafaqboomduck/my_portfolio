@@ -1,0 +1,111 @@
+/* ========== DARK THEME (first block) ========== */
+body.dark-theme .desktop { filter: brightness(0.8); }
+body.dark-theme .vista-window { background: rgba(20, 30, 50, 0.96); }
+body.dark-theme .window-content { background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%); color: #e0e0e0; }
+body.dark-theme .window-content h2, body.dark-theme .window-content h3 { color: #7eb4ea; }
+body.dark-theme .window-content p, body.dark-theme .window-content li { color: #c0c0c0; }
+body.dark-theme .vista-info-box { background: linear-gradient(135deg, #1a2a4a 0%, #0d1a30 100%); border-color: #3a5a8a; }
+body.dark-theme .vista-info-box h4 { color: #7eb4ea; }
+body.dark-theme .window-toolbar { background: linear-gradient(180deg, rgba(40, 50, 70, 0.97) 0%, rgba(30, 40, 60, 0.97) 100%); }
+body.dark-theme .address-bar { background: #1a1a2e; border-color: #3a5a8a; }
+body.dark-theme .address-bar span { color: #c0c0c0; }
+body.dark-theme .toolbar-btn { color: #c0c0c0; }
+body.dark-theme .project-vista-card, body.dark-theme .skill-vista-item, body.dark-theme .drive-item, body.dark-theme .cp-item, body.dark-theme .help-item, body.dark-theme .game-item { background: linear-gradient(180deg, #1a2a4a 0%, #0d1a30 100%); border-color: #3a5a8a; color: #c0c0c0; }
+body.dark-theme .project-vista-header { background: linear-gradient(180deg, #2a4a7a 0%, #1a3a5a 100%); }
+body.dark-theme .tech-vista-badge { background: #2a3a5a; border-color: #4a6a9a; color: #a0c0e0; }
+body.dark-theme .document-item span, body.dark-theme .cp-title { color: #7eb4ea; }
+body.dark-theme .program-item { border-color: #3a5a8a; }
+body.dark-theme .program-category { background: linear-gradient(180deg, #2a4a7a 0%, #1a3a5a 100%); }
+body.dark-theme .drive-bar { background: #2a3a5a; }
+
+body.dark-theme .welcome-link-card { background: linear-gradient(180deg, #1a2a4a 0%, #0d1a30 100%); border-color: #3a5a8a; }
+body.dark-theme .welcome-link-card:hover { background: linear-gradient(180deg, #253a5a 0%, #1a2a45 100%); border-color: #7eb4ea; }
+body.dark-theme .welcome-link-card strong { color: #7eb4ea; }
+body.dark-theme .welcome-link-card span { color: #a0a0a0; }
+body.dark-theme .welcome-window-header { border-bottom-color: #3a5a8a; }
+body.dark-theme .welcome-window-header p { color: #a0a0a0; }
+
+/* ===================================================================== */
+/* ==========  DARK MODE — matched to Dark Reader's palette  =========== */
+/* ===================================================================== */
+
+/* No global dim, and top bars + window frame stay identical to light mode */
+body.dark-theme .desktop { filter: none; }
+body.dark-theme .vista-window { background: rgba(34, 62, 102, 0.94); border-color: rgba(255,255,255,0.5); box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), 0 10px 30px rgba(0,0,0,0.5); }
+body.dark-theme .vista-window.active { border-color: rgba(255,255,255,0.7); box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 14px 44px rgba(0,0,0,0.55); }
+body.dark-theme .window-titlebar { background: linear-gradient(180deg, rgba(200, 220, 255, 0.45) 0%, rgba(100, 150, 220, 0.4) 50%, rgba(50, 100, 180, 0.5) 100%); border-bottom: 1px solid rgba(0,0,0,0.2); }
+body.dark-theme .window-title { color: #fff; }
+body.dark-theme .window-toolbar { background: linear-gradient(180deg, #2a2e31 0%, #202325 100%); border-bottom: 1px solid #000; }
+body.dark-theme .toolbar-btn { color: #cfccc6; }
+body.dark-theme .toolbar-btn i { color: #6cb0ec; }
+body.dark-theme .toolbar-btn:hover { background: rgba(108,176,236,0.15); }
+body.dark-theme .address-bar { background: #15171a; border-color: #3a3d3f; }
+body.dark-theme .address-bar i { color: #8a8f93; }
+body.dark-theme .address-bar span { color: #cfccc6; }
+body.dark-theme .window-btn-min, body.dark-theme .window-btn-max { background: linear-gradient(180deg, #7eb4ea 0%, #3a8ad9 100%); }
+
+/* Content + typography */
+body.dark-theme .window-content { background: linear-gradient(180deg, #1b1d1e 0%, #181a1b 100%); color: #e8e6e3; }
+body.dark-theme .window-content h2, body.dark-theme .window-content h3 { color: #8cc4f5; }
+body.dark-theme .window-content p, body.dark-theme .window-content li { color: #cbc7c0; }
+body.dark-theme .window-content a, body.dark-theme .contact-link a { color: #6cb0ec; }
+body.dark-theme .help-item div { color: #d8d4cd; }
+
+/* Boxes / cards / grids */
+body.dark-theme .vista-info-box { background: linear-gradient(135deg, #24282b 0%, #1e2123 100%) !important; border-color: #3a3d3f !important; }
+body.dark-theme .vista-info-box h4 { color: #8cc4f5; }
+body.dark-theme .skill-vista-item, body.dark-theme .project-vista-card, body.dark-theme .drive-item, body.dark-theme .cp-item, body.dark-theme .help-item, body.dark-theme .game-item, body.dark-theme .program-item, body.dark-theme .welcome-link-card { background: linear-gradient(180deg, #26292b 0%, #202325 100%); border-color: #3a3d3f; color: #cbc7c0; }
+body.dark-theme .skill-vista-item h5, body.dark-theme .drive-name, body.dark-theme .program-name { color: #e8e6e3; }
+body.dark-theme .skill-vista-item p, body.dark-theme .cp-desc, body.dark-theme .program-publisher, body.dark-theme .drive-space, body.dark-theme .game-item small, body.dark-theme .welcome-link-card span, body.dark-theme .welcome-window-header p { color: #9b968d; }
+body.dark-theme .cp-title, body.dark-theme .document-item span, body.dark-theme .welcome-link-card strong, body.dark-theme .skill-vista-item i, body.dark-theme .cp-item i, body.dark-theme .drive-item i, body.dark-theme .game-item i, body.dark-theme .document-item i, body.dark-theme .help-item i, body.dark-theme .program-item i, body.dark-theme .welcome-link-card i { color: #6cb0ec; }
+body.dark-theme .project-vista-header { background: linear-gradient(180deg, #2a4a6a 0%, #1d3550 100%); color: #e8e6e3; }
+body.dark-theme .project-vista-card.clickable:hover { border-color: #6cb0ec; box-shadow: 0 4px 12px rgba(0,0,0,0.6); }
+body.dark-theme .program-category { background: linear-gradient(180deg, #2a3540 0%, #20272e 100%); border-color: #3a3d3f; }
+body.dark-theme .program-category h4 { color: #8cc4f5; }
+body.dark-theme .document-item:hover, body.dark-theme .program-item:hover { background: rgba(108,176,236,0.10); }
+body.dark-theme .drive-item:hover, body.dark-theme .cp-item:hover, body.dark-theme .game-item:hover, body.dark-theme .welcome-link-card:hover { background: linear-gradient(180deg, #2e3236 0%, #262a2d 100%); border-color: #6cb0ec; }
+body.dark-theme .drives-section h3 { color: #8cc4f5; border-bottom-color: #3a3d3f; }
+body.dark-theme .system-info-table td:first-child { color: #9b968d; }
+body.dark-theme .system-info-table td:last-child { color: #e8e6e3; }
+
+/* Badges / code / scrollbars */
+body.dark-theme .tech-vista-badge { background: #2b2e30; border-color: #45494b; color: #b9d6f2; }
+body.dark-theme .project-vista-tag { background: #233244; color: #8cc4f5; }
+body.dark-theme .help-item kbd { background: linear-gradient(180deg, #2b2e30 0%, #202325 100%); border-color: #45494b; color: #e8e6e3; box-shadow: 0 2px 0 #000; }
+body.dark-theme .drive-bar { background: #2b2e30; }
+body.dark-theme .help-footer { border-top-color: #3a3d3f; }
+body.dark-theme .welcome-window-header { border-bottom-color: #3a3d3f; }
+body.dark-theme .window-content::-webkit-scrollbar-track { background: #202325; border-left-color: #3a3d3f; }
+body.dark-theme .window-content::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #4a4d4f 0%, #3a3d3f 100%); border-color: #2a2d2f; }
+
+/* Taskbar / start menu / tray / context menu / notification */
+/* Popups only — taskbar, start menu, orb & toasts stay blue (matches Dark Reader) */
+body.dark-theme .desktop-context-menu { background: rgba(30,33,35,0.98); border-color: #000; color: #e8e6e3; }
+body.dark-theme .context-item:hover { background: linear-gradient(180deg, #2a3a4a, #20303f); outline-color: #6cb0ec; }
+body.dark-theme .context-separator { background: rgba(255,255,255,0.1); }
+
+/* Sidebar gadgets */
+body.dark-theme .clock-gadget { background: radial-gradient(circle, rgba(60,63,66,0.97) 0%, rgba(20,22,24,0.95) 100%); border-color: rgba(255,255,255,0.25); }
+body.dark-theme .clock-face { background: rgba(255,255,255,0.04); }
+body.dark-theme .clock-hand { background: rgba(232,230,227,0.9); }
+body.dark-theme .clock-second { background: #e25; }
+body.dark-theme .clock-center { background: #e8e6e3; }
+body.dark-theme .calendar-gadget { background: rgba(20,22,24,0.88); border-color: #3a3d3f; }
+
+/* Buttons */
+body.dark-theme .vista-btn { background: linear-gradient(180deg, #3a6a9a 0%, #2a4a6a 100%); border-color: #2a4a6a; color: #eaf2fb; }
+body.dark-theme .vista-btn:hover { background: linear-gradient(180deg, #4a7aaa 0%, #3a5a7a 100%); }
+
+/* Minesweeper */
+body.dark-theme .ms-game { background: #2a2d2f; border-color: #45494b #15171a #15171a #45494b; }
+body.dark-theme .ms-header { background: #2a2d2f; border-color: #15171a #45494b #45494b #15171a; }
+body.dark-theme .ms-display { background: #0a0c0d; color: #ff5a5a; border-color: #15171a; }
+body.dark-theme .ms-face { background: #2a2d2f; border-color: #45494b #15171a #15171a #45494b; }
+body.dark-theme .ms-face:active { border-color: #15171a #45494b #45494b #15171a; }
+body.dark-theme .ms-board { border-color: #15171a #45494b #45494b #15171a; }
+body.dark-theme .ms-cell { background: #2f3234; border-color: #45494b #15171a #15171a #45494b; color: #e8e6e3; }
+body.dark-theme .ms-cell:hover:not(.revealed) { background: #3a3e41; }
+body.dark-theme .ms-cell.revealed { background: #202325; border: 1px solid #15171a; }
+body.dark-theme .ms-cell.mine { background: #7a1f1f; }
+body.dark-theme .ms-lose { background: #3a2020; color: #ff8a8a; border-color: #7a1f1f; }
+body.dark-theme .ms-win { background: #203a20; color: #8aff8a; border-color: #1f7a1f; }

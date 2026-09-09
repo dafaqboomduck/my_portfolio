@@ -1,0 +1,8 @@
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+    .vista-window { min-width: 100% !important; width: 100% !important; left: 0 !important; top: 0 !important; height: calc(100% - 40px) !important; border-radius: 0; }
+    .start-menu { width: 100%; }
+    .desktop-icons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; left: 10px; right: 10px; }
+    .skills-vista-grid { grid-template-columns: 1fr; }
+    .vista-sidebar { display: none !important; }
+}
