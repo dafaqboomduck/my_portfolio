@@ -572,7 +572,7 @@ const windowContent = {
 
             <h3>Need More Help?</h3>
             <div class="vista-info-box">
-                <p style="margin:0">Feel free to reach out! Visit the <a href="#" onclick="navigateFromHelp('contact'); return false;" style="color:#1e5799">Contact Me</a> section to get in touch.</p>
+                <p style="margin:0">Feel free to reach out! Visit the <a onclick="navigateFromHelp('contact');" class="inline-link"><strong>Contact Me</strong></a> section to get in touch.</p>
             </div>
 
             <div class="help-footer">

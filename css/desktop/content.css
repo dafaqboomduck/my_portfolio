@@ -110,5 +110,5 @@
 .welcome-link-card span { font-size: 11px; color: #666; line-height: 1.3; }
 
 /* Inline text link */
-.inline-link { color: inherit; text-decoration: none; }
+.inline-link { color: inherit; text-decoration: none; cursor: pointer; }
 .inline-link:hover { color: #1e5799; text-decoration: underline; }
