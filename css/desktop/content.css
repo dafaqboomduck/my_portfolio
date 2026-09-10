@@ -91,7 +91,7 @@
 .help-section { margin: 15px 0; }
 .help-item { display: flex; align-items: center; padding: 10px 15px; margin: 5px 0; background: #f8f8f8; border-radius: 4px; }
 .help-item i { font-size: 20px; color: #1e5799; margin-right: 15px; width: 30px; text-align: center; }
-.help-item kbd { background: linear-gradient(180deg, #f8f8f8 0%, #e0e0e0 100%); border: 1px solid #c0c0c0; border-radius: 3px; padding: 3px 8px; font-size: 11px; font-family: 'Consolas', monospace; margin-right: 5px; box-shadow: 0 2px 0 #a0a0a0; }
+.help-item kbd { display: inline-block; background: linear-gradient(180deg, #f8f8f8 0%, #e0e0e0 100%); border: 1px solid #c0c0c0; border-radius: 3px; padding: 2px 8px; font-size: 11px; line-height: 16px; font-family: 'Consolas', monospace; color: #333; margin-right: 5px; box-shadow: 0 2px 0 #a0a0a0; }
 .help-item div { flex: 1; font-size: 13px; color: #333; }
 .help-footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; text-align: center; }
 .help-footer p { margin: 5px 0; }
