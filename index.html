@@ -319,10 +319,27 @@
       </div>
     </div>
 
-    <!-- Shutdown Screen -->
+        <!-- Shutdown Screen -->
     <div id="shutdownScreen" class="shutdown-screen hidden">
-      <div class="shutdown-content">
-        <div class="shutdown-text">Shutting down...</div>
+      <div class="shutdown-aurora"></div>
+      <div class="shutdown-status">
+        <div class="shutdown-spinner"></div>
+        <div class="shutdown-text" id="shutdownText"></div>
+      </div>
+      <div class="shutdown-brand">
+        <img src="images/win-vista-logo.png" alt="" />
+        <div class="shutdown-brand-text">
+          Windows Vista<sup>&trade;</sup>
+          <span class="edition">Portfolio</span>
+        </div>
+      </div>
+      <div class="shutdown-power">
+        <div>
+          <p>It's now safe to close this tab.</p>
+          <button onclick="restartMachine()" class="vista-btn">
+            <i class="bi bi-arrow-clockwise"></i> Restart
+          </button>
+        </div>
       </div>
     </div>
 
