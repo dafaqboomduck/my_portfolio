@@ -1,23 +1,63 @@
 /* ---------- Aurora wallpaper ---------- */
-.aurora{
-  position:fixed; inset:0; z-index:0; overflow:hidden;
-  background:radial-gradient(140% 105% at 50% 120%, #0c2b52 0%, #061b34 42%, #03101f 100%);
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: radial-gradient(
+    140% 105% at 50% 120%,
+    #0c2b52 0%,
+    #061b34 42%,
+    #03101f 100%
+  );
 }
-.aurora::before, .aurora::after{ content:""; position:absolute; inset:-25%; }
-.aurora::before{
+.aurora::before,
+.aurora::after {
+  content: '';
+  position: absolute;
+  inset: -25%;
+}
+.aurora::before {
   background:
-    radial-gradient(58% 40% at 26% 72%, rgba(54,212,180,.40), transparent 62%),
-    radial-gradient(54% 38% at 70% 58%, rgba(70,150,255,.34), transparent 62%),
-    radial-gradient(72% 52% at 50% 92%, rgba(120,232,150,.30), transparent 66%);
-  filter:blur(34px);
-  animation:auroraDrift 26s ease-in-out infinite alternate;
+    radial-gradient(
+      58% 40% at 26% 72%,
+      rgba(54, 212, 180, 0.4),
+      transparent 62%
+    ),
+    radial-gradient(
+      54% 38% at 70% 58%,
+      rgba(70, 150, 255, 0.34),
+      transparent 62%
+    ),
+    radial-gradient(
+      72% 52% at 50% 92%,
+      rgba(120, 232, 150, 0.3),
+      transparent 66%
+    );
+  filter: blur(34px);
+  animation: auroraDrift 26s ease-in-out infinite alternate;
 }
-.aurora::after{
+.aurora::after {
   background:
-    radial-gradient(40% 30% at 80% 76%, rgba(120,235,255,.26), transparent 62%),
-    radial-gradient(46% 32% at 33% 86%, rgba(150,255,205,.22), transparent 62%);
-  filter:blur(46px);
-  mix-blend-mode:screen;
-  animation:auroraDrift 33s ease-in-out infinite alternate-reverse;
+    radial-gradient(
+      40% 30% at 80% 76%,
+      rgba(120, 235, 255, 0.26),
+      transparent 62%
+    ),
+    radial-gradient(
+      46% 32% at 33% 86%,
+      rgba(150, 255, 205, 0.22),
+      transparent 62%
+    );
+  filter: blur(46px);
+  mix-blend-mode: screen;
+  animation: auroraDrift 33s ease-in-out infinite alternate-reverse;
 }
-@keyframes auroraDrift{ from{transform:translateY(0) scale(1)} to{transform:translateY(-6%) scale(1.08)} }
+@keyframes auroraDrift {
+  from {
+    transform: translateY(0) scale(1);
+  }
+  to {
+    transform: translateY(-6%) scale(1.08);
+  }
+}

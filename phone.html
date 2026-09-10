@@ -1,75 +1,104 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#04101f">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#04101f" />
     <title>Razvan Nica — Portfolio (Phone Edition)</title>
 
     <!-- Device guard: keep larger screens on the Vista desktop edition.
          ?phone=1 forces this edition, ?desktop=1 forces the desktop one. -->
     <script>
-    (function () {
+      (function () {
         var qs = location.search;
         if (/[?&]phone=1/.test(qs)) return;
-        if (/[?&]desktop=1/.test(qs)) { location.replace('index.html' + qs + (location.hash || '')); return; }
+        if (/[?&]desktop=1/.test(qs)) {
+          location.replace('index.html' + qs + (location.hash || ''));
+          return;
+        }
         var shortSide = Math.min(window.innerWidth, window.innerHeight);
-        if (shortSide > 600) { location.replace('index.html?desktop=1' + (location.hash || '')); }
-    })();
+        if (shortSide > 600) {
+          location.replace('index.html?desktop=1' + (location.hash || ''));
+        }
+      })();
     </script>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="css/phone/base.css">
-    <link rel="stylesheet" href="css/phone/aurora.css">
-    <link rel="stylesheet" href="css/phone/boot-welcome.css">
-    <link rel="stylesheet" href="css/phone/shell.css">
-    <link rel="stylesheet" href="css/phone/home.css">
-    <link rel="stylesheet" href="css/phone/window.css">
-    <link rel="stylesheet" href="css/phone/minesweeper.css">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
+    <link rel="stylesheet" href="css/phone/base.css" />
+    <link rel="stylesheet" href="css/phone/aurora.css" />
+    <link rel="stylesheet" href="css/phone/boot-welcome.css" />
+    <link rel="stylesheet" href="css/phone/shell.css" />
+    <link rel="stylesheet" href="css/phone/home.css" />
+    <link rel="stylesheet" href="css/phone/window.css" />
+    <link rel="stylesheet" href="css/phone/minesweeper.css" />
+  </head>
+  <body>
     <!-- Vista Aurora wallpaper (sits behind everything; glass panels blur it) -->
     <div class="aurora"></div>
 
     <!-- Boot screen -->
     <div id="boot" class="boot">
-        <div class="boot-inner">
-            <img class="boot-logo" src="images/win-vista-logo.png" alt="Windows Vista">
-            <div class="boot-os">Microsoft<sup>&reg;</sup> Windows Vista<sup>&trade;</sup></div>
-            <div class="boot-edition">Portfolio Edition &middot; Phone</div>
-            <div class="boot-bar"><div class="boot-bar-fill"></div></div>
-            <div class="boot-beta"><span class="beta-tag">BETA</span> best viewed on a laptop or PC</div>
+      <div class="boot-inner">
+        <img
+          class="boot-logo"
+          src="images/win-vista-logo.png"
+          alt="Windows Vista"
+        />
+        <div class="boot-os">
+          Microsoft<sup>&reg;</sup> Windows Vista<sup>&trade;</sup>
         </div>
+        <div class="boot-edition">Portfolio Edition &middot; Phone</div>
+        <div class="boot-bar"><div class="boot-bar-fill"></div></div>
+        <div class="boot-beta">
+          <span class="beta-tag">BETA</span> best viewed on a laptop or PC
+        </div>
+      </div>
     </div>
 
     <!-- Welcome / log-in -->
     <div id="welcome" class="welcome hidden">
-        <div class="welcome-inner">
-            <button class="user-tile" id="userTile">
-                <span class="user-av"><i class="bi bi-person-fill"></i></span>
-                <span class="user-name">Razvan Nica</span>
-                <span class="user-hint">tap to log in</span>
-            </button>
-        </div>
+      <div class="welcome-inner">
+        <button class="user-tile" id="userTile">
+          <span class="user-av"><i class="bi bi-person-fill"></i></span>
+          <span class="user-name">Razvan Nica</span>
+          <span class="user-hint">tap to log in</span>
+        </button>
+      </div>
     </div>
 
     <!-- Phone shell -->
     <div id="phone" class="phone hidden">
-        <div class="statusbar glass">
-            <span class="sb-left">Vista Portfolio</span>
-            <span class="sb-right">
-                <span class="sig"><i></i><i></i><i></i><i></i><i></i></span>
-                <i class="bi bi-wifi" style="font-size:13px"></i>
-                <span class="batt"><span class="batt-shell"><span class="batt-fill" id="battFill" style="width:82%"></span></span><span id="battPct">82%</span></span>
-                <span id="barClock">--:--</span>
-            </span>
-        </div>
+      <div class="statusbar glass">
+        <span class="sb-left">Vista Portfolio</span>
+        <span class="sb-right">
+          <span class="sig"><i></i><i></i><i></i><i></i><i></i></span>
+          <i class="bi bi-wifi" style="font-size: 13px"></i>
+          <span class="batt"
+            ><span class="batt-shell"
+              ><span
+                class="batt-fill"
+                id="battFill"
+                style="width: 82%"
+              ></span></span
+            ><span id="battPct">82%</span></span
+          >
+          <span id="barClock">--:--</span>
+        </span>
+      </div>
 
-        <main id="view" class="view"></main>
+      <main id="view" class="view"></main>
 
-        <div class="dock glass">
-            <button id="abHome" class="start-orb" title="Start"><img src="images/start.png" alt="Start"></button>
-        </div>
+      <div class="dock glass">
+        <button id="abHome" class="start-orb" title="Start">
+          <img src="images/start.png" alt="Start" />
+        </button>
+      </div>
     </div>
 
     <!-- data: single-source globals -->
@@ -83,5 +112,5 @@
     <script src="js/phone/minesweeper.js"></script>
     <script src="js/phone/router.js"></script>
     <script src="js/phone/boot.js"></script>
-</body>
+  </body>
 </html>

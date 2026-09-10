@@ -3,24 +3,26 @@
    and stalled first paint. 'Segoe UI' is the authentic Vista font anyway. */
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    user-select: none;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  user-select: none;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    overflow: hidden;
-    background: #000;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+  background: #000;
 }
 
-.hidden { display: none !important; }
+.hidden {
+  display: none !important;
+}
 
 /* Text inside windows is selectable */
 .window-content,
 .window-content * {
-    user-select: text;
+  user-select: text;
 }
 
 /* ...except click targets and games inside content */
@@ -32,5 +34,5 @@ body {
 .window-content .welcome-link-card,
 .window-content .ms-game,
 .window-content .ms-game * {
-    user-select: none;
+  user-select: none;
 }

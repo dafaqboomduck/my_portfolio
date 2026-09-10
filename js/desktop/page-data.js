@@ -6,45 +6,56 @@
 // ========== DYNAMIC CONTENT GENERATORS ==========
 
 function generateProjectCards() {
-    let html = '';
-    for (const [key, project] of Object.entries(projectData)) {
-        html += `
+  let html = '';
+  for (const [key, project] of Object.entries(projectData)) {
+    html += `
             <div class="project-vista-card clickable" onclick="navigateFromProjects('${key}')">
                 <div class="project-vista-header">${project.title}</div>
                 <div class="project-vista-body">
                     <span class="project-vista-tag">${project.tag}</span>
                     <p>${project.description}</p>
                     <div class="project-vista-tech">
-                        ${project.technologies.slice(0, 5).map(t => `<span class="tech-vista-badge">${t}</span>`).join('')}
+                        ${project.technologies
+                          .slice(0, 5)
+                          .map(
+                            (t) => `<span class="tech-vista-badge">${t}</span>`,
+                          )
+                          .join('')}
                     </div>
                     <div class="view-more">Click to view details →</div>
                 </div>
             </div>
         `;
-    }
-    return html;
+  }
+  return html;
 }
 
 function generateDocumentsView() {
-    let html = '<div class="documents-grid">';
-    for (const [key, project] of Object.entries(projectData)) {
-        const iconClass = project.tag.includes('AI') || project.tag.includes('Healthcare') ? 'bi-file-earmark-medical' :
-                         project.tag.includes('Financial') ? 'bi-file-earmark-bar-graph' :
-                         project.tag.includes('Sports') ? 'bi-file-earmark-play' :
-                         project.tag.includes('International') ? 'bi-file-earmark-person' : 'bi-file-earmark-code';
-        html += `
+  let html = '<div class="documents-grid">';
+  for (const [key, project] of Object.entries(projectData)) {
+    const iconClass =
+      project.tag.includes('AI') || project.tag.includes('Healthcare')
+        ? 'bi-file-earmark-medical'
+        : project.tag.includes('Financial')
+          ? 'bi-file-earmark-bar-graph'
+          : project.tag.includes('Sports')
+            ? 'bi-file-earmark-play'
+            : project.tag.includes('International')
+              ? 'bi-file-earmark-person'
+              : 'bi-file-earmark-code';
+    html += `
             <div class="document-item" ondblclick="navigateFromDocuments('${key}')">
                 <i class="bi ${iconClass}"></i>
                 <span>${project.title.substring(0, 25)}${project.title.length > 25 ? '...' : ''}</span>
             </div>
         `;
-    }
-    html += '</div>';
-    return html;
+  }
+  html += '</div>';
+  return html;
 }
 
 function generateGamesContent() {
-    return `
+  return `
         <h2>Games</h2>
         <p>Classic Windows games for your entertainment</p>
 
@@ -78,7 +89,7 @@ function generateGamesContent() {
 }
 
 function generateControlPanelContent() {
-    return `
+  return `
         <h2>Control Panel</h2>
         <p>Adjust portfolio settings and preferences</p>
 
@@ -144,16 +155,18 @@ function generateControlPanelContent() {
 }
 
 function generateProgramsContent() {
-    const categories = [...new Set(installedPrograms.map(p => p.category))];
-    let html = `
+  const categories = [...new Set(installedPrograms.map((p) => p.category))];
+  let html = `
         <h2>Installed Programs</h2>
         <p>Technologies and tools in my development environment</p>
         <div class="programs-list">
     `;
-    categories.forEach(cat => {
-        html += `<div class="program-category"><h4>${cat}</h4></div>`;
-        installedPrograms.filter(p => p.category === cat).forEach(prog => {
-            html += `
+  categories.forEach((cat) => {
+    html += `<div class="program-category"><h4>${cat}</h4></div>`;
+    installedPrograms
+      .filter((p) => p.category === cat)
+      .forEach((prog) => {
+        html += `
                 <div class="program-item">
                     <i class="bi ${prog.icon}"></i>
                     <div class="program-info">
@@ -162,14 +175,14 @@ function generateProgramsContent() {
                     </div>
                 </div>
             `;
-        });
-    });
-    html += '</div>';
-    return html;
+      });
+  });
+  html += '</div>';
+  return html;
 }
 
 function generateProjectDetailContent(project) {
-    return `
+  return `
         <h2>${project.title}</h2>
         <span class="project-vista-tag" style="font-size:13px;padding:5px 12px">${project.tag}</span>
 
@@ -180,20 +193,22 @@ function generateProjectDetailContent(project) {
 
         <h3>Technologies Used</h3>
         <div class="project-vista-tech" style="margin:15px 0">
-            ${project.technologies.map(t => `<span class="tech-vista-badge">${t}</span>`).join('')}
+            ${project.technologies.map((t) => `<span class="tech-vista-badge">${t}</span>`).join('')}
         </div>
 
         <h3>Key Features</h3>
         <ul>
-            ${project.features.map(f => `<li>${f}</li>`).join('')}
+            ${project.features.map((f) => `<li>${f}</li>`).join('')}
         </ul>
 
         <h3>Achievements</h3>
         <ul>
-            ${project.achievements.map(a => `<li>${a}</li>`).join('')}
+            ${project.achievements.map((a) => `<li>${a}</li>`).join('')}
         </ul>
 
-        ${project.github !== '#' || project.demo !== '#' ? `
+        ${
+          project.github !== '#' || project.demo !== '#'
+            ? `
         <div class="vista-info-box" style="margin-top:20px">
             <h4>Links</h4>
             <div style="display:flex;gap:10px;margin-top:10px">
@@ -201,7 +216,9 @@ function generateProjectDetailContent(project) {
                 ${project.demo !== '#' ? `<a href="${project.demo}" target="_blank" class="vista-btn"><i class="bi bi-play-circle"></i> Demo</a>` : ''}
             </div>
         </div>
-        ` : ''}
+        `
+            : ''
+        }
     `;
 }
 
@@ -209,8 +226,8 @@ function generateProjectDetailContent(project) {
 // profile is loaded from data/profile-data.js, skills from data/skills-data.js.
 
 function generateAboutContent() {
-    const p = profile;
-    return `
+  const p = profile;
+  return `
         <h2>Hello, I'm ${p.name}</h2>
         <p><strong>${p.role}</strong></p>
         <p>${p.lede}</p>
@@ -221,36 +238,44 @@ function generateAboutContent() {
         </div>
 
         <h3>About My Work</h3>
-        ${p.paragraphs.map(t => `<p>${t}</p>`).join('')}
+        ${p.paragraphs.map((t) => `<p>${t}</p>`).join('')}
 
         <h3>Education</h3>
-        ${p.education.map(e => `
+        ${p.education
+          .map(
+            (e) => `
             <div class="vista-info-box">
                 <h4>${e.school}</h4>
                 <p style="margin:0">${e.detail}</p>
             </div>
-        `).join('')}
+        `,
+          )
+          .join('')}
 
         <h3>Recent Achievements</h3>
         <ul>
-            ${p.achievements.map(a => `<li>${a}</li>`).join('')}
+            ${p.achievements.map((a) => `<li>${a}</li>`).join('')}
         </ul>
     `;
 }
 
 function generateSkillsContent() {
-    return `
+  return `
         <h2>Core Competencies</h2>
         <p>Technical expertise meets creative problem-solving</p>
 
         <div class="skills-vista-grid">
-            ${skills.map(s => `
+            ${skills
+              .map(
+                (s) => `
                 <div class="skill-vista-item">
                     <i class="bi ${s.icon}"></i>
                     <h5>${s.name}</h5>
                     <p>${s.desc}</p>
                 </div>
-            `).join('')}
+            `,
+              )
+              .join('')}
         </div>
 
         <div class="vista-info-box" style="margin-top:20px">
@@ -261,8 +286,8 @@ function generateSkillsContent() {
 }
 
 function generateContactContent() {
-    const c = profile.contact;
-    return `
+  const c = profile.contact;
+  return `
         <h2>Get In Touch</h2>
         <p>Let's build something together! I'm always interested in new projects and opportunities.</p>
 
@@ -271,12 +296,16 @@ function generateContactContent() {
             <p style="margin:0"><a href="mailto:${c.email}" style="color:#1e5799">${c.email}</a></p>
         </div>
 
-        ${c.linkedin ? `
+        ${
+          c.linkedin
+            ? `
         <div class="vista-info-box contact-link">
             <h4>LinkedIn</h4>
             <p style="margin:0"><a href="${c.linkedin}" target="_blank" style="color:#1e5799">${c.linkedinLabel || c.linkedin}</a></p>
         </div>
-        ` : ''}
+        `
+            : ''
+        }
 
         <div class="vista-info-box contact-link">
             <h4>GitHub</h4>
@@ -293,11 +322,11 @@ function generateContactContent() {
 // ========== STATIC PAGE CONTENT ==========
 
 const windowContent = {
-    welcome: {
-        title: 'Welcome Center',
-        icon: 'images/win-vista-logo.png',
-        path: 'C:\\Windows\\Welcome Center',
-        content: `
+  welcome: {
+    title: 'Welcome Center',
+    icon: 'images/win-vista-logo.png',
+    path: 'C:\\Windows\\Welcome Center',
+    content: `
             <div class="welcome-window-header">
                 <h2>Welcome to My Portfolio</h2>
                 <p>Thanks for stopping by! This portfolio is built as an interactive Windows Vista experience. Here's a quick guide to get you started.</p>
@@ -365,49 +394,49 @@ const windowContent = {
                 <p style="margin:0 0 6px 0">• The <strong>Control Panel</strong> links to every section in one place</p>
                 <p style="margin:0">• Press <img src="images/show-desktop.png" alt="Close Window" width="16" height="16"> to quickly close the active window</p>
             </div>
-        `
-    },
-        about: {
-        title: 'About Me',
-        icon: 'images/about.png',
-        path: 'C:\\Users\\Razvan\\Documents\\About Me',
-        content: '' // Generated dynamically from `profile`
-    },
-        skills: {
-        title: 'My Skills',
-        icon: 'images/skills.png',
-        path: 'C:\\Users\\Razvan\\Documents\\Skills',
-        content: '' // Generated dynamically from `skills`
-    },
-    projects: {
-        title: 'Projects',
-        icon: 'images/projects.png',
-        path: 'C:\\Users\\Razvan\\Documents\\Projects',
-        content: '' // Generated dynamically in openWindow
-    },
-    documents: {
-        title: 'Documents',
-        icon: 'images/documents.png',
-        path: 'C:\\Users\\Razvan\\Documents',
-        content: '' // Generated dynamically in openWindow
-    },
-        contact: {
-        title: 'Contact Me - Outlook',
-        icon: 'images/contact.png',
-        path: 'Outlook Express - Contact Information',
-        content: '' // Generated dynamically from `profile.contact`
-    },
-    resume: {
-        title: 'Resume.pdf - Abobe Reader',
-        icon: 'images/resume.png',
-        path: 'C:\\Users\\Razvan\\Documents\\CV2.pdf',
-        content: '' // Generated dynamically by PDF reader
-    },
-    recycle: {
-        title: 'Recycle Bin',
-        icon: 'images/recycle-empty.png',
-        path: 'Recycle Bin',
-        content: `
+        `,
+  },
+  about: {
+    title: 'About Me',
+    icon: 'images/about.png',
+    path: 'C:\\Users\\Razvan\\Documents\\About Me',
+    content: '', // Generated dynamically from `profile`
+  },
+  skills: {
+    title: 'My Skills',
+    icon: 'images/skills.png',
+    path: 'C:\\Users\\Razvan\\Documents\\Skills',
+    content: '', // Generated dynamically from `skills`
+  },
+  projects: {
+    title: 'Projects',
+    icon: 'images/projects.png',
+    path: 'C:\\Users\\Razvan\\Documents\\Projects',
+    content: '', // Generated dynamically in openWindow
+  },
+  documents: {
+    title: 'Documents',
+    icon: 'images/documents.png',
+    path: 'C:\\Users\\Razvan\\Documents',
+    content: '', // Generated dynamically in openWindow
+  },
+  contact: {
+    title: 'Contact Me - Outlook',
+    icon: 'images/contact.png',
+    path: 'Outlook Express - Contact Information',
+    content: '', // Generated dynamically from `profile.contact`
+  },
+  resume: {
+    title: 'Resume.pdf - Abobe Reader',
+    icon: 'images/resume.png',
+    path: 'C:\\Users\\Razvan\\Documents\\CV2.pdf',
+    content: '', // Generated dynamically by PDF reader
+  },
+  recycle: {
+    title: 'Recycle Bin',
+    icon: 'images/recycle-empty.png',
+    path: 'Recycle Bin',
+    content: `
             <h2>Recycle Bin</h2>
             <p style="color:#666">Contains files and folders that you have deleted.</p>
 
@@ -420,31 +449,31 @@ const windowContent = {
                 <h4>Did you know?</h4>
                 <p style="margin:0">This portfolio was crafted with passion using HTML, CSS, and JavaScript to recreate the nostalgic Windows Vista experience!</p>
             </div>
-        `
-    },
-    games: {
-        title: 'Games',
-        icon: 'images/games.png',
-        path: 'C:\\Program Files\\Microsoft Games',
-        content: '' // Generated dynamically
-    },
-    minesweeper: {
-        title: 'Minesweeper',
-        icon: 'images/games.png',
-        path: 'C:\\Program Files\\Microsoft Games\\Minesweeper',
-        content: '' // Generated dynamically
-    },
-    programs: {
-        title: 'Default Programs',
-        icon: 'images/control-panel.png',
-        path: 'Control Panel\\Default Programs',
-        content: '' // Generated dynamically
-    },
-    computer: {
-        title: 'Computer',
-        icon: 'images/explorer.png',
-        path: 'Computer',
-        content: `
+        `,
+  },
+  games: {
+    title: 'Games',
+    icon: 'images/games.png',
+    path: 'C:\\Program Files\\Microsoft Games',
+    content: '', // Generated dynamically
+  },
+  minesweeper: {
+    title: 'Minesweeper',
+    icon: 'images/games.png',
+    path: 'C:\\Program Files\\Microsoft Games\\Minesweeper',
+    content: '', // Generated dynamically
+  },
+  programs: {
+    title: 'Default Programs',
+    icon: 'images/control-panel.png',
+    path: 'Control Panel\\Default Programs',
+    content: '', // Generated dynamically
+  },
+  computer: {
+    title: 'Computer',
+    icon: 'images/explorer.png',
+    path: 'Computer',
+    content: `
             <h2>Computer</h2>
             <p style="color:#666">View drives and system information</p>
 
@@ -493,19 +522,19 @@ const windowContent = {
                     <tr><td>Developer:</td><td>Razvan Nica</td></tr>
                 </table>
             </div>
-        `
-    },
-    controlpanel: {
-        title: 'Control Panel',
-        icon: 'images/control-panel.png',
-        path: 'Control Panel',
-        content: '' // Generated dynamically
-    },
-    help: {
-        title: 'Help and Support',
-        icon: 'images/explorer.png',
-        path: 'Help and Support Center',
-        content: `
+        `,
+  },
+  controlpanel: {
+    title: 'Control Panel',
+    icon: 'images/control-panel.png',
+    path: 'Control Panel',
+    content: '', // Generated dynamically
+  },
+  help: {
+    title: 'Help and Support',
+    icon: 'images/explorer.png',
+    path: 'Help and Support Center',
+    content: `
             <h2>Help and Support</h2>
             <p>Welcome to Razvan's Portfolio Help Center</p>
 
@@ -579,6 +608,6 @@ const windowContent = {
                 <p>Portfolio crafted with ❤️ by <strong>Razvan Nica</strong></p>
                 <p style="font-size:11px;color:#888">Built with HTML, CSS, JavaScript • Inspired by Windows Vista</p>
             </div>
-        `
-    }
+        `,
+  },
 };

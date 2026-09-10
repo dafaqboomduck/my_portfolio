@@ -1,24 +1,124 @@
 /* ========== DESKTOP ========== */
-.desktop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('../../images/window-vista-bkg.jpg') center/cover no-repeat; background-color: #0a1628; }
+.desktop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('../../images/window-vista-bkg.jpg') center/cover no-repeat;
+  background-color: #0a1628;
+}
 
 /* ========== DESKTOP ICONS ========== */
-.desktop-icons { position: absolute; top: 20px; left: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 10; }
-.desktop-icon { display: flex; flex-direction: column; align-items: center; width: 80px; padding: 8px; border-radius: 4px; cursor: pointer; transition: background 0.2s; border: 1px solid transparent; }
-.desktop-icon:hover { background: rgba(255,255,255,0.15); }
-.desktop-icon:active, .desktop-icon.selected { background: rgba(100,150,255,0.3); border: 1px solid rgba(100,150,255,0.5); }
-.desktop-icon img { width: 48px; height: 48px; margin-bottom: 5px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
-.desktop-icon span { color: #fff; font-size: 11px; text-align: center; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); word-wrap: break-word; max-width: 70px; }
+.desktop-icons {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 10;
+}
+.desktop-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80px;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border: 1px solid transparent;
+}
+.desktop-icon:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+.desktop-icon:active,
+.desktop-icon.selected {
+  background: rgba(100, 150, 255, 0.3);
+  border: 1px solid rgba(100, 150, 255, 0.5);
+}
+.desktop-icon img {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 5px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+.desktop-icon span {
+  color: #fff;
+  font-size: 11px;
+  text-align: center;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  word-wrap: break-word;
+  max-width: 70px;
+}
 
 /* Vista Notification (no blur) */
-.vista-notification { position: fixed; bottom: 60px; right: 20px; background: linear-gradient(180deg, rgba(40, 80, 140, 0.97) 0%, rgba(20, 50, 100, 0.97) 100%); color: #fff; padding: 12px 20px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 4px 20px rgba(0,0,0,0.4); z-index: 10000; opacity: 0; transform: translateY(20px); transition: all 0.3s ease; font-size: 13px; }
-.vista-notification.show { opacity: 1; transform: translateY(0); }
+.vista-notification {
+  position: fixed;
+  bottom: 60px;
+  right: 20px;
+  background: linear-gradient(
+    180deg,
+    rgba(40, 80, 140, 0.97) 0%,
+    rgba(20, 50, 100, 0.97) 100%
+  );
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  z-index: 10000;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  font-size: 13px;
+}
+.vista-notification.show {
+  opacity: 1;
+  transform: translateY(0);
+}
 
 /* ========== DESKTOP CONTEXT MENU ========== */
-.desktop-context-menu { position: absolute; z-index: 10000; background: rgba(248,248,248,0.98); border: 1px solid rgba(0,0,0,0.3); box-shadow: 2px 2px 8px rgba(0,0,0,0.4); padding: 3px; font-size: 13px; color: #000; min-width: 200px; border-radius: 3px; }
-.desktop-context-menu.hidden { display: none; }
-.context-item { padding: 6px 14px; cursor: default; display: flex; align-items: center; border-radius: 2px; }
-.context-item:hover { background: linear-gradient(180deg, #eaf3ff, #cfe3ff); outline: 1px solid rgba(51,153,255,0.5); }
-.context-separator { height: 1px; background: rgba(0,0,0,0.15); margin: 4px 6px; }
+.desktop-context-menu {
+  position: absolute;
+  z-index: 10000;
+  background: rgba(248, 248, 248, 0.98);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
+  padding: 3px;
+  font-size: 13px;
+  color: #000;
+  min-width: 200px;
+  border-radius: 3px;
+}
+.desktop-context-menu.hidden {
+  display: none;
+}
+.context-item {
+  padding: 6px 14px;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  border-radius: 2px;
+}
+.context-item:hover {
+  background: linear-gradient(180deg, #eaf3ff, #cfe3ff);
+  outline: 1px solid rgba(51, 153, 255, 0.5);
+}
+.context-separator {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.15);
+  margin: 4px 6px;
+}
 
 /* Marquee selection box */
-#selectionBox { position: fixed; border: 1px solid rgba(51,153,255,0.9); background: rgba(51,153,255,0.22); display: none; z-index: 9000; pointer-events: none; border-radius: 1px; }
+#selectionBox {
+  position: fixed;
+  border: 1px solid rgba(51, 153, 255, 0.9);
+  background: rgba(51, 153, 255, 0.22);
+  display: none;
+  z-index: 9000;
+  pointer-events: none;
+  border-radius: 1px;
+}
