@@ -57,7 +57,9 @@ function homeHTML() {
     '<div class="today glass"><span class="today-av"><i class="bi bi-person-fill"></i></span>' +
     '<div><div class="today-name">' +
     esc(profile.name) +
-    '</div><div class="today-role">Data Scientist · AI Engineer</div></div></div>';
+        '</div><div class="today-role">' +
+    esc(profile.role) +
+    '</div></div></div>';
   h += '<div class="launchers">';
   launchers.forEach(function (t) {
     h +=
@@ -239,7 +241,9 @@ function resumeHTML() {
   const url = profile.resumeUrl;
   let b =
     '<div class="doc"><div class="doc-top"><i class="bi bi-file-earmark-pdf-fill"></i>' +
-    '<div><div class="doc-name">Razvan_Nica_CV.pdf</div><div class="doc-meta">PDF document</div></div></div></div>';
+        '<div><div class="doc-name">' +
+    esc(profile.resumeFileName) +
+    '</div><div class="doc-meta">PDF document</div></div></div>';
   b +=
     '<a class="btn-aero" href="' +
     url +
@@ -253,8 +257,7 @@ function resumeHTML() {
 
 function contactHTML() {
   const c = profile.contact;
-  let b =
-    "<p>Let's build something together. I'm always open to new projects and opportunities.</p>";
+    let b = '<p>' + esc(c.intro) + '</p>';
   b +=
     '<a class="contact-row" href="mailto:' +
     esc(c.email) +

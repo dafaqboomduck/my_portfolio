@@ -289,7 +289,7 @@ function generateContactContent() {
   const c = profile.contact;
   return `
         <h2>Get In Touch</h2>
-        <p>Let's build something together! I'm always interested in new projects and opportunities.</p>
+                <p>${c.intro}</p>
 
         <div class="vista-info-box contact-link">
             <h4>Email</h4>
@@ -427,9 +427,9 @@ const windowContent = {
     content: '', // Generated dynamically from `profile.contact`
   },
   resume: {
-    title: 'Resume.pdf - Abobe Reader',
+    title: `${profile.resumeFileName} - Abobe Reader`,
     icon: 'images/resume.png',
-    path: 'C:\\Users\\Razvan\\Documents\\CV2.pdf',
+    path: `C:\\Users\\Razvan\\Documents\\${profile.resumeFileName}`,
     content: '', // Generated dynamically by PDF reader
   },
   recycle: {

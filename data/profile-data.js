@@ -26,11 +26,14 @@ const profile = {
     '<strong>Mar–Jun 2025:</strong> NASDAQ-100 Stock Price Prediction Platform',
     '<strong>Jan–Mar 2025:</strong> Top 3 Project · The Innovation Square (AI X-Ray System)',
   ],
-  contact: {
+    contact: {
+    intro:
+      "Let's build something together. I'm always open to new projects and opportunities.",
     email: 'razvan.al.nica@gmail.com',
     github: 'https://github.com/dafaqboomduck',
     githubLabel: 'github.com/dafaqboomduck',
     // LinkedIn: add { linkedin, linkedinLabel } here when ready.
   },
   resumeUrl: 'documents/CV2.pdf',
+  resumeFileName: 'Razvan_Nica_CV.pdf',
 };
