@@ -1,17 +1,46 @@
 // ========== SYSTEM ACTIONS ==========
+const SHUTDOWN_STEPS = [
+  { text: 'Logging off...', hold: 1400 },
+  { text: 'Shutting down...', hold: 2600 },
+];
+
 function shutdown() {
-  toggleStartMenu();
-  document.getElementById('shutdownScreen').classList.remove('hidden');
-  setTimeout(() => {
-    document.getElementById('desktop').classList.add('hidden');
-    document.getElementById('shutdownScreen').innerHTML = `
-            <div class="shutdown-content">
-                <div style="color:#fff; text-align:center">
-                    <p style="margin-bottom:20px">Thanks for visiting!</p>
-                    <button onclick="location.reload()" class="vista-btn"><i class="bi bi-arrow-clockwise"></i> Restart</button>
-                </div>
-            </div>`;
-  }, 2000);
+  const screen = document.getElementById('shutdownScreen');
+  const label = document.getElementById('shutdownText');
+  if (!screen || !label || screen.dataset.running === '1') return;
+  screen.dataset.running = '1';
+
+  const menu = document.getElementById('startMenu');
+  if (menu && !menu.classList.contains('hidden')) toggleStartMenu();
+
+  screen.classList.remove('hidden');
+  requestAnimationFrame(() => screen.classList.add('visible'));
+
+  let i = 0;
+  (function step() {
+    if (i >= SHUTDOWN_STEPS.length) {
+      screen.classList.add('powering-off');
+      setTimeout(() => {
+        document.getElementById('desktop').classList.add('hidden');
+        screen.classList.add('powered-off');
+      }, 1200);
+      return;
+    }
+    label.classList.remove('show');
+    setTimeout(() => {
+      const s = SHUTDOWN_STEPS[i++];
+      label.textContent = s.text;
+      label.classList.add('show');
+      setTimeout(step, s.hold);
+    }, 220);
+  })();
+}
+
+function restartMachine() {
+  try {
+    localStorage.removeItem(BOOT_SEEN_KEY);
+  } catch (e) {}
+  location.replace(location.pathname + location.search);
 }
 
 // ========== CONTEXT MENU / DESKTOP ACTIONS ==========

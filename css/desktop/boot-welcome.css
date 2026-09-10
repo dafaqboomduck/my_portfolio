@@ -174,29 +174,134 @@
 /* ========== SHUTDOWN SCREEN ========== */
 .shutdown-screen {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #000;
+  inset: 0;
   z-index: 20000;
+  background: #000;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.shutdown-screen.visible {
+  opacity: 1;
+}
+
+/* Vista aurora backdrop: same wallpaper as the desktop/welcome screen */
+.shutdown-aurora {
+  position: absolute;
+  inset: 0;
+  background: url('../../images/window-vista-bkg.jpg') center/cover no-repeat;
+  transition: opacity 1s ease;
+}
+.shutdown-aurora::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 20, 40, 0.22) 0%,
+    rgba(0, 20, 40, 0.1) 45%,
+    rgba(0, 20, 40, 0.28) 100%
+  );
+}
+/* Spinner + status text */
+.shutdown-status {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 16px;
+  transition: opacity 1s ease;
+}
+.shutdown-spinner {
+  flex: 0 0 auto;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    rgba(255, 255, 255, 0) 0deg,
+    rgba(180, 232, 255, 0.15) 120deg,
+    rgba(180, 232, 255, 0.65) 270deg,
+    #eafaff 355deg,
+    rgba(255, 255, 255, 0) 360deg
+  );
+  -webkit-mask: radial-gradient(farthest-side, transparent 56%, #000 58%);
+  mask: radial-gradient(farthest-side, transparent 56%, #000 58%);
+  animation: shutdownSpin 0.9s linear infinite;
+}
+@keyframes shutdownSpin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 .shutdown-text {
   color: #fff;
-  font-size: 24px;
-  animation: fadeInOut 2s ease-in-out;
+  font-size: 30px;
+  font-weight: 300;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transition: opacity 0.25s ease;
 }
-@keyframes fadeInOut {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
+.shutdown-text.show {
+  opacity: 1;
+}
+
+/* Bottom branding */
+.shutdown-brand {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 8%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: opacity 1s ease;
+}
+.shutdown-brand img {
+  width: 42px;
+  height: 42px;
+}
+.shutdown-brand-text {
+  color: #fff;
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+}
+.shutdown-brand-text sup {
+  font-size: 11px;
+  font-weight: 400;
+}
+.shutdown-brand-text .edition {
+  font-size: 20px;
+  font-weight: 300;
+}
+
+/* Power off */
+.shutdown-screen.powering-off .shutdown-aurora,
+.shutdown-screen.powering-off .shutdown-status,
+.shutdown-screen.powering-off .shutdown-brand {
+  opacity: 0;
+}
+.shutdown-power {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+}
+.shutdown-screen.powered-off .shutdown-power {
+  opacity: 1;
+  pointer-events: auto;
+}
+.shutdown-power p {
+  margin-bottom: 20px;
+  opacity: 0.85;
 }
