@@ -139,7 +139,7 @@ document.addEventListener('click', (e) => {
 
 // ========== KEYBOARD SHORTCUTS ==========
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'Meta' || (e.ctrlKey && e.key === 'Escape')) toggleStartMenu();
+    if (e.ctrlKey && (e.key === 'Meta' || e.key === 'Escape')) toggleStartMenu();
     if (e.key === 'Escape') {
         const menu = document.getElementById('startMenu');
         if (menu && !menu.classList.contains('hidden')) { toggleStartMenu(); return; }

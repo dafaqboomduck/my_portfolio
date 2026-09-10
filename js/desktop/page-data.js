@@ -545,7 +545,7 @@ const windowContent = {
             <h3>Keyboard Shortcuts</h3>
             <div class="help-section">
                 <div class="help-item">
-                    <kbd>Ctrl</kbd> + <kbd>Esc</kbd>
+                    <kbd>Ctrl</kbd> + <kbd>Win</kbd>
                     <div>Open/close Start Menu</div>
                 </div>
                 <div class="help-item">
@@ -576,7 +576,7 @@ const windowContent = {
             </div>
 
             <div class="help-footer">
-                <p>Portfolio crafted with care by <strong>Razvan Nica</strong></p>
+                <p>Portfolio crafted with ❤️ by <strong>Razvan Nica</strong></p>
                 <p style="font-size:11px;color:#888">Built with HTML, CSS, JavaScript • Inspired by Windows Vista</p>
             </div>
         `
