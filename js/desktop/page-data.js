@@ -347,7 +347,7 @@ const windowContent = {
                     <i class="bi bi-envelope-fill"></i>
                     <div>
                         <strong>Contact</strong>
-                        <span>Email, LinkedIn & GitHub</span>
+                        <span>Email & GitHub</span>
                     </div>
                 </div>
                 <div class="welcome-link-card" onclick="navigateTo('welcome', 'games');">
