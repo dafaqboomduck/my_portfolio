@@ -52,6 +52,7 @@ body.is-dragging .window-content { pointer-events: none !important; }
 .window-content li { margin-bottom: 8px; color: #444; }
 
 /* ========== SCROLLBAR VISTA STYLE ========== */
+.window-content { scrollbar-width: auto; scrollbar-color: #a0a0a0 #f0f0f0; color-scheme: light; }
 .window-content::-webkit-scrollbar { width: 16px; }
 .window-content::-webkit-scrollbar-track { background: #f0f0f0; border-left: 1px solid #ccc; }
 .window-content::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #c0c0c0 0%, #a0a0a0 100%); border: 1px solid #888; }
