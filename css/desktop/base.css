@@ -16,3 +16,21 @@ body {
 }
 
 .hidden { display: none !important; }
+
+/* Text inside windows is selectable */
+.window-content,
+.window-content * {
+    user-select: text;
+}
+
+/* ...except click targets and games inside content */
+.window-content .vista-btn,
+.window-content .document-item,
+.window-content .game-item,
+.window-content .cp-item,
+.window-content .drive-item,
+.window-content .welcome-link-card,
+.window-content .ms-game,
+.window-content .ms-game * {
+    user-select: none;
+}
