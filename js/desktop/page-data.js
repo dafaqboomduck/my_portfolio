@@ -515,7 +515,7 @@ const windowContent = {
             <div class="vista-info-box" style="margin-top:20px">
                 <h4>System Information</h4>
                 <table class="system-info-table">
-                    <tr><td>Processor:</td><td>BigBrain Tech™ Core 11 @ 9.0 GHz</td></tr>
+                    <tr><td>Processor:</td><td>Brain Core 11 (86B) @ 50 Hz</td></tr>
                     <tr><td>RAM:</td><td>N/A</td></tr>
                     <tr><td>Graphics:</td><td>Windows Vista Aero™</td></tr>
                     <tr><td>OS:</td><td>Windows Vista Portfolio Edition</td></tr>
