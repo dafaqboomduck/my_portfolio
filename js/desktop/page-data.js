@@ -255,7 +255,7 @@ function generateSkillsContent() {
 
         <div class="vista-info-box" style="margin-top:20px">
             <h4>Tip</h4>
-            <p style="margin:0">View my complete technology stack in <strong>Start Menu → Default Programs</strong></p>
+            <p style="margin:0">View my complete technology stack in <a class="inline-link" onclick="navigateTo('welcome', 'programs');"><strong>Start Menu → Default Programs</strong></a></p>
         </div>
     `;
 }
