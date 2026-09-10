@@ -127,9 +127,22 @@
               <div class="clock-center"></div>
             </div>
           </div>
-          <div class="gadget calendar-gadget">
-            <div class="cal-header" id="calMonthYear"></div>
-            <div class="cal-grid" id="calGrid"></div>
+          <div class="gadget calendar-gadget expanded" id="calendarGadget">
+            <div class="cal-month">
+              <div class="cal-month-head">
+                <button class="cal-nav" id="calPrev" title="Previous month">&#9664;</button>
+                <span class="cal-month-label" id="calMonthLabel"></span>
+                <button class="cal-nav" id="calNext" title="Next month">&#9654;</button>
+              </div>
+              <div class="cal-dow" id="calDow"></div>
+              <div class="cal-grid" id="calGrid"></div>
+            </div>
+            <div class="cal-page" id="calPage" title="Click to resize">
+              <div class="cal-rings"></div>
+              <div class="cal-page-month" id="calPageMonth"></div>
+              <div class="cal-page-day" id="calPageDay"></div>
+              <div class="cal-page-dow" id="calPageDow"></div>
+            </div>
           </div>
         </div>
         <div class="sidebar-bottom"></div>
