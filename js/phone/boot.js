@@ -29,6 +29,15 @@ function showWelcome() {
     document.getElementById('welcome').classList.remove('hidden');
 }
 
+const BOOT_SEEN_KEY = 'vistaBootSeen';
+
+function bootSeen() {
+    try { return localStorage.getItem(BOOT_SEEN_KEY) === '1'; } catch (e) { return false; }
+}
+function markBootSeen() {
+    try { localStorage.setItem(BOOT_SEEN_KEY, '1'); } catch (e) {}
+}
+
 function enterDesktop(skipAnim) {
     const welcome = document.getElementById('welcome');
     const boot = document.getElementById('boot');
@@ -64,6 +73,9 @@ function init() {
     });
 
     window.addEventListener('hashchange', render);
+
+    // returning visitor: skip boot + welcome
+    if (bootSeen()) { entered = true; enterDesktop(true); return; }
 
     // deep links / shared URLs skip boot + welcome
     const deep = location.hash && location.hash !== '#home' && location.hash !== '#start' && location.hash !== '#';
