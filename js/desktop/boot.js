@@ -22,6 +22,9 @@ function markBootSeen() {
     localStorage.setItem(BOOT_SEEN_KEY, '1');
   } catch (e) {}
 }
+function skipBootRequested() {
+  return /[?&]skipboot=1/.test(location.search);
+}
 function later(fn, ms) {
   bootTimers.push(setTimeout(fn, ms));
 }
@@ -34,8 +37,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const boot = document.getElementById('bootScreen');
   const orb = document.getElementById('orbScreen');
 
-  // Returning visitor: skip boot + logon entirely.
-  if (bootSeen()) {
+  // Returning visitor or ?skipboot=1: skip boot + logon entirely.
+  if (bootSeen() || skipBootRequested()) {
     boot.classList.add('hidden');
     startDesktop();
     return;

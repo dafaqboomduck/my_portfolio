@@ -14,7 +14,7 @@
         }
         var shortSide = Math.min(window.innerWidth, window.innerHeight);
         if (shortSide <= 600) {
-          location.replace('phone.html' + (location.hash || ''));
+          location.replace('phone.html' + qs + (location.hash || ''));
         }
       })();
     </script>
