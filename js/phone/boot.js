@@ -47,6 +47,10 @@ function markBootSeen() {
   } catch (e) {}
 }
 
+function skipBootRequested() {
+  return /[?&]skipboot=1/.test(location.search);
+}
+
 function enterDesktop(skipAnim) {
   const welcome = document.getElementById('welcome');
   const boot = document.getElementById('boot');
@@ -97,8 +101,8 @@ function init() {
 
   window.addEventListener('hashchange', render);
 
-  // returning visitor: skip boot + welcome
-  if (bootSeen()) {
+  // returning visitor or ?skipboot=1: skip boot + welcome
+  if (bootSeen() || skipBootRequested()) {
     entered = true;
     enterDesktop(true);
     return;

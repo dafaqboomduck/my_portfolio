@@ -43,40 +43,88 @@ function updateClock() {
   tick();
 }
 
-function initCalendarGadget() {
+let calViewDate = new Date();
+
+function renderCalendarMonth() {
   const grid = document.getElementById('calGrid');
-  const header = document.getElementById('calMonthYear');
-  if (!grid || !header) return;
+  const dow = document.getElementById('calDow');
+  const label = document.getElementById('calMonthLabel');
+  if (!grid || !dow || !label) return;
 
   const now = new Date();
-  const year = now.getFullYear(),
-    month = now.getMonth(),
-    today = now.getDate();
-  header.innerText = now.toLocaleDateString('en-US', {
+  const year = calViewDate.getFullYear(),
+    month = calViewDate.getMonth();
+
+  label.innerText = calViewDate.toLocaleDateString('en-US', {
     month: 'short',
-    year: 'numeric',
+    year: '2-digit',
   });
 
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  dow.innerHTML = '';
+  ['S', 'M', 'T', 'W', 'T', 'F', 'S'].forEach((d, i) => {
+    const el = document.createElement('div');
+    if (i === now.getDay()) el.className = 'is-today';
+    el.innerText = d;
+    dow.appendChild(el);
+  });
 
+  const start = new Date(year, month, 1 - new Date(year, month, 1).getDay());
   grid.innerHTML = '';
-  ['S', 'M', 'T', 'W', 'T', 'F', 'S'].forEach((d) => {
+  for (let i = 0; i < 42; i++) {
+    const d = new Date(
+      start.getFullYear(),
+      start.getMonth(),
+      start.getDate() + i
+    );
     const el = document.createElement('div');
     el.className = 'cal-day';
-    el.style.fontWeight = 'bold';
-    el.innerText = d;
+    if (d.getMonth() !== month) el.classList.add('other');
+    if (d.toDateString() === now.toDateString()) el.classList.add('today');
+    el.innerText = d.getDate();
     grid.appendChild(el);
+  }
+}
+
+function renderCalendarPage() {
+  const now = new Date();
+  const m = document.getElementById('calPageMonth');
+  const d = document.getElementById('calPageDay');
+  const w = document.getElementById('calPageDow');
+  if (m)
+    m.innerText = now.toLocaleDateString('en-US', {
+      month: 'long',
+      year: 'numeric',
+    });
+  if (d) d.innerText = now.getDate();
+  if (w) w.innerText = now.toLocaleDateString('en-US', { weekday: 'long' });
+}
+
+function initCalendarGadget() {
+  const gadget = document.getElementById('calendarGadget');
+  if (!gadget) return;
+
+  document.getElementById('calPrev').addEventListener('click', () => {
+    calViewDate = new Date(
+      calViewDate.getFullYear(),
+      calViewDate.getMonth() - 1,
+      1
+    );
+    renderCalendarMonth();
   });
-  for (let i = 0; i < firstDay; i++) {
-    const el = document.createElement('div');
-    el.className = 'cal-day empty';
-    grid.appendChild(el);
-  }
-  for (let i = 1; i <= daysInMonth; i++) {
-    const el = document.createElement('div');
-    el.className = 'cal-day' + (i === today ? ' today' : '');
-    el.innerText = i;
-    grid.appendChild(el);
-  }
+  document.getElementById('calNext').addEventListener('click', () => {
+    calViewDate = new Date(
+      calViewDate.getFullYear(),
+      calViewDate.getMonth() + 1,
+      1
+    );
+    renderCalendarMonth();
+  });
+  document.getElementById('calPage').addEventListener('click', () => {
+    gadget.classList.toggle('expanded');
+    calViewDate = new Date();
+    renderCalendarMonth();
+  });
+
+  renderCalendarPage();
+  renderCalendarMonth();
 }

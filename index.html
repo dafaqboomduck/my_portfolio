@@ -14,7 +14,7 @@
         }
         var shortSide = Math.min(window.innerWidth, window.innerHeight);
         if (shortSide <= 600) {
-          location.replace('phone.html' + (location.hash || ''));
+          location.replace('phone.html' + qs + (location.hash || ''));
         }
       })();
     </script>
@@ -42,45 +42,44 @@
   <body>
     <!-- Boot Screen -->
     <div id="bootScreen" class="boot-screen">
-      <div class="boot-content">
-        <img
-          src="images/win-vista-logo.png"
-          alt="Windows Vista"
-          class="boot-logo"
-        />
-        <div class="boot-text-group">
-          <div class="boot-text">
-            Microsoft<sup>®</sup> Windows Vista<sup>™</sup>
-          </div>
-          <div class="boot-edition">Portfolio Edition</div>
+      <div class="boot-loader">
+        <div class="boot-progress-track">
+          <div class="boot-progress-bars"></div>
         </div>
-        <div class="boot-loader">
-          <div class="boot-progress-track">
-            <div class="boot-progress-bars"></div>
-          </div>
-        </div>
-        <div class="boot-copyright">by Razvan Nica</div>
       </div>
+      <div class="boot-copyright">&copy; Microsoft Corporation</div>
     </div>
 
-    <!-- Welcome Screen -->
+    <!-- Orb Splash -->
+    <div id="orbScreen" class="orb-screen hidden">
+      <img src="images/win-vista-logo.png" alt="" class="orb-logo" />
+    </div>
+
+    <!-- Logon / Welcome Screen -->
     <div id="welcomeScreen" class="welcome-screen hidden">
-      <div class="welcome-overlay"></div>
-      <div class="welcome-content">
-        <div class="welcome-text">Welcome</div>
-        <div class="user-card" onclick="startDesktop()">
-          <div class="user-avatar">
-            <img
-              src="images/profile.jpg"
-              alt="Razvan"
-              onerror="
-                this.style.display = 'none';
-                this.parentElement.innerHTML =
-                  '<i class=\'bi bi-person-fill\'></i>';
-              "
-            />
-          </div>
-          <div class="user-name">Razvan Nica</div>
+      <div class="vista-aurora"></div>
+      <div class="logon-tile" id="logonTile" onclick="logon()">
+        <div class="user-avatar">
+          <img
+            src="images/profile.jpg"
+            alt="Razvan"
+            onerror="
+              this.style.display = 'none';
+              this.parentElement.innerHTML = '<i class=\'bi bi-person-fill\'></i>';
+            "
+          />
+        </div>
+        <div class="user-name">Razvan Nica</div>
+      </div>
+      <div class="vista-status hidden" id="logonStatus">
+        <div class="vista-spinner"></div>
+        <div class="vista-status-text show">Welcome</div>
+      </div>
+      <div class="vista-brand">
+        <img src="images/win-vista-logo.png" alt="" />
+        <div class="vista-brand-text">
+          Windows Vista<sup>&trade;</sup>
+          <span class="edition">Portfolio</span>
         </div>
       </div>
     </div>
@@ -127,9 +126,22 @@
               <div class="clock-center"></div>
             </div>
           </div>
-          <div class="gadget calendar-gadget">
-            <div class="cal-header" id="calMonthYear"></div>
-            <div class="cal-grid" id="calGrid"></div>
+          <div class="gadget calendar-gadget expanded" id="calendarGadget">
+            <div class="cal-month">
+              <div class="cal-month-head">
+                <button class="cal-nav" id="calPrev" title="Previous month">&#9664;</button>
+                <span class="cal-month-label" id="calMonthLabel"></span>
+                <button class="cal-nav" id="calNext" title="Next month">&#9654;</button>
+              </div>
+              <div class="cal-dow" id="calDow"></div>
+              <div class="cal-grid" id="calGrid"></div>
+            </div>
+            <div class="cal-page" id="calPage" title="Click to resize">
+              <div class="cal-rings"></div>
+              <div class="cal-page-month" id="calPageMonth"></div>
+              <div class="cal-page-day" id="calPageDay"></div>
+              <div class="cal-page-dow" id="calPageDow"></div>
+            </div>
           </div>
         </div>
         <div class="sidebar-bottom"></div>
@@ -319,10 +331,27 @@
       </div>
     </div>
 
-    <!-- Shutdown Screen -->
+     <!-- Shutdown Screen -->
     <div id="shutdownScreen" class="shutdown-screen hidden">
-      <div class="shutdown-content">
-        <div class="shutdown-text">Shutting down...</div>
+      <div class="vista-aurora"></div>
+      <div class="vista-status">
+        <div class="vista-spinner"></div>
+        <div class="vista-status-text" id="shutdownText"></div>
+      </div>
+      <div class="vista-brand">
+        <img src="images/win-vista-logo.png" alt="" />
+        <div class="vista-brand-text">
+          Windows Vista<sup>&trade;</sup>
+          <span class="edition">Portfolio</span>
+        </div>
+      </div>
+      <div class="shutdown-power">
+        <div>
+          <p>It's now safe to close this tab.</p>
+          <button onclick="restartMachine()" class="vista-btn">
+            <i class="bi bi-arrow-clockwise"></i> Restart
+          </button>
+        </div>
       </div>
     </div>
 
