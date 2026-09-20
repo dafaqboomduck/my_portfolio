@@ -230,6 +230,6 @@ const projectData = {
       'split',
   ],
   github: 'https://github.com/dafaqboomduck/nlp-research',
-  demo: '#',
+  demo: 'https://dafaqboomduck.github.io/nlp-research/',
 },
 };
