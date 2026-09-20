@@ -3,6 +3,7 @@
 A personal portfolio web app inspired by Windows Vista, built with HTML, CSS, and JavaScript. It features draggable windows, a start menu, and interactive desktop icons to showcase projects, skills, and contact information. Now with a beta phone version!
 
 ## Features
+
 - Desktop-like UI with multiple windows (About, Skills, Projects, Documents, Control Panel, Games, etc.)
 - Dynamic project cards and details
 - Minesweeper mini-game
@@ -10,4 +11,5 @@ A personal portfolio web app inspired by Windows Vista, built with HTML, CSS, an
 - Theme toggle (dark/light)
 
 ## Author
+
 Razvan Nica
