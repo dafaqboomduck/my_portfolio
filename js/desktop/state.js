@@ -7,7 +7,7 @@ let darkTheme = false;
 const TASKBAR_H = 40;
 const WIN_MIN_W = 400;
 const WIN_MIN_H = 300;
-const WIN_DEFAULT_W = 750;
+const WIN_DEFAULT_W = 800;
 const WIN_DEFAULT_H = 520;
 
 let navigationHistory = {}; // Per-window drill back-stack
