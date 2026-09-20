@@ -139,4 +139,49 @@ const projectData = {
     github: '#',
     demo: '#',
   },
+  project5: {
+    title: 'Transformers versus Emotions: Video-to-Emotion NLP Pipeline',
+    tag: 'Natural Language Processing',
+    description:
+      'Modular pipeline that transcribes, translates, and classifies the ' +
+      'emotion of every spoken sentence in a video.',
+    fullDescription:
+      'Built for the Content Intelligence Agency, a content analytics ' +
+      'company, at Breda University of Applied Sciences. Replaces a costly ' +
+      'GPT API-driven workflow with smaller task-specialised ' +
+      'Transformers: audio is extracted from video, transcribed via ' +
+      'AssemblyAI, cleaned and re-punctuated, round-trip translated through ' +
+      'Dutch to prove multilingual scalability, then classified for core ' +
+      'emotion, fine-grained emotion, and intensity.',
+    technologies: [
+      'Hugging Face Transformers',
+      'DistilBERT',
+      'AssemblyAI',
+      'Keras',
+      'Scikit-learn',
+      'Pandas',
+      'Word2Vec',
+    ],
+    features: [
+      'Swappable pipeline modules for transcription, translation, ' +
+        'processing, and prediction',
+      'Speech-to-text via AssemblyAI with rule-based and transformer-based ' +
+        'post-processing',
+      'Round-trip EN→NL→EN translation as a multilingual scalability ' +
+        'stress test',
+      'Three-way emotion output: 7-class core emotion, fine-grained ' +
+        'subtype, and intensity',
+      'Custom evaluation set of 1,228 hand-verified sentences built from a ' +
+        'real TV episode of Kitchen Nightmares',
+    ],
+    achievements: [
+      'Fine-tuned DistilBERT from binary sentiment to 7-class emotion, ' +
+        'reaching 64.1% accuracy and 61.7% weighted F1',
+      'Made the sustainability and cost case for a 66M-parameter model ' +
+        'over per-sentence LLM API calls',
+      'Documented with a full model card, error analysis, and XAI study',
+    ],
+    github: 'https://github.com/dafaqboomduck/nlp-project',
+    demo: '#',
+  },
 };
