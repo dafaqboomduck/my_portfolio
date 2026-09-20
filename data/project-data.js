@@ -184,4 +184,52 @@ const projectData = {
     github: 'https://github.com/dafaqboomduck/nlp-project',
     demo: '#',
   },
+  project6: {
+  title: 'M.E.S.S.I.: Context Windows in Dialogue Emotion Classification',
+  tag: 'NLP Research',
+  description:
+    'Controlled sweep of context-window size for dialogue emotion ' +
+    'classification.',
+  fullDescription:
+    'Follow-up research project with a new four-person team at Breda ' +
+    'University of Applied Sciences. I owned RQ-B1: context-window size ' +
+    'as the sole independent variable, swept from 0 to 10 preceding ' +
+    'utterances against an isolated-sentence baseline, with ' +
+    'architecture, dataset, and language held fixed and five seeds per ' +
+    'configuration.',
+  technologies: [
+    'RoBERTa-large',
+    'PyTorch',
+    'Hugging Face Transformers',
+    'MELD',
+    'Scikit-learn',
+    'Pandas',
+    'Pytest',
+  ],
+  features: [
+    'RoBERTa-large encoder with an attention-pooling layer and MLP head ' +
+      'over 7 emotion classes',
+    'Context-window sweep across k = 0, 1, 3, 5, 10 with five seeds each ' +
+      'for statistical robustness',
+    'Per-class F1, precision, recall, and confusion matrices rather than ' +
+      'aggregate accuracy alone',
+    'Feasibility EDA on MELD and a Spanish split covering dialogue ' +
+      'lengths, context available at each k, and the 512-token encoder ' +
+      'ceiling',
+    'Inference latency and memory tracked alongside accuracy, since ' +
+      'larger windows are not free',
+  ],
+  achievements: [
+    'Found a diminishing-returns curve peaking at k = 5: weighted F1 ' +
+      'rose from 0.614 to 0.634, with a 12% gain on ambiguous utterances ' +
+      'at 3.5% added latency',
+    'Showed the benefit is emotion-specific: disgust gained ~30% ' +
+      'relative F1, while fear degraded under severe class imbalance',
+    'Reported that the aggregate gain lost significance under ' +
+      'Holm-Bonferroni correction and did not transfer to the Spanish ' +
+      'split',
+  ],
+  github: 'https://github.com/dafaqboomduck/nlp-research',
+  demo: '#',
+},
 };
