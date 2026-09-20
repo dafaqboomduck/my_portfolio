@@ -1,7 +1,7 @@
 // Technology stack — single source of truth for both desktop and phone editions.
 const installedPrograms = [
   {
-    name: 'Python 3.10',
+    name: 'Python 3.xx',
     icon: 'bi-filetype-py',
     category: 'Programming Languages',
     publisher: 'Python Software Foundation',
@@ -36,11 +36,17 @@ const installedPrograms = [
     category: 'Machine Learning',
     publisher: 'Scikit-learn Developers',
   },
-  {
+    {
     name: 'PostgreSQL',
-    icon: 'bi-database',
+    icon: 'bi-database-fill',
     category: 'Database',
     publisher: 'PostgreSQL Global Dev Group',
+  },
+  {
+    name: 'SQLite',
+    icon: 'bi-database',
+    category: 'Database',
+    publisher: 'SQLite Consortium',
   },
   {
     name: 'Flask',
@@ -78,11 +84,17 @@ const installedPrograms = [
     category: 'Machine Learning',
     publisher: 'DMLC',
   },
-  {
+    {
     name: 'OpenCV',
     icon: 'bi-eye',
     category: 'Computer Vision',
     publisher: 'OpenCV Team',
+  },
+  {
+    name: 'Scikit-image',
+    icon: 'bi-image',
+    category: 'Computer Vision',
+    publisher: 'Scikit-image Developers',
   },
   {
     name: 'SQLAlchemy',
