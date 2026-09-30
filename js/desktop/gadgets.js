@@ -1,4 +1,39 @@
 // ========== CLOCK + GADGETS ==========
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+function initClockGadget() {
+  const marks = document.getElementById('clockMarks');
+  if (!marks) return;
+  for (let i = 0; i < 60; i++) {
+    const a = (i * 6 * Math.PI) / 180;
+    const sin = Math.sin(a),
+      cos = Math.cos(a);
+    if (i % 5 === 0) {
+      const tick = document.createElementNS(SVG_NS, 'line');
+      tick.setAttribute('class', 'clock-tick');
+      tick.setAttribute('x1', 100 + 74 * sin);
+      tick.setAttribute('y1', 100 - 74 * cos);
+      tick.setAttribute('x2', 100 + 81 * sin);
+      tick.setAttribute('y2', 100 - 81 * cos);
+      marks.appendChild(tick);
+
+      const num = document.createElementNS(SVG_NS, 'text');
+      num.setAttribute('class', 'clock-num');
+      num.setAttribute('x', 100 + 61 * sin);
+      num.setAttribute('y', 100 - 61 * cos);
+      num.textContent = i === 0 ? 12 : i / 5;
+      marks.appendChild(num);
+    } else {
+      const dot = document.createElementNS(SVG_NS, 'circle');
+      dot.setAttribute('class', 'clock-dot');
+      dot.setAttribute('cx', 100 + 78 * sin);
+      dot.setAttribute('cy', 100 - 78 * cos);
+      dot.setAttribute('r', 1);
+      marks.appendChild(dot);
+    }
+  }
+}
+
 function updateGadgetClock() {
   const now = new Date();
   const sec = now.getSeconds(),
@@ -10,9 +45,9 @@ function updateGadgetClock() {
   const h = document.getElementById('gadgetHour');
   const m = document.getElementById('gadgetMinute');
   const s = document.getElementById('gadgetSecond');
-  if (h) h.style.transform = `translateX(-50%) rotate(${hrDeg}deg)`;
-  if (m) m.style.transform = `translateX(-50%) rotate(${minDeg}deg)`;
-  if (s) s.style.transform = `translateX(-50%) rotate(${secDeg}deg)`;
+  if (h) h.setAttribute('transform', `rotate(${hrDeg} 100 100)`);
+  if (m) m.setAttribute('transform', `rotate(${minDeg} 100 100)`);
+  if (s) s.setAttribute('transform', `rotate(${secDeg} 100 100)`);
 }
 
 function tick() {
