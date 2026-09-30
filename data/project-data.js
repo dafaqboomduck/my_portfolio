@@ -1,5 +1,98 @@
 // Project data — single source of truth for both desktop and phone editions.
 const projectData = {
+  project5: {
+    title: 'Transformers versus Emotions: Video-to-Emotion NLP Pipeline',
+    tag: 'Natural Language Processing',
+    description:
+      'Modular pipeline that transcribes, translates, and classifies the ' +
+      'emotion of every spoken sentence in a video.',
+    fullDescription:
+      'Built for the Content Intelligence Agency, a content analytics ' +
+      'company, at Breda University of Applied Sciences. Replaces a costly ' +
+      'GPT API-driven workflow with smaller task-specialised ' +
+      'Transformers: audio is extracted from video, transcribed via ' +
+      'AssemblyAI, cleaned and re-punctuated, round-trip translated through ' +
+      'Dutch to prove multilingual scalability, then classified for core ' +
+      'emotion, fine-grained emotion, and intensity.',
+    technologies: [
+      'Hugging Face Transformers',
+      'DistilBERT',
+      'AssemblyAI',
+      'Keras',
+      'Scikit-learn',
+      'Pandas',
+      'Word2Vec',
+    ],
+    features: [
+      'Swappable pipeline modules for transcription, translation, ' +
+        'processing, and prediction',
+      'Speech-to-text via AssemblyAI with rule-based and transformer-based ' +
+        'post-processing',
+      'Round-trip EN→NL→EN translation as a multilingual scalability ' +
+        'stress test',
+      'Three-way emotion output: 7-class core emotion, fine-grained ' +
+        'subtype, and intensity',
+      'Custom evaluation set of 1,228 hand-verified sentences built from a ' +
+        'real TV episode of Kitchen Nightmares',
+    ],
+    achievements: [
+      'Fine-tuned DistilBERT from binary sentiment to 7-class emotion, ' +
+        'reaching 64.1% accuracy and 61.7% weighted F1',
+      'Made the sustainability and cost case for a 66M-parameter model ' +
+        'over per-sentence LLM API calls',
+      'Documented with a full model card, error analysis, and XAI study',
+    ],
+    github: 'https://github.com/dafaqboomduck/nlp-project',
+    demo: '#',
+  },
+  project6: {
+    title: 'M.E.S.S.I.: Context Windows in Dialogue Emotion Classification',
+    tag: 'NLP Research',
+    description:
+      'Controlled sweep of context-window size for dialogue emotion ' +
+      'classification.',
+    fullDescription:
+      'Follow-up research project with a new four-person team at Breda ' +
+      'University of Applied Sciences. I owned RQ-B1: context-window size ' +
+      'as the sole independent variable, swept from 0 to 10 preceding ' +
+      'utterances against an isolated-sentence baseline, with ' +
+      'architecture, dataset, and language held fixed and five seeds per ' +
+      'configuration.',
+    technologies: [
+      'RoBERTa-large',
+      'PyTorch',
+      'Hugging Face Transformers',
+      'MELD',
+      'Scikit-learn',
+      'Pandas',
+      'Pytest',
+    ],
+    features: [
+      'RoBERTa-large encoder with an attention-pooling layer and MLP head ' +
+        'over 7 emotion classes',
+      'Context-window sweep across k = 0, 1, 3, 5, 10 with five seeds each ' +
+        'for statistical robustness',
+      'Per-class F1, precision, recall, and confusion matrices rather than ' +
+        'aggregate accuracy alone',
+      'Feasibility EDA on MELD and a Spanish split covering dialogue ' +
+        'lengths, context available at each k, and the 512-token encoder ' +
+        'ceiling',
+      'Inference latency and memory tracked alongside accuracy, since ' +
+        'larger windows are not free',
+    ],
+    achievements: [
+      'Found a diminishing-returns curve peaking at k = 5: weighted F1 ' +
+        'rose from 0.614 to 0.634, with a 12% gain on ambiguous utterances ' +
+        'at 3.5% added latency',
+      'Showed the benefit is emotion-specific: disgust gained ~30% ' +
+        'relative F1, while fear degraded under severe class imbalance',
+      'Reported that the aggregate gain lost significance under ' +
+        'Holm-Bonferroni correction and did not transfer to the Spanish ' +
+        'split',
+    ],
+    github: 'https://github.com/dafaqboomduck/nlp-research',
+    demo: 'https://dafaqboomduck.github.io/nlp-research/',
+  },
   project1: {
     title: 'AI-Powered Chest X-Ray Classification with Explainable AI',
     tag: 'AI & Healthcare',
@@ -139,97 +232,4 @@ const projectData = {
     github: '#',
     demo: '#',
   },
-  project5: {
-    title: 'Transformers versus Emotions: Video-to-Emotion NLP Pipeline',
-    tag: 'Natural Language Processing',
-    description:
-      'Modular pipeline that transcribes, translates, and classifies the ' +
-      'emotion of every spoken sentence in a video.',
-    fullDescription:
-      'Built for the Content Intelligence Agency, a content analytics ' +
-      'company, at Breda University of Applied Sciences. Replaces a costly ' +
-      'GPT API-driven workflow with smaller task-specialised ' +
-      'Transformers: audio is extracted from video, transcribed via ' +
-      'AssemblyAI, cleaned and re-punctuated, round-trip translated through ' +
-      'Dutch to prove multilingual scalability, then classified for core ' +
-      'emotion, fine-grained emotion, and intensity.',
-    technologies: [
-      'Hugging Face Transformers',
-      'DistilBERT',
-      'AssemblyAI',
-      'Keras',
-      'Scikit-learn',
-      'Pandas',
-      'Word2Vec',
-    ],
-    features: [
-      'Swappable pipeline modules for transcription, translation, ' +
-        'processing, and prediction',
-      'Speech-to-text via AssemblyAI with rule-based and transformer-based ' +
-        'post-processing',
-      'Round-trip EN→NL→EN translation as a multilingual scalability ' +
-        'stress test',
-      'Three-way emotion output: 7-class core emotion, fine-grained ' +
-        'subtype, and intensity',
-      'Custom evaluation set of 1,228 hand-verified sentences built from a ' +
-        'real TV episode of Kitchen Nightmares',
-    ],
-    achievements: [
-      'Fine-tuned DistilBERT from binary sentiment to 7-class emotion, ' +
-        'reaching 64.1% accuracy and 61.7% weighted F1',
-      'Made the sustainability and cost case for a 66M-parameter model ' +
-        'over per-sentence LLM API calls',
-      'Documented with a full model card, error analysis, and XAI study',
-    ],
-    github: 'https://github.com/dafaqboomduck/nlp-project',
-    demo: '#',
-  },
-  project6: {
-  title: 'M.E.S.S.I.: Context Windows in Dialogue Emotion Classification',
-  tag: 'NLP Research',
-  description:
-    'Controlled sweep of context-window size for dialogue emotion ' +
-    'classification.',
-  fullDescription:
-    'Follow-up research project with a new four-person team at Breda ' +
-    'University of Applied Sciences. I owned RQ-B1: context-window size ' +
-    'as the sole independent variable, swept from 0 to 10 preceding ' +
-    'utterances against an isolated-sentence baseline, with ' +
-    'architecture, dataset, and language held fixed and five seeds per ' +
-    'configuration.',
-  technologies: [
-    'RoBERTa-large',
-    'PyTorch',
-    'Hugging Face Transformers',
-    'MELD',
-    'Scikit-learn',
-    'Pandas',
-    'Pytest',
-  ],
-  features: [
-    'RoBERTa-large encoder with an attention-pooling layer and MLP head ' +
-      'over 7 emotion classes',
-    'Context-window sweep across k = 0, 1, 3, 5, 10 with five seeds each ' +
-      'for statistical robustness',
-    'Per-class F1, precision, recall, and confusion matrices rather than ' +
-      'aggregate accuracy alone',
-    'Feasibility EDA on MELD and a Spanish split covering dialogue ' +
-      'lengths, context available at each k, and the 512-token encoder ' +
-      'ceiling',
-    'Inference latency and memory tracked alongside accuracy, since ' +
-      'larger windows are not free',
-  ],
-  achievements: [
-    'Found a diminishing-returns curve peaking at k = 5: weighted F1 ' +
-      'rose from 0.614 to 0.634, with a 12% gain on ambiguous utterances ' +
-      'at 3.5% added latency',
-    'Showed the benefit is emotion-specific: disgust gained ~30% ' +
-      'relative F1, while fear degraded under severe class imbalance',
-    'Reported that the aggregate gain lost significance under ' +
-      'Holm-Bonferroni correction and did not transfer to the Spanish ' +
-      'split',
-  ],
-  github: 'https://github.com/dafaqboomduck/nlp-research',
-  demo: 'https://dafaqboomduck.github.io/nlp-research/',
-},
 };
