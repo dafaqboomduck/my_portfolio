@@ -120,12 +120,43 @@
         <div class="sidebar-top"></div>
         <div class="sidebar-content">
           <div class="gadget clock-gadget">
-            <div class="clock-face">
-              <div class="clock-hand clock-hour" id="gadgetHour"></div>
-              <div class="clock-hand clock-minute" id="gadgetMinute"></div>
-              <div class="clock-hand clock-second" id="gadgetSecond"></div>
-              <div class="clock-center"></div>
-            </div>
+            <svg class="clock-svg" viewBox="0 0 200 200" aria-label="Clock">
+              <defs>
+                <linearGradient id="clockBezel" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#6a6a6a" />
+                  <stop offset="0.45" stop-color="#2b2b2b" />
+                  <stop offset="1" stop-color="#111" />
+                </linearGradient>
+                <linearGradient id="clockBezelInner" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#0c0c0c" />
+                  <stop offset="1" stop-color="#4a4a4a" />
+                </linearGradient>
+                <radialGradient id="clockDial" cx="0.5" cy="0.45" r="0.6">
+                  <stop offset="0" stop-color="#fbfaf3" />
+                  <stop offset="0.75" stop-color="#f0ede0" />
+                  <stop offset="1" stop-color="#d9d5c4" />
+                </radialGradient>
+                <linearGradient id="clockGlass" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#fff" stop-opacity="0.3" />
+                  <stop offset="1" stop-color="#fff" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+              <circle class="clock-bezel" cx="100" cy="100" r="97" fill="url(#clockBezel)" />
+              <circle cx="100" cy="100" r="88" fill="url(#clockBezelInner)" />
+              <circle class="clock-dial" cx="100" cy="100" r="84" fill="url(#clockDial)" />
+              <g id="clockMarks"></g>
+              <g class="clock-hands">
+                <polygon id="gadgetHour" class="clock-hand" points="96.2,114 103.8,114 101.6,52 100,48 98.4,52" />
+                <polygon id="gadgetMinute" class="clock-hand" points="97,116 103,116 101.2,26 100,22 98.8,26" />
+                <g id="gadgetSecond" class="clock-second">
+                  <line x1="100" y1="124" x2="100" y2="20" />
+                  <circle cx="100" cy="118" r="3" />
+                </g>
+                <circle cx="100" cy="100" r="5" fill="#111" />
+                <circle cx="100" cy="100" r="2" fill="#c8201e" />
+              </g>
+              <path class="clock-glass" d="M 34 78 A 70 70 0 0 1 166 78 Q 100 58 34 78 Z" fill="url(#clockGlass)" />
+            </svg>
           </div>
           <div class="gadget calendar-gadget expanded" id="calendarGadget">
             <div class="cal-month">

@@ -314,25 +314,8 @@ body.dark-theme .context-separator {
 }
 
 /* Sidebar gadgets */
-body.dark-theme .clock-gadget {
-  background: radial-gradient(
-    circle,
-    rgba(60, 63, 66, 0.97) 0%,
-    rgba(20, 22, 24, 0.95) 100%
-  );
-  border-color: rgba(255, 255, 255, 0.25);
-}
-body.dark-theme .clock-face {
-  background: rgba(255, 255, 255, 0.04);
-}
-body.dark-theme .clock-hand {
-  background: rgba(232, 230, 227, 0.9);
-}
-body.dark-theme .clock-second {
-  background: #e25;
-}
-body.dark-theme .clock-center {
-  background: #e8e6e3;
+body.dark-theme .clock-dial {
+  filter: brightness(0.88);
 }
 body.dark-theme .calendar-gadget {
   background: rgba(20, 22, 24, 0.88);

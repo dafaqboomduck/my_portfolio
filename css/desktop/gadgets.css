@@ -29,70 +29,49 @@
   align-items: center;
 }
 
-/* Clock Gadget */
+/* Clock Gadget (Vista classic) */
 .clock-gadget {
-  width: 140px;
-  height: 140px;
-  background: radial-gradient(
-    circle,
-    rgba(235, 235, 245, 0.96) 0%,
-    rgba(60, 60, 70, 0.92) 100%
-  );
-  border: 3px solid rgba(255, 255, 255, 0.55);
-  border-radius: 50%;
-  box-shadow:
-    0 6px 16px rgba(0, 0, 0, 0.5),
-    inset 0 2px 10px rgba(255, 255, 255, 0.7);
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 150px;
+  height: 150px;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.5));
+  user-select: none;
 }
-.clock-face {
-  width: 130px;
-  height: 130px;
-  position: relative;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
+.clock-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.clock-tick {
+  stroke: #2a2a2a;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+}
+.clock-dot {
+  fill: #555;
+}
+.clock-num {
+  fill: #3a3a3a;
+  font-family: 'Arial Narrow', 'Roboto Condensed', 'Liberation Sans Narrow',
+    sans-serif;
+  font-stretch: condensed;
+  font-size: 21px;
+  font-weight: 700;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+.clock-hands {
+  filter: drop-shadow(1.5px 2px 1.2px rgba(0, 0, 0, 0.35));
 }
 .clock-hand {
-  position: absolute;
-  bottom: 50%;
-  left: 50%;
-  transform-origin: bottom center;
-  background: rgba(0, 0, 0, 0.85);
-  border-radius: 10px;
+  fill: #151515;
 }
-.clock-hour {
-  width: 4px;
-  height: 35px;
-  transform: translateX(-50%);
-  z-index: 3;
+.clock-second line {
+  stroke: #c8201e;
+  stroke-width: 1.3;
+  stroke-linecap: round;
 }
-.clock-minute {
-  width: 3px;
-  height: 50px;
-  transform: translateX(-50%);
-  z-index: 2;
-}
-.clock-second {
-  width: 2px;
-  height: 55px;
-  background: #e23;
-  transform: translateX(-50%);
-  z-index: 4;
-}
-.clock-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 10px;
-  height: 10px;
-  background: #000;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 5;
-  box-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+.clock-second circle {
+  fill: #c8201e;
 }
 
 /* ========== CALENDAR GADGET (Vista tear-off) ========== */

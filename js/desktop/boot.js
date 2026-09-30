@@ -15,6 +15,7 @@ function markBootSeen() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+  initClockGadget();
   tick();
   setInterval(tick, 1000);
   initCalendarGadget();
