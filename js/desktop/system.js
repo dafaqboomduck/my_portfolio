@@ -58,15 +58,10 @@ function toggleSidebar() {
 
 function changeWallpaper() {
   const d = document.getElementById('desktop');
-  const wallpapers = [
-    "url('images/window-vista-bkg.jpg') center/cover no-repeat",
-    'radial-gradient(circle at center, #1a2a6c, #112 100%)',
-    'linear-gradient(135deg, #2a6aaa 0%, #0a1628 100%)',
-    'linear-gradient(135deg, #6a2a5a 0%, #16081a 100%)',
-  ];
+  const wallpapers = ['aurora1.jpg', 'aurora2.jpg', 'bliss.jpg', 'windows.jpg'];
   let idx = parseInt(d.dataset.wpIdx || 0);
   idx = (idx + 1) % wallpapers.length;
-  d.style.background = wallpapers[idx];
+  d.style.background = `url('images/${wallpapers[idx]}') center/cover no-repeat`;
   d.style.backgroundColor = '#0a1628';
   d.dataset.wpIdx = idx;
 }

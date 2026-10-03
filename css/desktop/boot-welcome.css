@@ -87,7 +87,7 @@
 .vista-aurora {
   position: absolute;
   inset: 0;
-  background: url('../../images/window-vista-bkg.jpg') center/cover no-repeat;
+  background: url('../../images/aurora1.jpg') center/cover no-repeat;
   transition: opacity 1s ease;
 }
 .vista-aurora::after {
