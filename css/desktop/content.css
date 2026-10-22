@@ -512,3 +512,155 @@
   color: #1e5799;
   text-decoration: underline;
 }
+
+/* About Me landing page */
+.about-page {
+  container-type: inline-size;
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px 32px;
+}
+/* Split only when the window itself is wide (maximized), not the viewport */
+@container (min-width: 820px) {
+  .about-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.about-col {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.window-content .about-col h2 {
+  font-size: 30px;
+}
+.window-content .about-col h3 {
+  margin: 16px 0 10px;
+}
+/* Line up the two column headings at the top */
+.window-content .about-col > :first-child,
+.window-content .about-section-head:first-child h3 {
+  margin-top: 0;
+}
+.window-content .about-role {
+  font-size: 19px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+.window-content .about-lede {
+  font-size: 17px;
+  color: #555;
+  margin-bottom: 2px;
+}
+.window-content .about-status {
+  font-size: 15px;
+  color: #777;
+}
+.about-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.about-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid #8eb4dc;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #fdfeff 0%, #e2eefb 100%);
+  color: #1e5799;
+  font-size: 15px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.about-btn:hover {
+  border-color: #3c7fb1;
+  background: linear-gradient(180deg, #eaf6fd 0%, #bee6fd 100%);
+}
+.about-btn.primary {
+  background: linear-gradient(180deg, #4a8fd6 0%, #1e5799 100%);
+  border-color: #174a85;
+  color: #fff;
+}
+.about-btn.primary:hover {
+  background: linear-gradient(180deg, #5da0e6 0%, #2766ad 100%);
+}
+.about-skill-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.about-skill-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: #f0f6fd;
+  border: 1px solid #c4d9ef;
+  border-radius: 3px;
+  font-size: 15px;
+  color: #333;
+}
+.about-skill-chip i {
+  color: #1e5799;
+}
+.about-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.about-section-head a {
+  font-size: 15px;
+  color: #1e5799;
+}
+.about-project-card {
+  background: #fff;
+  border: 1px solid #c0c0c0;
+  border-left: 4px solid #1e5799;
+  border-radius: 4px;
+  padding: 10px 16px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.about-project-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(30, 87, 153, 0.3);
+  border-color: #1e5799;
+}
+.about-project-card h4 {
+  color: #1e5799;
+  font-size: 17px;
+  margin: 0 0 4px;
+}
+.window-content .about-project-card p {
+  font-size: 15px;
+  margin: 0;
+}
+.about-project-card .project-vista-tag {
+  font-size: 13px;
+  margin: 0;
+}
+.about-project-card .project-vista-tech {
+  margin-top: 8px;
+}
+.about-project-card .tech-vista-badge {
+  font-size: 13px;
+}
+.about-edu {
+  padding: 10px 15px;
+  margin: 8px 0;
+}
+.window-content .about-edu h4 {
+  font-size: 15px;
+  margin-bottom: 2px;
+}
+.window-content .about-edu p {
+  font-size: 15px;
+  margin: 0;
+}

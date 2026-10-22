@@ -13,11 +13,14 @@ function navigateTo(fromWindowId, targetWindowId, openFn) {
     if (content) scrollPositions[fromWindowId] = content.scrollTop;
   }
   const stack = buildHistoryStack(fromWindowId);
+  const wasMaximized = !!(windows[fromWindowId] && windows[fromWindowId].maximized);
 
   suppressPush = true;
   closeWindow(fromWindowId);
   if (openFn) openFn(stack);
   else openWindow(targetWindowId, null, stack);
+  // Drilling inside a maximized window stays maximized, like Explorer.
+  if (wasMaximized && activeWindow) maximizeWindow(activeWindow, true);
   suppressPush = false;
 
   pushNav();
@@ -25,6 +28,9 @@ function navigateTo(fromWindowId, targetWindowId, openFn) {
 
 function navigateFromProjects(projectKey) {
   navigateTo('projects', null, (stack) => openProjectDetail(projectKey, stack));
+}
+function navigateFromAbout(projectKey) {
+  navigateTo('about', null, (stack) => openProjectDetail(projectKey, stack));
 }
 function navigateFromDocuments(projectKey) {
   navigateTo('documents', null, (stack) =>

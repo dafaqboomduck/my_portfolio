@@ -157,12 +157,14 @@ function goBack(id) {
   if (!navigationHistory[id] || navigationHistory[id].length === 0) return;
   const stack = [...navigationHistory[id]];
   const previousWindow = stack.pop();
+  const wasMaximized = windows[id].maximized;
 
   suppressPush = true;
   closeWindow(id);
   if (previousWindow.startsWith('project-'))
     openProjectDetail(previousWindow.replace('project-', ''), stack);
   else openWindow(previousWindow, null, stack);
+  if (wasMaximized) maximizeWindow(previousWindow, true);
   suppressPush = false;
   pushNav();
 

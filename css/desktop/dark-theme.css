@@ -381,3 +381,48 @@ body.dark-theme .ms-win {
   color: #8aff8a;
   border-color: #1f7a1f;
 }
+
+/* About Me landing page */
+body.dark-theme .window-content .about-role {
+  color: #e8e6e3;
+}
+body.dark-theme .window-content .about-lede {
+  color: #9b968d;
+}
+body.dark-theme .window-content .about-status {
+  color: #7d7973;
+}
+body.dark-theme .about-btn {
+  background: linear-gradient(180deg, #2b2e30 0%, #222527 100%);
+  border-color: #45494b;
+  color: #b9d6f2;
+}
+body.dark-theme .about-btn:hover {
+  border-color: #6cb0ec;
+}
+body.dark-theme .about-btn.primary {
+  background: linear-gradient(180deg, #2f6aa8 0%, #1d4a7a 100%);
+  border-color: #2a5c92;
+  color: #fff;
+}
+body.dark-theme .about-skill-chip {
+  background: #2b2e30;
+  border-color: #45494b;
+  color: #e8e6e3;
+}
+body.dark-theme .about-skill-chip i,
+body.dark-theme .about-section-head a {
+  color: #6cb0ec;
+}
+body.dark-theme .about-project-card {
+  background: linear-gradient(180deg, #26292b 0%, #202325 100%);
+  border-color: #3a3d3f;
+  border-left-color: #6cb0ec;
+}
+body.dark-theme .about-project-card:hover {
+  border-color: #6cb0ec;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+body.dark-theme .about-project-card h4 {
+  color: #8cc4f5;
+}

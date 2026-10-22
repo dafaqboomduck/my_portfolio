@@ -100,5 +100,14 @@ function startDesktop() {
   if (screen) screen.classList.add('hidden');
   document.getElementById('desktop').classList.remove('hidden');
   history.replaceState(snapshot(), '', '#desktop');
-  setTimeout(() => openWindow('welcome'), 300);
+  // About Me opens maximized on top so a quick visitor sees the essentials
+  // first; closing it reveals the Welcome Center. One history entry for both.
+  setTimeout(() => {
+    suppressPush = true;
+    openWindow('welcome');
+    openWindow('about');
+    maximizeWindow('about', true);
+    suppressPush = false;
+    pushNav();
+  }, 300);
 }

@@ -1,7 +1,7 @@
 // Profile data — single source of truth for both desktop and phone editions.
 const profile = {
   name: 'Razvan Nica',
-  role: 'AI Engineer · Data Scientist · App Developer',
+  role: 'AI Engineer · Data Scientist · Software Developer',
   lede: 'Building intelligent systems from data to deployment.',
   paragraphs: [
     `I'm a third year Data & AI student at Breda University of Applied Sciences, specializing in developing 
@@ -11,7 +11,7 @@ const profile = {
     `My work spans healthcare diagnostics, financial analytics, and predictive modeling. I focus on scalable, 
          explainable AI systems that integrate into real-world workflows.`,
   ],
-  status: 'Available for opportunities · Based in the Netherlands',
+  status: 'Available for opportunities · Breda, NL',
   education: [
     {
       school: 'Breda University of Applied Sciences',
@@ -34,6 +34,8 @@ const profile = {
     githubLabel: 'github.com/dafaqboomduck',
     // LinkedIn: add { linkedin, linkedinLabel } here when ready.
   },
+  // Keys into projectData, shown in this order on the About Me landing page.
+  featuredProjects: ['project5', 'project1', 'project2'],
   resumeUrl: 'documents/CV2.pdf',
   resumeFileName: 'Razvan_Nica_CV.pdf',
 };

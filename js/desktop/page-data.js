@@ -227,35 +227,92 @@ function generateProjectDetailContent(project) {
 
 function generateAboutContent() {
   const p = profile;
-  return `
-        <h2>Hello, I'm ${p.name}</h2>
-        <p><strong>${p.role}</strong></p>
-        <p>${p.lede}</p>
+  const c = p.contact;
+  const featured = p.featuredProjects.filter((key) => projectData[key]);
 
-        <div class="vista-info-box">
-            <h4>Current Status</h4>
-            <p style="margin:0">${p.status}</p>
+  // Left column answers "who / how to reach", right column "what was built",
+  // so a quick visitor gets both without scrolling on a maximized window.
+  return `
+    <div class="about-page">
+      <div class="about-grid">
+        <div class="about-col">
+          <h2>Hello, I'm ${p.name}</h2>
+          <p class="about-role">${p.role}</p>
+          <p class="about-lede">${p.lede}</p>
+          <p class="about-status">${p.status}</p>
+
+          <h3>About My Work</h3>
+          ${p.paragraphs.map((t) => `<p>${t}</p>`).join('')}
+
+          <h3>Core Skills</h3>
+          <div class="about-skill-chips">
+            ${skills
+              .map(
+                (s) =>
+                  `<span class="about-skill-chip" title="${s.desc}"><i class="bi ${s.icon}"></i>${s.name}</span>`,
+              )
+              .join('')}
+          </div>
+
+          <h3>Links</h3>
+          <div class="about-actions">
+            <a class="about-btn primary" href="${p.resumeUrl}" download="${p.resumeFileName}">
+              <i class="bi bi-download"></i>Download CV
+            </a>
+            <a class="about-btn" href="mailto:${c.email}">
+              <i class="bi bi-envelope"></i>${c.email}
+            </a>
+            <a class="about-btn" href="${c.github}" target="_blank" rel="noopener">
+              <i class="bi bi-github"></i>GitHub
+            </a>
+            ${
+              c.linkedin
+                ? `<a class="about-btn" href="${c.linkedin}" target="_blank" rel="noopener">
+                     <i class="bi bi-linkedin"></i>LinkedIn
+                   </a>`
+                : ''
+            }
+          </div>
         </div>
 
-        <h3>About My Work</h3>
-        ${p.paragraphs.map((t) => `<p>${t}</p>`).join('')}
+        <div class="about-col">
+          <div class="about-section-head">
+            <h3>Featured Projects</h3>
+            <a class="inline-link" onclick="navigateTo('about', 'projects')">See all projects →</a>
+          </div>
+          ${featured
+            .map((key) => {
+              const project = projectData[key];
+              return `
+              <div class="about-project-card" onclick="navigateFromAbout('${key}')">
+                  <h4>${project.title}</h4>
+                  <p>${project.description}</p>
+                  <div class="project-vista-tech">
+                      <span class="project-vista-tag">${project.tag}</span>
+                      ${project.technologies
+                        .slice(0, 4)
+                        .map((t) => `<span class="tech-vista-badge">${t}</span>`)
+                        .join('')}
+                  </div>
+              </div>
+          `;
+            })
+            .join('')}
 
-        <h3>Education</h3>
-        ${p.education
-          .map(
-            (e) => `
-            <div class="vista-info-box">
-                <h4>${e.school}</h4>
-                <p style="margin:0">${e.detail}</p>
-            </div>
-        `,
-          )
-          .join('')}
-
-        <h3>Recent Achievements</h3>
-        <ul>
-            ${p.achievements.map((a) => `<li>${a}</li>`).join('')}
-        </ul>
+          <h3>Education</h3>
+          ${p.education
+            .map(
+              (e) => `
+              <div class="vista-info-box about-edu">
+                  <h4>${e.school}</h4>
+                  <p>${e.detail}</p>
+              </div>
+          `,
+            )
+            .join('')}
+        </div>
+      </div>
+    </div>
     `;
 }
 
