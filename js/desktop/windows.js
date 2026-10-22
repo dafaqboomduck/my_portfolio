@@ -87,7 +87,7 @@ function openWindow(id, fromWindow, historyStack) {
       ...content,
       content: `
             <h2>📂 My Documents</h2>
-            <p>Double-click any file to view project details</p>
+            <p>Click any file to view project details</p>
             ${generateDocumentsView()}
         `,
     };

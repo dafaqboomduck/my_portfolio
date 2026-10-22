@@ -211,7 +211,7 @@ document.addEventListener('keydown', (e) => {
     }
     const sel = document.querySelector('.desktop-icon.selected');
     if (sel) {
-      const m = (sel.getAttribute('ondblclick') || '').match(
+      const m = (sel.getAttribute('onclick') || '').match(
         /openWindow\(['"]([^'"]+)['"]\)/,
       );
       if (m) openWindow(m[1]);

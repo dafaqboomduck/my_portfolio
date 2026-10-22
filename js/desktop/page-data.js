@@ -44,7 +44,7 @@ function generateDocumentsView() {
               ? 'bi-file-earmark-person'
               : 'bi-file-earmark-code';
     html += `
-            <div class="document-item" ondblclick="navigateFromDocuments('${key}')">
+            <div class="document-item" onclick="navigateFromDocuments('${key}')">
                 <i class="bi ${iconClass}"></i>
                 <span>${project.title.substring(0, 25)}${project.title.length > 25 ? '...' : ''}</span>
             </div>
@@ -60,7 +60,7 @@ function generateGamesContent() {
         <p>Classic Windows games for your entertainment</p>
 
         <div class="games-grid">
-            <div class="game-item" ondblclick="navigateFromGames('minesweeper')">
+            <div class="game-item" onclick="navigateFromGames('minesweeper')">
                 <i class="bi bi-grid-3x3-gap-fill"></i>
                 <span>Minesweeper</span>
             </div>
@@ -83,7 +83,7 @@ function generateGamesContent() {
 
         <div class="vista-info-box" style="margin-top:20px">
             <h4>Tip</h4>
-            <p style="margin:0">Double-click Minesweeper to start playing! Right-click to place flags.</p>
+            <p style="margin:0">Click Minesweeper to start playing! Right-click to place flags.</p>
         </div>
     `;
 }
@@ -335,7 +335,7 @@ const windowContent = {
             <div class="vista-info-box" style="background:linear-gradient(135deg, #fff8e0 0%, #fff0c0 100%); border-color:#e0c080">
                 <h4>How to Navigate</h4>
                 <p style="margin:0">
-                    <strong>Double-click</strong> desktop icons or use the <strong>Start Menu</strong> (green button, bottom-left) to open windows.
+                    <strong>Click</strong> desktop icons or use the <strong>Start Menu</strong> (green button, bottom-left) to open windows.
                     Drag windows by their title bar, and use the <strong>Back</strong> button to retrace your steps.
                 </p>
             </div>
@@ -540,7 +540,7 @@ const windowContent = {
 
             <div class="vista-info-box" style="background:linear-gradient(135deg, #fff8e0 0%, #fff0c0 100%); border-color:#e0c080">
                 <h4>Welcome!</h4>
-                <p style="margin:0">This portfolio is designed as a Windows Vista experience. Navigate using the Start Menu, desktop icons, or by double-clicking folders.</p>
+                <p style="margin:0">This portfolio is designed as a Windows Vista experience. Navigate using the Start Menu, desktop icons, or by clicking folders.</p>
             </div>
 
             <h3>Navigation Guide</h3>
@@ -548,7 +548,7 @@ const windowContent = {
                 <div class="help-item">
                     <i class="bi bi-mouse-fill"></i>
                     <div>
-                        <strong>Double-click</strong> desktop icons to open windows
+                        <strong>Click</strong> desktop icons to open windows
                     </div>
                 </div>
                 <div class="help-item">
