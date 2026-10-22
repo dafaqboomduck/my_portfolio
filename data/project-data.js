@@ -195,8 +195,8 @@ const projectData = {
         'classification',
       'Achieved 78% prediction accuracy with balanced classes',
     ],
-    github: '#',
-    demo: '#',
+    github: 'https://github.com/dafaqboomduck/hospital-readmissions',
+    demo: 'https://nbviewer.org/github/dafaqboomduck/hospital-readmissions/blob/main/Deliverables/BlockY1B_CreativeBrief_242715_RazvanNica.ipynb',
   },
   project4: {
     title: 'SDG Water, Sanitation & Infant Mortality Dashboard',
@@ -230,6 +230,6 @@ const projectData = {
         'water/sanitation and infant mortality',
     ],
     github: '#',
-    demo: '#',
+    demo: 'https://app.powerbi.com/view?r=eyJrIjoiNGY0OTViZjUtODUxMS00OTlhLWJmNmQtMDczNWZlNDJhZGVhIiwidCI6IjBhMzM1ODliLTAwMzYtNGZlOC1hODI5LTNlZDA5MjZhZjg4NiIsImMiOjl9',
   },
 };
