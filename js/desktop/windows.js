@@ -191,7 +191,7 @@ function minimizeWindow(id) {
 function maximizeWindow(id, forceOn) {
   const w = windows[id];
   if (!w) return;
-  const turnOn = forceOn === true ? true : !w.maximized;
+  const turnOn = typeof forceOn === 'boolean' ? forceOn : !w.maximized;
 
   if (turnOn) {
     if (!w.maximized) w.prevRect = rectOf(w.element);
@@ -211,6 +211,7 @@ function maximizeWindow(id, forceOn) {
       w.prevRect = null;
     }
   }
+  replaceNav();
 }
 
 function focusWindow(id) {

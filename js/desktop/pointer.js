@@ -16,6 +16,7 @@ function startDrag(e, id) {
       Math.min(e.clientX - pw / 2, window.innerWidth - pw),
     );
     setGeom(w.element, nl, 0, pw, ph);
+    replaceNav();
   }
 
   pointer.mode = 'drag';
