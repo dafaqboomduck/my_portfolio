@@ -520,7 +520,7 @@
 .about-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 10px 32px;
+  gap: 10px 96px;
 }
 /* Split only when the window itself is wide (maximized), not the viewport */
 @container (min-width: 820px) {
