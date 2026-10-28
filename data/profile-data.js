@@ -4,12 +4,10 @@ const profile = {
   role: 'AI Engineer · Data Scientist · Software Developer',
   lede: 'Building intelligent systems from data.',
   paragraphs: [
-    `I'm a third year Data & AI student at Breda University of Applied Sciences, specializing in developing 
-         production-ready machine learning systems.`,
-    `With a background in deep learning, computer vision, and natural language processing, I create end-to-end 
-         solutions, from data analysis to model training and implementation.`,
-    `My work spans healthcare diagnostics, financial analytics, and predictive modeling. I focus on scalable, 
-         explainable AI systems that integrate into real-world workflows.`,
+    `I’m a third-year Data & AI student at Breda University of Applied Sciences.`,
+    `I’ve worked on plant root detection with computer vision, emotion recognition in conversation,
+         and route optimization. I care about the full path from data to deployment, and about
+         models people can understand and trust.`,
   ],
   status: 'Available for opportunities · Breda, NL',
   education: [
