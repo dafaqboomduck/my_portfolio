@@ -2,7 +2,7 @@
 const profile = {
   name: 'Razvan Nica',
   role: 'AI Engineer · Data Scientist · Software Developer',
-  lede: 'Building intelligent systems from data to deployment.',
+  lede: 'Building intelligent systems from data.',
   paragraphs: [
     `I'm a third year Data & AI student at Breda University of Applied Sciences, specializing in developing 
          production-ready machine learning systems.`,
@@ -16,10 +16,12 @@ const profile = {
     {
       school: 'Breda University of Applied Sciences',
       detail: 'BSc Data Science & Artificial Intelligence',
+      dates: '2024–Present',
     },
     {
       school: 'National College "Cantemir Voda"',
       detail: 'Mathematics & Computer Science, Bilingual English',
+      dates: '2020–2024',
     },
   ],
   achievements: [

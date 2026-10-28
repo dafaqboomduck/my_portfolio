@@ -304,7 +304,10 @@ function generateAboutContent() {
             .map(
               (e) => `
               <div class="vista-info-box about-edu">
-                  <h4>${e.school}</h4>
+                  <div class="about-edu-head">
+                    <h4>${e.school}</h4>
+                    <span class="about-edu-dates">${e.dates}</span>
+                  </div>
                   <p>${e.detail}</p>
               </div>
           `,
