@@ -156,7 +156,7 @@ function projectDetailHTML(id) {
   let b = '<h2 class="proj-title">' + esc(p.title) + '</h2>';
   b += '<span class="tag">' + esc(p.tag) + '</span>';
   b +=
-    '<div class="card"><h4>Overview</h4><p>' +
+    '<div class="card"><h4>Overview</h4><p style="white-space:pre-line">' +
     esc(p.fullDescription) +
     '</p></div>';
   b += '<h3>Technologies</h3><div class="chips">';

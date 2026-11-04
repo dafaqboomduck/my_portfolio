@@ -188,7 +188,7 @@ function generateProjectDetailContent(project) {
 
         <div class="vista-info-box" style="margin-top:20px">
             <h4>Overview</h4>
-            <p style="margin:0">${project.fullDescription}</p>
+            <p style="margin:0; white-space:pre-line">${project.fullDescription}</p>
         </div>
 
         <h3>Technologies Used</h3>
@@ -503,11 +503,6 @@ const windowContent = {
             <div style="text-align:center; padding:60px 20px; color:#888">
                 <i class="bi bi-trash3" style="font-size:80px; opacity:0.3"></i>
                 <p style="margin-top:20px; font-size:14px">The Recycle Bin is empty.</p>
-            </div>
-
-            <div class="vista-info-box">
-                <h4>Did you know?</h4>
-                <p style="margin:0">This portfolio was crafted with passion using HTML, CSS, and JavaScript to recreate the nostalgic Windows Vista experience!</p>
             </div>
         `,
   },
