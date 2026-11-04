@@ -1,5 +1,52 @@
 // Project data — single source of truth for both desktop and phone editions.
 const projectData = {
+  project7: {
+    title: 'Inkshade: Desktop PDF Reader with Annotation and Narration',
+    tag: 'Desktop Application',
+    description:
+      'Cross-platform PDF reader with highlighting, freehand drawing, and ' +
+      'an in-development text-to-speech narration pipeline.',
+    fullDescription:
+      'Personal project built end to end: architecture, code, and ' +
+      'releases. A PDF reader built on PyQt5 and PyMuPDF with character-level ' +
+      'selection, search, annotations, and table-of-contents navigation, ' +
+      'built with a modular architecture.\n' +
+      'A companion narration system reads PDFs aloud, combining ' +
+      'PyMuPDF extraction and YOLO layout detection.',
+    technologies: [
+      'Python',
+      'PyQt5',
+      'PyMuPDF',
+      'YOLO',
+      'Qwen2.5-VL',
+      'PyInstaller',
+      'Flatpak',
+    ],
+    features: [
+      'Character-level text selection, document-wide search, and clickable ' +
+        'links with hover previews',
+      'Highlights and freehand drawing with undo/redo, exportable into the ' +
+        'PDF itself',
+      'Large-PDF performance: LRU page cache, lazy layer loading, widget ' +
+        'recycling, and chunked search that yields to the event loop',
+      'Distributed for Windows via PyInstaller and for Linux as a ' +
+        'source-built Flatpak with AppStream metadata',
+      'Hybrid TTS pipeline: fast rule-based scripts for prose, with page ' +
+        'image plus extracted text routed to a VLM only for hard blocks (planned)',
+    ],
+    achievements: [
+     'Worked around PyMuPDF not being thread-safe with chunked ' +
+        'synchronous search driven by QTimer',
+      'Improved large-PDF performance and stability by updating widgets ' +
+        'in place instead of recreating them, which removed a cascade of ' +
+        'ghost-page, zoom/scroll recursion, and Wayland crashes',
+      'Managed character-level selection by indexing every glyph from ' +
+        'PyMuPDF rawdict into a 50-point spatial grid for constant-time ' +
+        'hit testing, with anchor/focus ranges spanning multiple pages',
+    ],
+    github: 'https://github.com/dafaqboomduck/Inkshade-PDF',
+    demo: '#',
+  },
   project5: {
     title: 'Transformers versus Emotions: Video-to-Emotion NLP Pipeline',
     tag: 'Natural Language Processing',
