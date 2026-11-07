@@ -2,27 +2,32 @@
 const skills = [
   {
     icon: 'bi-graph-up',
-    name: 'ML Development',
-    desc: 'End-to-end ML pipelines, Scikit-learn, ensemble methods',
+    name: 'Machine Learning',
+    desc: 'End-to-end pipelines, Scikit-learn, ensemble methods',
   },
   {
-    icon: 'bi-server',
+    icon: 'bi-cpu',
+    name: 'Deep Learning',
+    desc: 'TensorFlow/Keras, Transformers, CNNs, Hugging Face',
+  },
+  {
+    icon: 'bi-rocket-takeoff',
     name: 'MLOps & Deployment',
-    desc: 'CI/CD, containerization, Flask APIs',
+    desc: 'Docker, CI/CD, model serving',
   },
   {
     icon: 'bi-code-slash',
-    name: 'Backend Development',
-    desc: 'Flask, PostgreSQL, SQLAlchemy, JWT',
+    name: 'Backend & APIs',
+    desc: 'FastAPI, Flask, PostgreSQL, SQLAlchemy',
   },
   {
-    icon: 'bi-eye',
-    name: 'Computer Vision',
-    desc: 'CNNs, TensorFlow/Keras, Grad-CAM, LIME',
+    icon: 'bi-bar-chart',
+    name: 'Data Analysis',
+    desc: 'Exploration, feature engineering, visualizations',
   },
   {
-    icon: 'bi-chat-dots',
-    name: 'NLP & Transformers',
-    desc: 'BERT, GPT, Hugging Face, fine-tuning',
+    icon: 'bi-terminal',
+    name: 'Linux & Servers',
+    desc: 'Server setup, deployment, shell scripting',
   },
 ];
