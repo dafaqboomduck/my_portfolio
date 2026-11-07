@@ -405,12 +405,20 @@ body.dark-theme .about-btn.primary {
   border-color: #2a5c92;
   color: #fff;
 }
-body.dark-theme .about-skill-chip {
+body.dark-theme .about-skill-row {
+  border-bottom-color: #2c3a55;
+}
+body.dark-theme .about-skill-icon {
   background: #2b2e30;
   border-color: #45494b;
+}
+body.dark-theme .about-skill-name {
   color: #e8e6e3;
 }
-body.dark-theme .about-skill-chip i,
+body.dark-theme .about-skill-desc {
+  color: #9b968d;
+}
+body.dark-theme .about-skill-icon,
 body.dark-theme .about-section-head a {
   color: #6cb0ec;
 }

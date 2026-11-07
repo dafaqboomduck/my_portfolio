@@ -245,11 +245,17 @@ function generateAboutContent() {
           ${p.paragraphs.map((t) => `<p>${t}</p>`).join('')}
 
           <h3>Core Skills</h3>
-          <div class="about-skill-chips">
+          <div class="about-skill-rows">
             ${skills
               .map(
-                (s) =>
-                  `<span class="about-skill-chip" title="${s.desc}"><i class="bi ${s.icon}"></i>${s.name}</span>`,
+                (s) => `
+              <div class="about-skill-row">
+                <span class="about-skill-icon"><i class="bi ${s.icon}"></i></span>
+                <div>
+                  <span class="about-skill-name">${s.name}</span>
+                  <span class="about-skill-desc">${s.desc}</span>
+                </div>
+              </div>`,
               )
               .join('')}
           </div>
