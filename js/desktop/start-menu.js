@@ -111,7 +111,9 @@ function getSearchIndex() {
           ' ' +
           p.tag +
           ' ' +
-          (p.technologies || []).join(' ')
+          (p.technologies || []).join(' ') +
+          ' ' +
+          (p.hiddenTechnologies || []).join(' ')
         ).toLowerCase(),
       });
     });

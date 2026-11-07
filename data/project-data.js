@@ -1,4 +1,5 @@
 // Project data — single source of truth for both desktop and phone editions.
+// hiddenTechnologies is never rendered; it only adds Start Menu search keywords.
 const projectData = {
   project7: {
     title: 'Inkshade: Desktop PDF Reader with Annotation and Narration',
@@ -22,6 +23,7 @@ const projectData = {
       'PyInstaller',
       'Flatpak',
     ],
+    hiddenTechnologies: [],
     features: [
       'Character-level text selection, document-wide search, and clickable ' +
         'links with hover previews',
@@ -70,6 +72,7 @@ const projectData = {
       'Pandas',
       'Word2Vec',
     ],
+    hiddenTechnologies: [],
     features: [
       'Swappable pipeline modules for transcription, translation, ' +
         'processing, and prediction',
@@ -114,6 +117,7 @@ const projectData = {
       'Pandas',
       'Pytest',
     ],
+    hiddenTechnologies: [],
     features: [
       'RoBERTa-large encoder with an attention-pooling layer and MLP head ' +
         'over 7 emotion classes',
@@ -160,6 +164,7 @@ const projectData = {
       'Grad-CAM',
       'OpenCV',
     ],
+    hiddenTechnologies: [],
     features: [
       'CNN trained on 8,000 chest X-rays (4,000 normal / 4,000 abnormal)',
       'Interactive XAI dashboard with Grad-CAM region highlighting',
@@ -193,6 +198,7 @@ const projectData = {
       'Scikit-learn',
       'Time Series Clustering & Analysis',
     ],
+    hiddenTechnologies: [],
     features: [
       'Minute-level time series forecasting across NASDAQ-100 companies',
       'Clustering approach isolating companies with atypical trading patterns',
@@ -229,6 +235,7 @@ const projectData = {
       'NumPy',
       'Matplotlib/Seaborn',
     ],
+    hiddenTechnologies: [],
     features: [
       'Direct comparison of regression and classification approaches',
       'SMOTE to correct severe class imbalance',
@@ -264,6 +271,7 @@ const projectData = {
       'Statistical Analysis',
       'Data Visualization',
     ],
+    hiddenTechnologies: [],
     features: [
       'Country-level filtering and drill-down across 50+ developing nations',
       'Custom DAX measures for health indicator calculations',
