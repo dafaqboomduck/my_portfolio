@@ -15,15 +15,15 @@ const projectData = {
       'A companion narration system reads PDFs aloud, combining ' +
       'PyMuPDF extraction and YOLO layout detection.',
     technologies: [
-      'Python',
       'PyQt5',
       'PyMuPDF',
       'YOLO',
-      'Qwen2.5-VL',
       'PyInstaller',
       'Flatpak',
     ],
-    hiddenTechnologies: [],
+    hiddenTechnologies: [
+      'Python',
+    ],
     features: [
       'Character-level text selection, document-wide search, and clickable ' +
         'links with hover previews',
@@ -69,10 +69,12 @@ const projectData = {
       'AssemblyAI',
       'Keras',
       'Scikit-learn',
-      'Pandas',
       'Word2Vec',
     ],
-    hiddenTechnologies: [],
+    hiddenTechnologies: [
+      'Python',
+      'Pandas',
+    ],
     features: [
       'Swappable pipeline modules for transcription, translation, ' +
         'processing, and prediction',
@@ -114,10 +116,11 @@ const projectData = {
       'Hugging Face Transformers',
       'MELD',
       'Scikit-learn',
-      'Pandas',
-      'Pytest',
     ],
-    hiddenTechnologies: [],
+    hiddenTechnologies: [
+      'Python',
+      'Pandas',
+    ],
     features: [
       'RoBERTa-large encoder with an attention-pooling layer and MLP head ' +
         'over 7 emotion classes',
@@ -164,7 +167,9 @@ const projectData = {
       'Grad-CAM',
       'OpenCV',
     ],
-    hiddenTechnologies: [],
+    hiddenTechnologies: [
+      'Python',
+    ],
     features: [
       'CNN trained on 8,000 chest X-rays (4,000 normal / 4,000 abnormal)',
       'Interactive XAI dashboard with Grad-CAM region highlighting',
@@ -198,7 +203,12 @@ const projectData = {
       'Scikit-learn',
       'Time Series Clustering & Analysis',
     ],
-    hiddenTechnologies: [],
+    hiddenTechnologies: [
+      'Python',
+      'NumPy',
+      'Matplotlib',
+      'Seaborn',
+    ],
     features: [
       'Minute-level time series forecasting across NASDAQ-100 companies',
       'Clustering approach isolating companies with atypical trading patterns',
@@ -233,9 +243,12 @@ const projectData = {
       'Random Forest',
       'Logistic Regression',
       'NumPy',
-      'Matplotlib/Seaborn',
+      'Matplotlib',
+      'Seaborn',
     ],
-    hiddenTechnologies: [],
+    hiddenTechnologies: [
+      'Python',
+    ],
     features: [
       'Direct comparison of regression and classification approaches',
       'SMOTE to correct severe class imbalance',
