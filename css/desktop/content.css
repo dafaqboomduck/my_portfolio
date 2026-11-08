@@ -87,6 +87,9 @@
   font-size: 11px;
   margin-bottom: 10px;
 }
+.project-vista-tag + .project-vista-tag {
+  margin-left: 4px;
+}
 .project-vista-tech {
   display: flex;
   flex-wrap: wrap;

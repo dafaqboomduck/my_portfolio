@@ -5,6 +5,18 @@
 
 // ========== DYNAMIC CONTENT GENERATORS ==========
 
+// project.tag may be one string or an array of strings; always returns an array.
+function getProjectTags(project) {
+  return [].concat(project.tag || []);
+}
+
+function generateTagBadges(project, style = '') {
+  const attr = style ? ` style="${style}"` : '';
+  return getProjectTags(project)
+    .map((t) => `<span class="project-vista-tag"${attr}>${t}</span>`)
+    .join('');
+}
+
 // Projects sharing project.series.id, ordered by part, as [key, project] pairs.
 function getSeriesMembers(series) {
   if (!series) return [];
@@ -26,7 +38,7 @@ function generateSeriesBox(projectKey, project) {
   const items = members
     .map(([key, p]) => {
       const current = key === projectKey;
-      const sub = [p.series.note, p.tag].filter(Boolean).join(' · ');
+      const sub = [p.series.note, ...getProjectTags(p)].filter(Boolean).join(' · ');
       return `
             <div class="related-item${current ? ' current' : ''}"${current ? '' : ` onclick="navigateFromProject('${projectKey}', '${key}')"`}>
                 <span class="ri-part">Part ${p.series.part}</span>
@@ -52,7 +64,7 @@ function generateProjectCards() {
             <div class="project-vista-card clickable" onclick="navigateFromProjects('${key}')">
                 <div class="project-vista-header">${project.title}</div>
                 <div class="project-vista-body">
-                    <span class="project-vista-tag">${project.tag}</span>${generateSeriesChip(project)}
+                    ${generateTagBadges(project)}${generateSeriesChip(project)}
                     <p>${project.description}</p>
                     <div class="project-vista-tech">
                         ${project.technologies
@@ -200,7 +212,7 @@ function generateProgramsContent() {
 function generateProjectDetailContent(projectKey, project) {
   return `
         <h2>${project.title}</h2>
-        <span class="project-vista-tag" style="font-size:13px;padding:5px 12px">${project.tag}</span>
+        ${generateTagBadges(project, 'font-size:13px;padding:5px 12px')}
 
         <div class="vista-info-box" style="margin-top:20px">
             <h4>Overview</h4>
@@ -338,7 +350,7 @@ function generateAboutContent() {
                   <h4>${project.title}</h4>
                   <p>${project.description}</p>
                   <div class="project-vista-tech">
-                      <span class="project-vista-tag">${project.tag}</span>
+                      ${generateTagBadges(project)}
                       ${project.technologies
                         .slice(0, 4)
                         .map((t) => `<span class="tech-vista-badge">${t}</span>`)

@@ -104,7 +104,7 @@ function getSearchIndex() {
         keywords: (
           p.title +
           ' ' +
-          p.tag +
+          getProjectTags(p).join(' ') +
           ' ' +
           (p.technologies || []).join(' ') +
           ' ' +
