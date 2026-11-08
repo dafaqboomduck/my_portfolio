@@ -173,6 +173,11 @@ const projectData = {
   project5: {
     title: 'Transformers versus Emotions: Video-to-Emotion NLP Pipeline',
     tag: 'Natural Language Processing',
+    series: {
+      id: 'cia-emotion',
+      name: 'CIA Emotion Recognition',
+      part: 1,
+    },
     description:
       'Modular pipeline that transcribes, translates, and classifies the ' +
       'emotion of every spoken sentence in a video.',
@@ -221,6 +226,11 @@ const projectData = {
   project6: {
     title: 'M.E.S.S.I.: Context Windows in Dialogue Emotion Classification',
     tag: 'NLP Research',
+    series: {
+      id: 'cia-emotion',
+      name: 'CIA Emotion Recognition',
+      part: 2,
+    },
     description:
       'Controlled sweep of context-window size for dialogue emotion ' +
       'classification.',
