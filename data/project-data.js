@@ -225,7 +225,7 @@ const projectData = {
   },
   project6: {
     title: 'M.E.S.S.I.: Context Windows in Dialogue Emotion Classification',
-    tag: 'NLP Research',
+    tag: ['Natural Language Processing', 'Research Project'],
     series: {
       id: 'cia-emotion',
       name: 'CIA Emotion Recognition',
