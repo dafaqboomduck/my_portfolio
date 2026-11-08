@@ -17,6 +17,25 @@ function generateTagBadges(project, style = '') {
     .join('');
 }
 
+// Colors live in CSS (.st-<state>); an unknown state renders nothing rather
+// than an unstyled label.
+const STATUS_STATES = ['finished', 'pending', 'ongoing'];
+
+function getProjectStatus(project) {
+  const s = project.status;
+  return s && STATUS_STATES.includes(s.state) ? s : null;
+}
+
+function generateStatusLabel(project) {
+  const s = getProjectStatus(project);
+  return s ? `<span class="status-text st-${s.state}">${s.label}</span>` : '';
+}
+
+function generateStatusBanner(project) {
+  const s = getProjectStatus(project);
+  return s ? `<div class="status-banner st-${s.state}"><b>Status</b><span>${s.label}</span></div>` : '';
+}
+
 // Projects sharing project.series.id, ordered by part, as [key, project] pairs.
 function getSeriesMembers(series) {
   if (!series) return [];
@@ -60,10 +79,12 @@ function generateSeriesBox(projectKey, project) {
 function generateProjectCards() {
   let html = '';
   for (const [key, project] of Object.entries(projectData)) {
+    const status = getProjectStatus(project);
     html += `
-            <div class="project-vista-card clickable" onclick="navigateFromProjects('${key}')">
+            <div class="project-vista-card clickable${status ? ` has-status st-${status.state}` : ''}" onclick="navigateFromProjects('${key}')">
                 <div class="project-vista-header">${project.title}</div>
                 <div class="project-vista-body">
+                    ${generateStatusLabel(project)}
                     ${generateTagBadges(project)}${generateSeriesChip(project)}
                     <p>${project.description}</p>
                     <div class="project-vista-tech">
@@ -213,6 +234,7 @@ function generateProjectDetailContent(projectKey, project) {
   return `
         <h2>${project.title}</h2>
         ${generateTagBadges(project, 'font-size:13px;padding:5px 12px')}
+        ${generateStatusBanner(project)}
 
         <div class="vista-info-box" style="margin-top:20px">
             <h4>Overview</h4>
@@ -345,8 +367,10 @@ function generateAboutContent() {
           ${featured
             .map((key) => {
               const project = projectData[key];
+              const status = getProjectStatus(project);
               return `
-              <div class="about-project-card" onclick="navigateFromAbout('${key}')">
+              <div class="about-project-card${status ? ` has-status st-${status.state}` : ''}" onclick="navigateFromAbout('${key}')">
+                  ${generateStatusLabel(project)}
                   <h4>${project.title}</h4>
                   <p>${project.description}</p>
                   <div class="project-vista-tech">

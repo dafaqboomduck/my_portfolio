@@ -2,6 +2,8 @@
 // hiddenTechnologies is never rendered; it only adds Start Menu search keywords.
 // series (optional) links projects that continue each other: same id = same
 // series, part sets the order, note is the subtitle shown in the series box.
+// status (optional) is { label, state }: label is free text, state picks the
+// color: 'finished' (gray), 'pending' (amber) or 'ongoing' (green).
 const projectData = {
   project9: {
     title: 'NPEC Production ML Platform: Deployment, CI/CD, and Monitoring',
@@ -399,6 +401,7 @@ const projectData = {
   project4: {
     title: 'SDG Water, Sanitation & Infant Mortality Dashboard',
     tag: 'Data Analytics',
+    status: { label: 'Finished · Nov 2024', state: 'finished' },
     description:
       'Interactive Power BI analytics for UN Sustainable Development Goals ' +
       'monitoring.',

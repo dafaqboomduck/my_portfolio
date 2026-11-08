@@ -482,3 +482,14 @@ body.dark-theme .related-item.current .ri-part {
 body.dark-theme .related-item.current .ri-title {
   color: #e8e6e3;
 }
+
+/* Project status. Repeats the bar rule because the dark card rules above outrank the light one. */
+body.dark-theme .st-finished { --st-bg: #2a2d2f; --st-fg: #b5b1aa; --st-bd: #45484a; --st-dot: #8a8a8a; }
+body.dark-theme .st-pending { --st-bg: #3a3020; --st-fg: #f0c870; --st-bd: #6a5630; --st-dot: #f0b020; }
+body.dark-theme .st-ongoing { --st-bg: #1d3322; --st-fg: #8fd895; --st-bd: #3c6a45; --st-dot: #4cc95a; }
+body.dark-theme .about-project-card.has-status,
+body.dark-theme .about-project-card.has-status:hover,
+body.dark-theme .project-vista-card.has-status,
+body.dark-theme .project-vista-card.has-status:hover {
+  border-left-color: var(--st-dot);
+}
