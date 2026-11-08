@@ -34,13 +34,8 @@ function getSearchIndex() {
       id: 'projects',
       label: 'Projects',
       icon: 'bi-folder-fill',
-      keywords: 'projects work portfolio builds featured ml systems',
-    },
-    {
-      id: 'documents',
-      label: 'Documents',
-      icon: 'bi-folder2-open',
-      keywords: 'documents files my documents',
+      keywords:
+        'projects work portfolio builds featured ml systems documents files',
     },
     {
       id: 'contact',

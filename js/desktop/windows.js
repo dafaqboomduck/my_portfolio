@@ -82,15 +82,6 @@ function openWindow(id, fromWindow, historyStack) {
             ${generateProjectCards()}
         `,
     };
-  } else if (id === 'documents') {
-    content = {
-      ...content,
-      content: `
-            <h2>📂 My Documents</h2>
-            <p>Click any file to view project details</p>
-            ${generateDocumentsView()}
-        `,
-    };
   } else if (id === 'programs') {
     content = { ...content, content: generateProgramsContent() };
   } else if (id === 'games') {

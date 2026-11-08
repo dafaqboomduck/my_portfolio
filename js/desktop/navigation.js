@@ -32,11 +32,6 @@ function navigateFromProjects(projectKey) {
 function navigateFromAbout(projectKey) {
   navigateTo('about', null, (stack) => openProjectDetail(projectKey, stack));
 }
-function navigateFromDocuments(projectKey) {
-  navigateTo('documents', null, (stack) =>
-    openProjectDetail(projectKey, stack),
-  );
-}
 function navigateFromGames(targetWindow) {
   navigateTo('games', targetWindow);
 }

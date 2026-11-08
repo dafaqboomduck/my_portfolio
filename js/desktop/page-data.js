@@ -30,30 +30,6 @@ function generateProjectCards() {
   return html;
 }
 
-function generateDocumentsView() {
-  let html = '<div class="documents-grid">';
-  for (const [key, project] of Object.entries(projectData)) {
-    const iconClass =
-      project.tag.includes('AI') || project.tag.includes('Healthcare')
-        ? 'bi-file-earmark-medical'
-        : project.tag.includes('Financial')
-          ? 'bi-file-earmark-bar-graph'
-          : project.tag.includes('Sports')
-            ? 'bi-file-earmark-play'
-            : project.tag.includes('International')
-              ? 'bi-file-earmark-person'
-              : 'bi-file-earmark-code';
-    html += `
-            <div class="document-item" onclick="navigateFromDocuments('${key}')">
-                <i class="bi ${iconClass}"></i>
-                <span>${project.title.substring(0, 25)}${project.title.length > 25 ? '...' : ''}</span>
-            </div>
-        `;
-  }
-  html += '</div>';
-  return html;
-}
-
 function generateGamesContent() {
   return `
         <h2>Games</h2>
@@ -521,12 +497,6 @@ const windowContent = {
     title: 'Projects',
     icon: 'images/projects.png',
     path: 'C:\\Users\\Razvan\\Documents\\Projects',
-    content: '', // Generated dynamically in openWindow
-  },
-  documents: {
-    title: 'Documents',
-    icon: 'images/documents.png',
-    path: 'C:\\Users\\Razvan\\Documents',
     content: '', // Generated dynamically in openWindow
   },
   contact: {

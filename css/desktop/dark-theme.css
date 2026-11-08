@@ -59,7 +59,6 @@ body.dark-theme .tech-vista-badge {
   border-color: #4a6a9a;
   color: #a0c0e0;
 }
-body.dark-theme .document-item span,
 body.dark-theme .cp-title {
   color: #7eb4ea;
 }
@@ -211,13 +210,11 @@ body.dark-theme .welcome-window-header p {
   color: #9b968d;
 }
 body.dark-theme .cp-title,
-body.dark-theme .document-item span,
 body.dark-theme .welcome-link-card strong,
 body.dark-theme .skill-vista-item i,
 body.dark-theme .cp-item i,
 body.dark-theme .drive-item i,
 body.dark-theme .game-item i,
-body.dark-theme .document-item i,
 body.dark-theme .help-item i,
 body.dark-theme .program-item i,
 body.dark-theme .welcome-link-card i {
@@ -238,7 +235,6 @@ body.dark-theme .program-category {
 body.dark-theme .program-category h4 {
   color: #8cc4f5;
 }
-body.dark-theme .document-item:hover,
 body.dark-theme .program-item:hover {
   background: rgba(108, 176, 236, 0.1);
 }
