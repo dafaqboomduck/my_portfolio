@@ -434,3 +434,22 @@ body.dark-theme .about-project-card:hover {
 body.dark-theme .about-project-card h4 {
   color: #8cc4f5;
 }
+body.dark-theme .about-tabs,
+body.dark-theme .about-tab,
+body.dark-theme .about-tab-panel {
+  border-color: #45494b;
+}
+body.dark-theme .about-tab {
+  background: linear-gradient(180deg, #2b2e30 0%, #222527 100%);
+  color: #e8e6e3;
+}
+body.dark-theme .about-tab:hover {
+  background: linear-gradient(180deg, #33373a 0%, #2b2e30 100%);
+}
+body.dark-theme .about-tab[aria-selected='true'],
+body.dark-theme .about-tab-panel {
+  background: #1b1d1e;
+}
+body.dark-theme .about-tab[aria-selected='true'] {
+  color: #8cc4f5;
+}

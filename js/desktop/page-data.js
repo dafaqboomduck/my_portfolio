@@ -229,6 +229,33 @@ function generateAboutContent() {
   const p = profile;
   const c = p.contact;
   const featured = p.featuredProjects.filter((key) => projectData[key]);
+  const experience = p.experience || [];
+  const hasExperience = experience.length > 0;
+
+  const educationHTML = p.education
+    .map(
+      (e) => `
+      <div class="vista-info-box about-edu">
+          <div class="about-edu-head">
+            <h4>${e.school}</h4>
+            <span class="about-edu-dates">${e.dates}</span>
+          </div>
+          <p>${e.detail}</p>
+      </div>`,
+    )
+    .join('');
+  const experienceHTML = experience
+    .map(
+      (x) => `
+      <div class="vista-info-box about-edu">
+          <div class="about-edu-head">
+            <h4>${x.role} · ${x.company}</h4>
+            <span class="about-edu-dates">${x.dates}</span>
+          </div>
+          <p>${x.detail}</p>
+      </div>`,
+    )
+    .join('');
 
   // Left column answers "who / how to reach", right column "what was built",
   // so a quick visitor gets both without scrolling on a maximized window.
@@ -305,24 +332,40 @@ function generateAboutContent() {
             })
             .join('')}
 
-          <h3>Education</h3>
-          ${p.education
-            .map(
-              (e) => `
-              <div class="vista-info-box about-edu">
-                  <div class="about-edu-head">
-                    <h4>${e.school}</h4>
-                    <span class="about-edu-dates">${e.dates}</span>
-                  </div>
-                  <p>${e.detail}</p>
-              </div>
-          `,
-            )
-            .join('')}
+          ${hasExperience ? aboutTabs(experienceHTML, educationHTML) : `<h3>Education</h3>${educationHTML}`}
         </div>
       </div>
     </div>
     `;
+}
+
+// Experience and Education share one tabbed box so adding jobs never makes
+// the maximized About page taller than the screen.
+function aboutTabs(experienceHTML, educationHTML) {
+  return `
+    <div class="about-tabs" role="tablist">
+      <button class="about-tab" role="tab" aria-selected="true" data-tab="experience"
+              onclick="switchAboutTab(this)">Experience</button>
+      <button class="about-tab" role="tab" aria-selected="false" data-tab="education"
+              onclick="switchAboutTab(this)">Education</button>
+    </div>
+    <div class="about-tab-panel" role="tabpanel" data-panel="experience">${experienceHTML}</div>
+    <div class="about-tab-panel" role="tabpanel" data-panel="education" hidden>${educationHTML}</div>
+  `;
+}
+
+/**
+ * Show the About tab panel matching the clicked tab.
+ * @param {HTMLElement} tab - the clicked .about-tab button; its data-tab names the panel.
+ */
+function switchAboutTab(tab) {
+  const col = tab.closest('.about-col');
+  col.querySelectorAll('.about-tab').forEach((t) => {
+    t.setAttribute('aria-selected', String(t === tab));
+  });
+  col.querySelectorAll('.about-tab-panel').forEach((panel) => {
+    panel.hidden = panel.dataset.panel !== tab.dataset.tab;
+  });
 }
 
 function generateSkillsContent() {
