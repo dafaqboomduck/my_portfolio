@@ -82,10 +82,12 @@ function generateProjectCards() {
     const status = getProjectStatus(project);
     html += `
             <div class="project-vista-card clickable${status ? ` has-status st-${status.state}` : ''}" onclick="navigateFromProjects('${key}')">
-                <div class="project-vista-header">${project.title}</div>
+                <div class="project-vista-header">
+                    <span class="project-vista-title">${project.title}</span>
+                    <div class="project-vista-tags">${generateTagBadges(project)}${generateSeriesChip(project)}</div>
+                </div>
                 <div class="project-vista-body">
                     ${generateStatusLabel(project)}
-                    ${generateTagBadges(project)}${generateSeriesChip(project)}
                     <p>${project.description}</p>
                     <div class="project-vista-tech">
                         ${project.technologies

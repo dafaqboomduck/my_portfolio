@@ -777,6 +777,39 @@
   border: 1px solid #f0d58a;
   vertical-align: top;
 }
+/* Card banner: tags + series chip follow the title; they wrap under a long title */
+.project-vista-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+}
+.project-vista-title {
+  min-width: 0;
+}
+.project-vista-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+/* Same box model for tags and chip, so mixed rows line up */
+.project-vista-tags .project-vista-tag,
+.project-vista-tags .series-chip {
+  margin: 0;
+  line-height: 16px;
+  border: 1px solid transparent;
+  font-weight: 400;
+}
+/* Light-blue tag would vanish on the blue banner */
+.project-vista-tags .project-vista-tag {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.28);
+}
+.project-vista-tags .series-chip {
+  border-color: #f0d58a;
+}
 .related-list {
   display: grid;
   gap: 6px;

@@ -456,6 +456,11 @@ body.dark-theme .series-chip {
   color: #f0c870;
   border-color: #6a5630;
 }
+body.dark-theme .project-vista-tags .project-vista-tag {
+  background: rgba(255, 255, 255, 0.1);
+  color: #d6e6f6;
+  border-color: rgba(255, 255, 255, 0.18);
+}
 body.dark-theme .related-item {
   background: #202325;
   border-color: #3a3d3f;
