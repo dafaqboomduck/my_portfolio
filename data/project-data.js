@@ -1,6 +1,127 @@
 // Project data — single source of truth for both desktop and phone editions.
 // hiddenTechnologies is never rendered; it only adds Start Menu search keywords.
+// series (optional) links projects that continue each other: same id = same
+// series, part sets the order, note is the subtitle shown in the series box.
 const projectData = {
+  project9: {
+    title: 'NPEC Production ML Platform: Deployment, CI/CD, and Monitoring',
+    tag: 'MLOps',
+    series: {
+      id: 'npec',
+      name: 'NPEC Root Phenotyping',
+      part: 2,
+      note: 'Apr–Jun 2026 · Team of five',
+    },
+    description:
+      'Production platform for plant root analysis, built by a team of ' +
+      'five on top of my root segmentation pipeline.',
+    fullDescription:
+      'Second phase of the NPEC project at Breda University of Applied ' +
+      'Sciences (Apr to Jun 2026). With four classmates, I turned my ' +
+      'earlier root segmentation pipeline into a production system with a ' +
+      'FastAPI backend, React dashboard, PostgreSQL, MinIO, and an Azure ML ' +
+      'retraining pipeline.\n\n' +
+      'I owned deployment and delivery: packaging the pipeline as the ' +
+      'npec-cv library, Docker images, CI/CD, the on-prem Portainer stack, ' +
+      'the Azure cloud deployment, test coverage, and Metabase monitoring.',
+    technologies: [
+      'Docker',
+      'GitHub Actions',
+      'Portainer',
+      'Azure ML',
+      'Metabase',
+      'FastAPI',
+    ],
+    hiddenTechnologies: [
+      'Python',
+      'Docker Compose',
+      'GHCR',
+      'PostgreSQL',
+      'CUDA',
+      'TensorFlow',
+      'CI/CD',
+    ],
+    features: [
+      'npec-cv Python package and CLI published to TestPyPI, with model ' +
+        'weights distributed via GitHub Releases',
+      'Separate Docker images for local development, on-prem production, ' +
+        'and Azure ML cloud serving',
+      'PR checks for linting, formatting, pytest, and Docker builds on ' +
+        'every merge into dev and main',
+      'Release workflow that tags images with the Git SHA, pushes them to ' +
+        'GHCR, and redeploys the Portainer stack through a webhook',
+      'Metabase dashboards over PostgreSQL tracking request volume, error ' +
+        'rates, latency, and model quality',
+    ],
+    achievements: [
+      'Selected with my team to showcase the project at BUas Industry Day, ' +
+        'where I presented it to industry guests',
+      'Automated on-prem delivery through a self-hosted runner inside the ' +
+        'university firewall',
+      'Fixed memory hogging by releasing GPU memory after an ' +
+        'inference idle timeout',
+      'Kept inference working on older Pascal GPUs by pinning a ' +
+        'compatible cuDNN version',
+    ],
+    github: 'https://github.com/dafaqboomduck/npec-project',
+    demo: '#',
+  },
+  project8: {
+    title: 'NPEC Root Phenotyping and Robotic Inoculation',
+    tag: 'Computer Vision & Robotics',
+    series: {
+      id: 'npec',
+      name: 'NPEC Root Phenotyping',
+      part: 1,
+      note: 'Nov 2025–Jan 2026 · Solo',
+    },
+    description:
+      'Root segmentation pipeline that measures plant roots and guides a ' +
+      'robot arm to inoculate each root tip.',
+    fullDescription:
+      'Solo project for the Netherlands Plant Eco-phenotyping Centre (NPEC) ' +
+      'at Breda University of Applied Sciences (Nov 2025 to Jan 2026). The ' +
+      'pipeline segments Arabidopsis thaliana roots in Petri dish scans, ' +
+      'measures root length, and locates root tips. A simulated OT-2 robot ' +
+      'then moves to each tip with a PID or reinforcement learning ' +
+      'controller to inoculate it.\n',
+    technologies: [
+      'TensorFlow',
+      'Keras',
+      'OpenCV',
+      'Stable Baselines3',
+      'PyBullet',
+      'Gymnasium',
+    ],
+    hiddenTechnologies: [
+      'Python',
+      'NumPy',
+      'U-Net',
+      'PPO',
+      'Reinforcement Learning',
+    ],
+    features: [
+      'U-Net trained with knowledge distillation from a teacher ensemble, ' +
+        'then retrained on ground truth with a weighted Dice-BCE loss',
+      'Patch-based inference on full-resolution scans, with anchor ' +
+        'detection assigning each root to its plant',
+      'Adaptive thresholding and a shoot-overlap penalty so faint roots ' +
+        'are found without false positives',
+      'Geodesic root length via skeletonisation, gap bridging, and ' +
+        'Dijkstra over an 8-connected pixel graph',
+      'Custom Gymnasium environment for the OT-2 with a shaped reward, ' +
+        'driving PID and PPO controllers through multi-target inoculation',
+    ],
+    achievements: [
+      'First place in the school Kaggle competition, with around 5% sMAPE ' +
+        'on root length',
+      'Reached 88% F1 for root segmentation on the validation set',
+      'Achieved sub-millimetre precision in the simulated environment for ' +
+        'the OT-2 robot arm',
+    ],
+    github: 'https://github.com/dafaqboomduck/npec-project',
+    demo: '#',
+  },
   project7: {
     title: 'Inkshade: Desktop PDF Reader with Annotation and Narration',
     tag: 'Desktop Application',
