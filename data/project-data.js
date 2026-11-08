@@ -5,6 +5,58 @@
 // status (optional) is { label, state }: label is free text, state picks the
 // color: 'finished' (gray), 'pending' (amber) or 'ongoing' (green).
 const projectData = {
+  project10: {
+    title: 'Boostlogix Route Optimization Pipeline',
+    tag: ['Route Optimization', 'Data Engineering'],
+    status: { label: 'Finished · Sep 2026', state: 'finished' },
+    description:
+      'End-to-end route optimization pipeline for a delivery fleet, from ' +
+      'raw customer data to a client-facing results dashboard.',
+    fullDescription:
+      'Built with one teammate for a Boostlogix client that delivers its ' +
+      'own products (Feb to Sep 2026). About a third of the project went ' +
+      'into preprocessing: merging the client data into one table, filling ' +
+      'missing values, geocoding stops, and computing distances between ' +
+      'them.\n\n' +
+      'Most of the remaining work went into the optimization framework. My ' +
+      'hand-built v1 (nearest neighbour plus 2-opt and Or-opt) worked well ' +
+      'without time windows but broke down once they were added, so I ' +
+      'replaced it with Google OR-Tools. Results were presented to the ' +
+      'client through a web dashboard.',
+    technologies: [
+      'Pandas',
+      'Google OR-Tools',
+      'HERE API',
+      'Leaflet.js',
+    ],
+    hiddenTechnologies: [
+      'Python',
+      'JavaScript',
+      'HTML',
+      'VRP',
+    ],
+    features: [
+      'Preprocessing pipeline that cleaned, filled, and merged the client ' +
+        'data into a single table',
+      'Geocoding of delivery locations via the HERE API, with haversine ' +
+        'distance matrices between stops',
+      'Hand-built v1 solver using nearest-neighbour construction with ' +
+        '2-opt and Or-opt local search',
+      'OR-Tools solver for the time-window problem, driven by a custom ' +
+        'difficulty ranker with adaptive retries on violations',
+      'HTML/JS dashboard with Leaflet.js maps presenting the routes and ' +
+        'scenarios to the client',
+    ],
+    achievements: [
+      'Optimized ~800 routes across two months, cutting the fleet\'s ' +
+        'route count by 22% and saving 60k km of driving over that span',
+      'Proposed two scenarios: €600k yearly savings from pure ' +
+        'optimization, and €1.5M with load balancing to an external carrier',
+      'Reached zero time-window violations with the tiered solver system',
+    ],
+    github: '#',
+    demo: 'https://route-optimizer.demo.boostlogix.com',
+  },
   project9: {
     title: 'NPEC Production ML Platform: Deployment, CI/CD, and Monitoring',
     tag: 'MLOps',
