@@ -59,7 +59,6 @@ body.dark-theme .tech-vista-badge {
   border-color: #4a6a9a;
   color: #a0c0e0;
 }
-body.dark-theme .document-item span,
 body.dark-theme .cp-title {
   color: #7eb4ea;
 }
@@ -211,13 +210,11 @@ body.dark-theme .welcome-window-header p {
   color: #9b968d;
 }
 body.dark-theme .cp-title,
-body.dark-theme .document-item span,
 body.dark-theme .welcome-link-card strong,
 body.dark-theme .skill-vista-item i,
 body.dark-theme .cp-item i,
 body.dark-theme .drive-item i,
 body.dark-theme .game-item i,
-body.dark-theme .document-item i,
 body.dark-theme .help-item i,
 body.dark-theme .program-item i,
 body.dark-theme .welcome-link-card i {
@@ -238,7 +235,6 @@ body.dark-theme .program-category {
 body.dark-theme .program-category h4 {
   color: #8cc4f5;
 }
-body.dark-theme .document-item:hover,
 body.dark-theme .program-item:hover {
   background: rgba(108, 176, 236, 0.1);
 }
@@ -433,4 +429,72 @@ body.dark-theme .about-project-card:hover {
 }
 body.dark-theme .about-project-card h4 {
   color: #8cc4f5;
+}
+body.dark-theme .about-tabs,
+body.dark-theme .about-tab,
+body.dark-theme .about-tab-panel {
+  border-color: #45494b;
+}
+body.dark-theme .about-tab {
+  background: linear-gradient(180deg, #2b2e30 0%, #222527 100%);
+  color: #e8e6e3;
+}
+body.dark-theme .about-tab:hover {
+  background: linear-gradient(180deg, #33373a 0%, #2b2e30 100%);
+}
+body.dark-theme .about-tab[aria-selected='true'],
+body.dark-theme .about-tab-panel {
+  background: #1b1d1e;
+}
+body.dark-theme .about-tab[aria-selected='true'] {
+  color: #8cc4f5;
+}
+
+/* Project series */
+body.dark-theme .series-chip {
+  background: #3a3020;
+  color: #f0c870;
+  border-color: #6a5630;
+}
+body.dark-theme .project-vista-tags .project-vista-tag {
+  background: rgba(255, 255, 255, 0.1);
+  color: #d6e6f6;
+  border-color: rgba(255, 255, 255, 0.18);
+}
+body.dark-theme .related-item {
+  background: #202325;
+  border-color: #3a3d3f;
+}
+body.dark-theme .related-item:not(.current):hover {
+  border-color: #6cb0ec;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+body.dark-theme .related-item.current {
+  background: #233244;
+  border-color: #3a5a8a;
+  border-left-color: #6cb0ec;
+}
+body.dark-theme .related-item .ri-part,
+body.dark-theme .related-item .ri-sub {
+  color: #9b968d;
+}
+body.dark-theme .related-item .ri-title,
+body.dark-theme .related-item .ri-go,
+body.dark-theme .related-item .ri-here,
+body.dark-theme .related-item.current .ri-part {
+  color: #8cc4f5;
+}
+body.dark-theme .related-item.current .ri-title {
+  color: #e8e6e3;
+}
+
+/* Project status. Repeats the bar rule because the dark card rules above outrank the light one. */
+body.dark-theme .st-finished { --st-bg: #2a2d2f; --st-fg: #b5b1aa; --st-bd: #45484a; --st-dot: #8a8a8a; }
+body.dark-theme .st-pending { --st-bg: #3a3020; --st-fg: #f0c870; --st-bd: #6a5630; --st-dot: #f0b020; }
+body.dark-theme .st-ongoing { --st-bg: #1d3322; --st-fg: #8fd895; --st-bd: #3c6a45; --st-dot: #4cc95a; }
+body.dark-theme .about-project-card.has-status,
+body.dark-theme .about-project-card.has-status:hover,
+body.dark-theme .project-vista-card.has-status,
+body.dark-theme .project-vista-card.has-status:hover {
+  border-left-color: var(--st-dot);
 }

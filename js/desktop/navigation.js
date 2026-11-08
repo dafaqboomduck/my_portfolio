@@ -32,9 +32,10 @@ function navigateFromProjects(projectKey) {
 function navigateFromAbout(projectKey) {
   navigateTo('about', null, (stack) => openProjectDetail(projectKey, stack));
 }
-function navigateFromDocuments(projectKey) {
-  navigateTo('documents', null, (stack) =>
-    openProjectDetail(projectKey, stack),
+// Series link: swap one project window for another; Back returns to the first.
+function navigateFromProject(fromKey, toKey) {
+  navigateTo('project-' + fromKey, null, (stack) =>
+    openProjectDetail(toKey, stack),
   );
 }
 function navigateFromGames(targetWindow) {
@@ -68,7 +69,7 @@ function openProjectDetail(projectKey, historyStack) {
     title: project.title,
     icon: 'images/projects.png',
     path: `C:\\Users\\Razvan\\Documents\\Projects\\${project.title.replace(/[^a-zA-Z0-9]/g, '_')}`,
-    content: generateProjectDetailContent(project),
+    content: generateProjectDetailContent(projectKey, project),
   };
   createWindow(detailId, content, stack);
 }

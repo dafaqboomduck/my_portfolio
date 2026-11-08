@@ -87,6 +87,9 @@
   font-size: 11px;
   margin-bottom: 10px;
 }
+.project-vista-tag + .project-vista-tag {
+  margin-left: 4px;
+}
 .project-vista-tech {
   display: flex;
   flex-wrap: wrap;
@@ -138,42 +141,6 @@
 }
 .vista-btn i {
   font-size: 14px;
-}
-
-/* Documents Grid View */
-.documents-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 20px;
-  padding: 20px 10px;
-}
-.document-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 15px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-align: center;
-}
-.document-item:hover {
-  background: rgba(30, 87, 153, 0.1);
-}
-.document-item:active {
-  background: rgba(30, 87, 153, 0.2);
-}
-.document-item i {
-  font-size: 48px;
-  color: #1e5799;
-  margin-bottom: 8px;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-}
-.document-item span {
-  font-size: 11px;
-  color: #333;
-  word-wrap: break-word;
-  line-height: 1.3;
 }
 
 /* Default Programs / Installed Programs */
@@ -676,6 +643,61 @@
 .about-project-card .tech-vista-badge {
   font-size: 13px;
 }
+
+/* Project status: gray finished, amber pending, green ongoing */
+.st-finished { --st-bg: #efefef; --st-fg: #555; --st-bd: #cfcfcf; --st-dot: #8a8a8a; }
+.st-pending { --st-bg: #fff1d0; --st-fg: #8a5a00; --st-bd: #f0c96a; --st-dot: #e0a000; }
+.st-ongoing { --st-bg: #e2f5df; --st-fg: #24692a; --st-bd: #9fd49a; --st-dot: #2fa83a; }
+/* Listed with :hover because the hover rule's border-color would reset the bar to blue */
+.about-project-card.has-status,
+.about-project-card.has-status:hover {
+  border-left-color: var(--st-dot);
+}
+.project-vista-card.has-status,
+.project-vista-card.has-status:hover {
+  border-left: 4px solid var(--st-dot);
+}
+/* Own line above the tags, so it never wraps into the tag row */
+.project-vista-body > .status-text {
+  display: flex;
+  margin-bottom: 8px;
+}
+.status-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--st-fg);
+}
+.status-text::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--st-dot);
+}
+.about-project-card .status-text {
+  margin-bottom: 2px;
+}
+.status-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 8px 12px;
+  border: 1px solid var(--st-bd);
+  border-left: 4px solid var(--st-dot);
+  border-radius: 4px;
+  background: var(--st-bg);
+  color: var(--st-fg);
+  font-size: 13px;
+}
+.status-banner b {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
 .about-edu {
   padding: 10px 15px;
   margin: 8px 0;
@@ -698,4 +720,156 @@
   font-size: 13px;
   white-space: nowrap;
   opacity: 0.7;
+}
+
+/* Experience | Education tabs (Vista tab control) */
+.about-tabs {
+  display: flex;
+  gap: 2px;
+  margin-top: 16px;
+  padding-left: 4px;
+  border-bottom: 1px solid #8e8f8f;
+}
+.about-tab {
+  margin-bottom: -1px;
+  padding: 5px 16px;
+  border: 1px solid #8e8f8f;
+  border-bottom: none;
+  border-radius: 3px 3px 0 0;
+  background: linear-gradient(180deg, #f7f7f7 0%, #e1e1e1 100%);
+  color: #333;
+  font-size: 15px;
+  cursor: pointer;
+}
+.about-tab:hover {
+  background: linear-gradient(180deg, #eaf6fd 0%, #bee6fd 100%);
+}
+/* Selected tab sits taller and merges into the panel below it */
+.about-tab[aria-selected='true'] {
+  margin-top: -2px;
+  padding-top: 7px;
+  background: #fff;
+  color: #2a6ab8;
+  font-weight: 600;
+}
+.about-tab:focus-visible {
+  outline: 1px dotted currentColor;
+  outline-offset: -4px;
+}
+.about-tab-panel {
+  padding: 4px 12px;
+  border: 1px solid #8e8f8f;
+  border-top: none;
+  background: #fff;
+}
+
+/* Project series: chip on cards, "Part of a series" box in project windows */
+.series-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 6px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 11px;
+  background: #fff4d6;
+  color: #8a5a00;
+  border: 1px solid #f0d58a;
+  vertical-align: top;
+}
+/* Card banner: tags + series chip follow the title; they wrap under a long title */
+.project-vista-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+}
+.project-vista-title {
+  min-width: 0;
+}
+.project-vista-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+/* Same box model for tags and chip, so mixed rows line up */
+.project-vista-tags .project-vista-tag,
+.project-vista-tags .series-chip {
+  margin: 0;
+  line-height: 16px;
+  border: 1px solid transparent;
+  font-weight: 400;
+}
+/* Light-blue tag would vanish on the blue banner */
+.project-vista-tags .project-vista-tag {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.28);
+}
+.project-vista-tags .series-chip {
+  border-color: #f0d58a;
+}
+.related-list {
+  display: grid;
+  gap: 6px;
+}
+.related-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: #fff;
+  border: 1px solid #c8d8ea;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.related-item:not(.current):hover {
+  border-color: #1e5799;
+  box-shadow: 0 2px 6px rgba(30, 87, 153, 0.2);
+}
+/* The project being viewed: selected-row look, like Explorer; not clickable. */
+.related-item.current {
+  cursor: default;
+  background: #f3f8fe;
+  border-color: #a0c4e8;
+  border-left: 4px solid #1e5799;
+  /* Left bar is 3px wider than the border, so trim the padding to keep text aligned. */
+  padding-left: 7px;
+}
+.related-item .ri-part {
+  flex: 0 0 52px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #888;
+}
+.related-item .ri-main {
+  flex: 1;
+  min-width: 0;
+}
+.related-item .ri-title {
+  font-weight: 600;
+  color: #1e5799;
+}
+.related-item .ri-sub {
+  font-size: 11px;
+  color: #666;
+}
+.related-item .ri-go,
+.related-item .ri-here,
+.related-item.current .ri-part {
+  color: #1e5799;
+}
+.related-item .ri-here {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+.related-item.current .ri-title {
+  color: #333;
 }

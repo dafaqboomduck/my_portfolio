@@ -5,14 +5,89 @@
 
 // ========== DYNAMIC CONTENT GENERATORS ==========
 
+// project.tag may be one string or an array of strings; always returns an array.
+function getProjectTags(project) {
+  return [].concat(project.tag || []);
+}
+
+function generateTagBadges(project, style = '') {
+  const attr = style ? ` style="${style}"` : '';
+  return getProjectTags(project)
+    .map((t) => `<span class="project-vista-tag"${attr}>${t}</span>`)
+    .join('');
+}
+
+// Colors live in CSS (.st-<state>); an unknown state renders nothing rather
+// than an unstyled label.
+const STATUS_STATES = ['finished', 'pending', 'ongoing'];
+
+function getProjectStatus(project) {
+  const s = project.status;
+  return s && STATUS_STATES.includes(s.state) ? s : null;
+}
+
+function generateStatusLabel(project) {
+  const s = getProjectStatus(project);
+  return s ? `<span class="status-text st-${s.state}">${s.label}</span>` : '';
+}
+
+function generateStatusBanner(project) {
+  const s = getProjectStatus(project);
+  return s ? `<div class="status-banner st-${s.state}"><b>Status</b><span>${s.label}</span></div>` : '';
+}
+
+// Projects sharing project.series.id, ordered by part, as [key, project] pairs.
+function getSeriesMembers(series) {
+  if (!series) return [];
+  return Object.entries(projectData)
+    .filter(([, p]) => p.series && p.series.id === series.id)
+    .sort(([, a], [, b]) => a.series.part - b.series.part);
+}
+
+function generateSeriesChip(project) {
+  const total = getSeriesMembers(project.series).length;
+  // A series of one has nothing to link to, so it gets no chip.
+  if (total < 2) return '';
+  return `<span class="series-chip"><i class="bi bi-link-45deg"></i>${project.series.name} · Part ${project.series.part} of ${total}</span>`;
+}
+
+function generateSeriesBox(projectKey, project) {
+  const members = getSeriesMembers(project.series);
+  if (members.length < 2) return '';
+  const items = members
+    .map(([key, p]) => {
+      const current = key === projectKey;
+      const sub = [p.series.note, ...getProjectTags(p)].filter(Boolean).join(' · ');
+      return `
+            <div class="related-item${current ? ' current' : ''}"${current ? '' : ` onclick="navigateFromProject('${projectKey}', '${key}')"`}>
+                <span class="ri-part">Part ${p.series.part}</span>
+                <div class="ri-main">
+                    <div class="ri-title">${p.title}</div>
+                    <div class="ri-sub">${sub}</div>
+                </div>
+                ${current ? '<span class="ri-here">You are here</span>' : '<i class="bi bi-chevron-right ri-go"></i>'}
+            </div>`;
+    })
+    .join('');
+  return `
+        <div class="vista-info-box">
+            <h4>Part of a series: ${project.series.name}</h4>
+            <div class="related-list">${items}</div>
+        </div>`;
+}
+
 function generateProjectCards() {
   let html = '';
   for (const [key, project] of Object.entries(projectData)) {
+    const status = getProjectStatus(project);
     html += `
-            <div class="project-vista-card clickable" onclick="navigateFromProjects('${key}')">
-                <div class="project-vista-header">${project.title}</div>
+            <div class="project-vista-card clickable${status ? ` has-status st-${status.state}` : ''}" onclick="navigateFromProjects('${key}')">
+                <div class="project-vista-header">
+                    <span class="project-vista-title">${project.title}</span>
+                    <div class="project-vista-tags">${generateTagBadges(project)}${generateSeriesChip(project)}</div>
+                </div>
                 <div class="project-vista-body">
-                    <span class="project-vista-tag">${project.tag}</span>
+                    ${generateStatusLabel(project)}
                     <p>${project.description}</p>
                     <div class="project-vista-tech">
                         ${project.technologies
@@ -27,30 +102,6 @@ function generateProjectCards() {
             </div>
         `;
   }
-  return html;
-}
-
-function generateDocumentsView() {
-  let html = '<div class="documents-grid">';
-  for (const [key, project] of Object.entries(projectData)) {
-    const iconClass =
-      project.tag.includes('AI') || project.tag.includes('Healthcare')
-        ? 'bi-file-earmark-medical'
-        : project.tag.includes('Financial')
-          ? 'bi-file-earmark-bar-graph'
-          : project.tag.includes('Sports')
-            ? 'bi-file-earmark-play'
-            : project.tag.includes('International')
-              ? 'bi-file-earmark-person'
-              : 'bi-file-earmark-code';
-    html += `
-            <div class="document-item" onclick="navigateFromDocuments('${key}')">
-                <i class="bi ${iconClass}"></i>
-                <span>${project.title.substring(0, 25)}${project.title.length > 25 ? '...' : ''}</span>
-            </div>
-        `;
-  }
-  html += '</div>';
   return html;
 }
 
@@ -181,15 +232,17 @@ function generateProgramsContent() {
   return html;
 }
 
-function generateProjectDetailContent(project) {
+function generateProjectDetailContent(projectKey, project) {
   return `
         <h2>${project.title}</h2>
-        <span class="project-vista-tag" style="font-size:13px;padding:5px 12px">${project.tag}</span>
+        ${generateTagBadges(project, 'font-size:13px;padding:5px 12px')}
+        ${generateStatusBanner(project)}
 
         <div class="vista-info-box" style="margin-top:20px">
             <h4>Overview</h4>
             <p style="margin:0; white-space:pre-line">${project.fullDescription}</p>
         </div>
+        ${generateSeriesBox(projectKey, project)}
 
         <h3>Technologies Used</h3>
         <div class="project-vista-tech" style="margin:15px 0">
@@ -229,6 +282,33 @@ function generateAboutContent() {
   const p = profile;
   const c = p.contact;
   const featured = p.featuredProjects.filter((key) => projectData[key]);
+  const experience = p.experience || [];
+  const hasExperience = experience.length > 0;
+
+  const educationHTML = p.education
+    .map(
+      (e) => `
+      <div class="vista-info-box about-edu">
+          <div class="about-edu-head">
+            <h4>${e.school}</h4>
+            <span class="about-edu-dates">${e.dates}</span>
+          </div>
+          <p>${e.detail}</p>
+      </div>`,
+    )
+    .join('');
+  const experienceHTML = experience
+    .map(
+      (x) => `
+      <div class="vista-info-box about-edu">
+          <div class="about-edu-head">
+            <h4>${x.role} · ${x.company}</h4>
+            <span class="about-edu-dates">${x.dates}</span>
+          </div>
+          <p>${x.detail}</p>
+      </div>`,
+    )
+    .join('');
 
   // Left column answers "who / how to reach", right column "what was built",
   // so a quick visitor gets both without scrolling on a maximized window.
@@ -289,12 +369,14 @@ function generateAboutContent() {
           ${featured
             .map((key) => {
               const project = projectData[key];
+              const status = getProjectStatus(project);
               return `
-              <div class="about-project-card" onclick="navigateFromAbout('${key}')">
+              <div class="about-project-card${status ? ` has-status st-${status.state}` : ''}" onclick="navigateFromAbout('${key}')">
+                  ${generateStatusLabel(project)}
                   <h4>${project.title}</h4>
                   <p>${project.description}</p>
                   <div class="project-vista-tech">
-                      <span class="project-vista-tag">${project.tag}</span>
+                      ${generateTagBadges(project)}
                       ${project.technologies
                         .slice(0, 4)
                         .map((t) => `<span class="tech-vista-badge">${t}</span>`)
@@ -305,24 +387,40 @@ function generateAboutContent() {
             })
             .join('')}
 
-          <h3>Education</h3>
-          ${p.education
-            .map(
-              (e) => `
-              <div class="vista-info-box about-edu">
-                  <div class="about-edu-head">
-                    <h4>${e.school}</h4>
-                    <span class="about-edu-dates">${e.dates}</span>
-                  </div>
-                  <p>${e.detail}</p>
-              </div>
-          `,
-            )
-            .join('')}
+          ${hasExperience ? aboutTabs(experienceHTML, educationHTML) : `<h3>Education</h3>${educationHTML}`}
         </div>
       </div>
     </div>
     `;
+}
+
+// Experience and Education share one tabbed box so adding jobs never makes
+// the maximized About page taller than the screen.
+function aboutTabs(experienceHTML, educationHTML) {
+  return `
+    <div class="about-tabs" role="tablist">
+      <button class="about-tab" role="tab" aria-selected="true" data-tab="experience"
+              onclick="switchAboutTab(this)">Experience</button>
+      <button class="about-tab" role="tab" aria-selected="false" data-tab="education"
+              onclick="switchAboutTab(this)">Education</button>
+    </div>
+    <div class="about-tab-panel" role="tabpanel" data-panel="experience">${experienceHTML}</div>
+    <div class="about-tab-panel" role="tabpanel" data-panel="education" hidden>${educationHTML}</div>
+  `;
+}
+
+/**
+ * Show the About tab panel matching the clicked tab.
+ * @param {HTMLElement} tab - the clicked .about-tab button; its data-tab names the panel.
+ */
+function switchAboutTab(tab) {
+  const col = tab.closest('.about-col');
+  col.querySelectorAll('.about-tab').forEach((t) => {
+    t.setAttribute('aria-selected', String(t === tab));
+  });
+  col.querySelectorAll('.about-tab-panel').forEach((panel) => {
+    panel.hidden = panel.dataset.panel !== tab.dataset.tab;
+  });
 }
 
 function generateSkillsContent() {
@@ -478,12 +576,6 @@ const windowContent = {
     title: 'Projects',
     icon: 'images/projects.png',
     path: 'C:\\Users\\Razvan\\Documents\\Projects',
-    content: '', // Generated dynamically in openWindow
-  },
-  documents: {
-    title: 'Documents',
-    icon: 'images/documents.png',
-    path: 'C:\\Users\\Razvan\\Documents',
     content: '', // Generated dynamically in openWindow
   },
   contact: {

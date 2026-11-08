@@ -40,7 +40,7 @@ sup { position: relative; font-size: .75em; line-height: 0; vertical-align: base
 
 /* ...except click targets and games inside content */
 .window-content .vista-btn,
-.window-content .document-item,
+.window-content .related-item,
 .window-content .game-item,
 .window-content .cp-item,
 .window-content .drive-item,

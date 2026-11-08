@@ -96,6 +96,22 @@ function aboutHTML() {
     '<div class="card"><h4>Current status</h4><p>' +
     esc(a.status) +
     '</p></div>';
+  // Phone is a scrolling page, so experience gets its own section instead of tabs.
+  if (a.experience && a.experience.length) {
+    b += '<h3>Experience</h3>';
+    a.experience.forEach(function (x) {
+      b +=
+        '<div class="card"><h4>' +
+        esc(x.role) +
+        ' · ' +
+        esc(x.company) +
+        '</h4><p>' +
+        esc(x.dates) +
+        '</p><p>' +
+        esc(x.detail) +
+        '</p></div>';
+    });
+  }
   b += '<h3>Education</h3>';
   a.education.forEach(function (e) {
     b +=
