@@ -449,3 +449,36 @@ body.dark-theme .about-tab-panel {
 body.dark-theme .about-tab[aria-selected='true'] {
   color: #8cc4f5;
 }
+
+/* Project series */
+body.dark-theme .series-chip {
+  background: #3a3020;
+  color: #f0c870;
+  border-color: #6a5630;
+}
+body.dark-theme .related-item {
+  background: #202325;
+  border-color: #3a3d3f;
+}
+body.dark-theme .related-item:not(.current):hover {
+  border-color: #6cb0ec;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+body.dark-theme .related-item.current {
+  background: #233244;
+  border-color: #3a5a8a;
+  border-left-color: #6cb0ec;
+}
+body.dark-theme .related-item .ri-part,
+body.dark-theme .related-item .ri-sub {
+  color: #9b968d;
+}
+body.dark-theme .related-item .ri-title,
+body.dark-theme .related-item .ri-go,
+body.dark-theme .related-item .ri-here,
+body.dark-theme .related-item.current .ri-part {
+  color: #8cc4f5;
+}
+body.dark-theme .related-item.current .ri-title {
+  color: #e8e6e3;
+}

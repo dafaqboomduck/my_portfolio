@@ -5,6 +5,46 @@
 
 // ========== DYNAMIC CONTENT GENERATORS ==========
 
+// Projects sharing project.series.id, ordered by part, as [key, project] pairs.
+function getSeriesMembers(series) {
+  if (!series) return [];
+  return Object.entries(projectData)
+    .filter(([, p]) => p.series && p.series.id === series.id)
+    .sort(([, a], [, b]) => a.series.part - b.series.part);
+}
+
+function generateSeriesChip(project) {
+  const total = getSeriesMembers(project.series).length;
+  // A series of one has nothing to link to, so it gets no chip.
+  if (total < 2) return '';
+  return `<span class="series-chip"><i class="bi bi-link-45deg"></i>${project.series.name} · Part ${project.series.part} of ${total}</span>`;
+}
+
+function generateSeriesBox(projectKey, project) {
+  const members = getSeriesMembers(project.series);
+  if (members.length < 2) return '';
+  const items = members
+    .map(([key, p]) => {
+      const current = key === projectKey;
+      const sub = [p.series.note, p.tag].filter(Boolean).join(' · ');
+      return `
+            <div class="related-item${current ? ' current' : ''}"${current ? '' : ` onclick="navigateFromProject('${projectKey}', '${key}')"`}>
+                <span class="ri-part">Part ${p.series.part}</span>
+                <div class="ri-main">
+                    <div class="ri-title">${p.title}</div>
+                    <div class="ri-sub">${sub}</div>
+                </div>
+                ${current ? '<span class="ri-here">You are here</span>' : '<i class="bi bi-chevron-right ri-go"></i>'}
+            </div>`;
+    })
+    .join('');
+  return `
+        <div class="vista-info-box">
+            <h4>Part of a series: ${project.series.name}</h4>
+            <div class="related-list">${items}</div>
+        </div>`;
+}
+
 function generateProjectCards() {
   let html = '';
   for (const [key, project] of Object.entries(projectData)) {
@@ -12,7 +52,7 @@ function generateProjectCards() {
             <div class="project-vista-card clickable" onclick="navigateFromProjects('${key}')">
                 <div class="project-vista-header">${project.title}</div>
                 <div class="project-vista-body">
-                    <span class="project-vista-tag">${project.tag}</span>
+                    <span class="project-vista-tag">${project.tag}</span>${generateSeriesChip(project)}
                     <p>${project.description}</p>
                     <div class="project-vista-tech">
                         ${project.technologies
@@ -157,7 +197,7 @@ function generateProgramsContent() {
   return html;
 }
 
-function generateProjectDetailContent(project) {
+function generateProjectDetailContent(projectKey, project) {
   return `
         <h2>${project.title}</h2>
         <span class="project-vista-tag" style="font-size:13px;padding:5px 12px">${project.tag}</span>
@@ -166,6 +206,7 @@ function generateProjectDetailContent(project) {
             <h4>Overview</h4>
             <p style="margin:0; white-space:pre-line">${project.fullDescription}</p>
         </div>
+        ${generateSeriesBox(projectKey, project)}
 
         <h3>Technologies Used</h3>
         <div class="project-vista-tech" style="margin:15px 0">
